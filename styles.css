@@ -99,6 +99,37 @@ body::before {
   gap: 8px;
 }
 
+.theme-toggle .sun {
+  display: none;
+}
+
+html.dark-mode .theme-toggle .sun {
+  display: block;
+}
+
+html.dark-mode .theme-toggle .moon {
+  display: none;
+}
+
+/* Dark Mode Inversion */
+html.dark-mode {
+  filter: invert(1) hue-rotate(180deg);
+  background-color: #000; /* Ensure background stays solid during transition */
+}
+
+/* Re-invert elements to preserve original appearance */
+html.dark-mode .album-art img,
+html.dark-mode .bg-character img,
+html.dark-mode .highlight-name,
+html.dark-mode .signature-img {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+html.dark-mode body::before {
+  opacity: 0.1; /* Slightly more grain visible in dark mode */
+}
+
+
 .theme-toggle svg {
   width: 14px;
   height: 14px;

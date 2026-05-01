@@ -135,10 +135,26 @@
       </section>
   
       <!-- Footer -->
-      <footer class="footer">
+    <footer class="footer">
         <p>© 2026 Pushkar Jha</p>
       </footer>
     </div>
   </div>
+
+  <script>
+    const themeToggle = document.querySelector('.theme-toggle');
+    const html = document.documentElement;
+
+    // Check for saved theme
+    if (localStorage.getItem('theme') === 'dark') {
+      html.classList.add('dark-mode');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      html.classList.toggle('dark-mode');
+      const theme = html.classList.contains('dark-mode') ? 'dark' : 'light';
+      localStorage.setItem('theme', theme);
+    });
+  </script>
 </body>
 </html>
