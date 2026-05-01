@@ -293,7 +293,7 @@ html.dark-mode body::before {
   left: 120px;
   right: 0;
   margin: 0 auto;
-  width: 360px;
+  width: 420px;
   object-fit: contain;
   opacity: 0.85;
   transform: rotate(30deg);
@@ -460,7 +460,7 @@ html.dark-mode body::before {
     margin: 0 auto;
     top: 50%; /* Perfect vertical center of the album art row */
     transform: translateY(-50%) rotate(25deg);
-    width: 220px;
+    width: 280px;
     z-index: 2;
   }
 
