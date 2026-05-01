@@ -203,10 +203,11 @@ html.dark-mode body::before {
 .bg-character {
   position: fixed;
   bottom: -20px;
-  left: -20px;
+  right: -20px;
   width: 575px;
   pointer-events: none;
   z-index: 0;
+  transform: scaleX(-1);
 }
 
 .bg-character img {
@@ -224,7 +225,7 @@ html.dark-mode body::before {
 
 /* About Paragraph */
 .about {
-  margin-bottom: 50px;
+  margin-bottom: 60px;
   max-width: 650px;
   margin-left: 0;
 }
@@ -289,7 +290,7 @@ html.dark-mode body::before {
 .signature-img {
   position: absolute;
   left: 140px;
-  width: 320px;
+  width: 360px;
   object-fit: contain;
   opacity: 0.85;
   transform: rotate(30deg);
@@ -442,7 +443,7 @@ html.dark-mode body::before {
     left: 140px;
     top: 50%; /* Perfect vertical center of the album art row */
     transform: translateY(-50%) rotate(25deg);
-    width: 220px;
+    width: 260px;
     z-index: 2;
   }
 
