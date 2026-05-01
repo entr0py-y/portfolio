@@ -51,12 +51,18 @@ body::before {
 .page-wrapper {
   width: 100%;
   max-width: 650px;
-  padding: 100px 40px 60px;
+  padding: 40px 40px 60px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
 .content-container {
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Top Navigation */
@@ -129,7 +135,7 @@ body::before {
   font-family: var(--font-family-body);
   font-size: 16px;
   line-height: 1.5;
-  margin: -4px 0 0 0;
+  margin: 8px 0 16px 0;
   color: var(--color-on-background);
   font-weight: 400;
 }
@@ -206,6 +212,12 @@ body::before {
   gap: 12px;
 }
 
+.player-top-row {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
 .album-art img {
   width: 120px;
   height: 120px;
@@ -213,6 +225,16 @@ body::before {
   object-fit: cover;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0,0,0,0.2);
   display: block;
+}
+
+.signature-img {
+  position: absolute;
+  left: 140px;
+  width: 320px;
+  object-fit: contain;
+  opacity: 0.85;
+  transform: rotate(30deg);
+  pointer-events: none;
 }
 
 .track-details {
@@ -264,14 +286,14 @@ body::before {
   margin-left: 0;
   font-size: 12px;
   font-weight: 600;
-  margin-top: 80px;
+  margin-top: 60px;
 }
 
 /* Social Links */
 .social-links {
   display: flex;
   gap: 16px;
-  margin-top: 16px;
+  margin-top: 0;
 }
 
 .social-links a {
@@ -322,7 +344,7 @@ body::before {
 
   /* Optimize starting point (top padding) */
   .page-wrapper {
-    padding: 80px 20px 30px;
+    padding: 20px 20px 30px;
   }
   
   /* Optimize ending point (bottom margin) */
