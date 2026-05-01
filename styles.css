@@ -111,37 +111,39 @@ html.dark-mode .theme-toggle .moon {
   display: none;
 }
 
-/* Dark Mode Layering */
-html {
-  background-color: var(--color-background);
-  transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+/* Dark Mode Colors (Variable Swapping) */
+html.dark-mode {
+  --color-background: #121212;
+  --color-on-background: #fdfdfb;
+  --color-surface: #1e1e1e;
+  --color-on-surface: #fdfdfb;
+  --color-outline: #a0a0a0;
+  --color-outline-variant: #404040;
 }
 
-html.dark-mode {
-  background-color: #000;
+html {
+  background-color: var(--color-background);
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 body {
-  transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-html.dark-mode body {
-  filter: invert(1);
-  /* Removed opacity: 0.5 as requested */
+/* Subtle image dimming in dark mode for comfort */
+html.dark-mode img {
+  filter: brightness(0.9);
+  transition: filter 0.4s ease;
 }
 
-/* Re-invert and restore opacity for protected elements */
-html.dark-mode .album-art img,
+/* Protection for the anime girl and album art (no dimming) */
 html.dark-mode .bg-character img,
-html.dark-mode .highlight-name {
-  filter: invert(1);
+html.dark-mode .album-art img {
+  filter: brightness(1);
 }
 
-/* Transitions for elements */
-.album-art img,
-.bg-character img,
-.highlight-name {
-  transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+html.dark-mode body::before {
+  opacity: 0.08; /* Slightly more visible grain in dark mode */
 }
 
 html.dark-mode body::before {
@@ -411,19 +413,21 @@ html.dark-mode body::before {
     bottom: -10px;
   }
 
-  /* Reposition signature for mobile to prevent overflow */
+  /* Fix signature positioning on mobile to overlap album art */
   .player-top-row {
-    flex-direction: column;
-    align-items: flex-start;
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin-bottom: 8px; /* Small gap before track info */
   }
 
   .signature-img {
-    position: relative;
-    left: 0;
-    width: 200px;
-    margin-top: -20px;
-    margin-left: 20px;
-    transform: rotate(15deg);
+    position: absolute;
+    left: 60px; /* Overlap album art to the right */
+    top: 50%;
+    transform: translateY(-50%) rotate(25deg);
+    width: 220px;
+    z-index: 2;
   }
 
   .greeting {
@@ -434,5 +438,6 @@ html.dark-mode body::before {
     font-size: 1.3rem;
   }
 }
+
 
 
