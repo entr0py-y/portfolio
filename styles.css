@@ -423,7 +423,7 @@ html.dark-mode body::before {
 
   .signature-img {
     position: absolute;
-    left: 60px; /* Overlap album art to the right */
+    left: 110px; /* Shifted further right to avoid excessive overlap */
     top: 50%;
     transform: translateY(-50%) rotate(25deg);
     width: 220px;
