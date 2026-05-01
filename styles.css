@@ -429,8 +429,8 @@ html.dark-mode body::before {
 
   .signature-img {
     position: absolute;
-    left: 140px; /* Better centering in the empty right area */
-    top: 50%;
+    left: 140px;
+    top: 50%; /* Perfect vertical center of the album art row */
     transform: translateY(-50%) rotate(25deg);
     width: 220px;
     z-index: 2;
@@ -445,18 +445,19 @@ html.dark-mode body::before {
   }
 
   .header {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2.2rem;
   }
 
   .about, .escape-section, .contact-section {
-    margin-bottom: 2rem !important;
+    margin-bottom: 2.2rem !important;
   }
 
   .footer {
-    margin-top: 2rem;
+    margin-top: 2.2rem;
     padding-top: 0;
   }
 }
+
 
 
 
