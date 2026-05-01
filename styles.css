@@ -429,7 +429,7 @@ html.dark-mode body::before {
 
   .signature-img {
     position: absolute;
-    left: 110px; /* Shifted further right to avoid excessive overlap */
+    left: 140px; /* Better centering in the empty right area */
     top: 50%;
     transform: translateY(-50%) rotate(25deg);
     width: 220px;
@@ -443,7 +443,20 @@ html.dark-mode body::before {
   .text-headline-md {
     font-size: 1.3rem;
   }
+
+  .header {
+    margin-bottom: 1.5rem;
+  }
+
+  .about, .escape-section, .contact-section {
+    margin-bottom: 2rem !important;
+  }
+
+  .footer {
+    margin-top: 1.5rem;
+  }
 }
+
 
 
 
