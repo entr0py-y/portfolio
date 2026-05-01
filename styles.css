@@ -165,7 +165,7 @@ html.dark-mode body::before {
 
 /* Header */
 .header {
-  margin-bottom: 25px;
+  margin-bottom: 60px;
   margin-left: 0;
 }
 
@@ -276,6 +276,7 @@ html.dark-mode body::before {
   display: flex;
   align-items: center;
   position: relative;
+  width: 100%;
 }
 
 .album-art img {
@@ -289,7 +290,9 @@ html.dark-mode body::before {
 
 .signature-img {
   position: absolute;
-  left: 140px;
+  left: 120px;
+  right: 0;
+  margin: 0 auto;
   width: 360px;
   object-fit: contain;
   opacity: 0.85;
@@ -430,17 +433,26 @@ html.dark-mode body::before {
     bottom: -10px;
   }
 
+  .content-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
   /* Fix signature positioning on mobile to overlap album art */
   .player-top-row {
     position: relative;
-    width: 120px;
+    width: 100%;
     height: 120px;
     margin-bottom: 8px; /* Small gap before track info */
   }
 
   .signature-img {
     position: absolute;
-    left: 140px;
+    left: 120px;
+    right: 0;
+    margin: 0 auto;
     top: 50%; /* Perfect vertical center of the album art row */
     transform: translateY(-50%) rotate(25deg);
     width: 260px;
@@ -456,24 +468,20 @@ html.dark-mode body::before {
   }
 
   .header {
-    margin-bottom: 1.2rem;
+    margin-bottom: 0;
   }
 
   .about, .escape-section, .contact-section {
-    margin-bottom: 1.2rem !important;
+    margin-bottom: 0 !important;
   }
 
   .main-content {
-    margin: auto 0;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
+    display: contents;
   }
 
   .footer {
-    margin-top: 0; /* Let margin: auto on main-content handle it */
+    margin: 0;
     padding-bottom: 0;
-    margin-bottom: 2.5rem; /* Shifted upward as requested */
   }
 }
 
