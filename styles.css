@@ -445,15 +445,15 @@ html.dark-mode body::before {
   }
 
   .header {
-    margin-bottom: 2.2rem;
+    margin-bottom: 1.5rem;
   }
 
   .about, .escape-section, .contact-section {
-    margin-bottom: 2.2rem !important;
+    margin-bottom: 1.5rem !important;
   }
 
   .footer {
-    margin-top: 2.2rem;
+    margin-top: 1.5rem;
     padding-top: 0;
   }
 }

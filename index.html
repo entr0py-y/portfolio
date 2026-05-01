@@ -148,8 +148,9 @@
     const themeToggle = document.querySelector('.theme-toggle');
     const html = document.documentElement;
 
-    // Check for saved theme
-    if (localStorage.getItem('theme') === 'dark') {
+    // Check for saved theme, default to dark
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || savedTheme === null) {
       html.classList.add('dark-mode');
     }
 
