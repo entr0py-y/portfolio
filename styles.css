@@ -112,18 +112,29 @@ html.dark-mode .theme-toggle .moon {
 }
 
 /* Dark Mode Inversion */
+html {
+  transition: filter 0.5s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 html.dark-mode {
   filter: invert(1) hue-rotate(180deg);
-  background-color: #000; /* Ensure background stays solid during transition */
+  background-color: #000;
 }
 
 /* Re-invert elements to preserve original appearance */
 html.dark-mode .album-art img,
 html.dark-mode .bg-character img,
-html.dark-mode .highlight-name,
-html.dark-mode .signature-img {
+html.dark-mode .highlight-name {
   filter: invert(1) hue-rotate(180deg);
 }
+
+/* Ensure smooth transition for re-inverted elements too */
+.album-art img,
+.bg-character img,
+.highlight-name {
+  transition: filter 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 
 html.dark-mode body::before {
   opacity: 0.1; /* Slightly more grain visible in dark mode */
@@ -385,7 +396,18 @@ html.dark-mode body::before {
   
   /* Scale background character to prevent overflow */
   .bg-character {
-    width: 110vw;
-    max-width: 480px;
+    width: 130vw;
+    max-width: 550px;
+    opacity: 0.8; /* Slightly more subtle on mobile */
+    bottom: -10px;
+  }
+
+  .greeting {
+    font-size: 24px;
+  }
+
+  .text-headline-md {
+    font-size: 22px;
   }
 }
+
