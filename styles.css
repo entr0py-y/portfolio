@@ -142,6 +142,11 @@ html.dark-mode .album-art img {
   filter: brightness(1);
 }
 
+html.dark-mode .signature-img {
+  filter: invert(1);
+}
+
+
 html.dark-mode body::before {
   opacity: 0.08; /* Slightly more visible grain in dark mode */
 }
@@ -339,7 +344,7 @@ html.dark-mode body::before {
   margin-left: 0;
   font-size: 12px;
   font-weight: 600;
-  margin-top: 60px;
+  margin-top: 20px; /* Reduced from 60px */
 }
 
 /* Social Links */
