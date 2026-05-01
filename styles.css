@@ -462,12 +462,20 @@ html.dark-mode body::before {
     margin-bottom: 1.2rem !important;
   }
 
+  .main-content {
+    margin: auto 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
   .footer {
-    margin-top: auto;
-    padding-bottom: 1.2rem;
-    margin-bottom: 1rem; /* Shifted upward as requested */
+    margin-top: 0; /* Let margin: auto on main-content handle it */
+    padding-bottom: 0;
+    margin-bottom: 2.5rem; /* Shifted upward as requested */
   }
 }
+
 
 
 
