@@ -308,7 +308,8 @@ html.dark-mode body::before {
 
 .artist-name {
   font-size: 12px;
-  color: #333;
+  color: var(--color-on-background);
+  opacity: 0.7;
   margin-bottom: 8px;
 }
 
