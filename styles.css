@@ -32,7 +32,7 @@ body {
   position: relative;
   min-height: 100vh;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   overflow-x: hidden; /* Prevents unwanted horizontal scroll from bleeds */
 }
 
@@ -51,7 +51,7 @@ body::before {
 .page-wrapper {
   width: 100%;
   max-width: 650px;
-  padding: 60px 40px;
+  padding: 100px 40px 60px;
   position: relative;
 }
 
@@ -61,10 +61,12 @@ body::before {
 
 /* Top Navigation */
 .top-nav {
+  position: fixed;
+  top: 40px;
+  right: 40px;
   display: flex;
   gap: 12px;
-  margin-bottom: 50px;
-  margin-left: 0;
+  z-index: 100;
 }
 
 .icon-btn {
@@ -313,9 +315,14 @@ body::before {
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
+  .top-nav {
+    top: 20px;
+    right: 20px;
+  }
+
   /* Optimize starting point (top padding) */
   .page-wrapper {
-    padding: 30px 20px;
+    padding: 80px 20px 30px;
   }
   
   /* Optimize ending point (bottom margin) */
