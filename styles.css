@@ -127,7 +127,7 @@ body {
 
 html.dark-mode body {
   filter: invert(1);
-  opacity: 0.5; /* The "layered" 50% opacity inversion */
+  /* Removed opacity: 0.5 as requested */
 }
 
 /* Re-invert and restore opacity for protected elements */
@@ -135,14 +135,13 @@ html.dark-mode .album-art img,
 html.dark-mode .bg-character img,
 html.dark-mode .highlight-name {
   filter: invert(1);
-  opacity: 1 !important; /* Keep these clear and punchy */
 }
 
 /* Transitions for elements */
 .album-art img,
 .bg-character img,
 .highlight-name {
-  transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 html.dark-mode body::before {
@@ -412,12 +411,28 @@ html.dark-mode body::before {
     bottom: -10px;
   }
 
+  /* Reposition signature for mobile to prevent overflow */
+  .player-top-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .signature-img {
+    position: relative;
+    left: 0;
+    width: 200px;
+    margin-top: -20px;
+    margin-left: 20px;
+    transform: rotate(15deg);
+  }
+
   .greeting {
-    font-size: 24px;
+    font-size: 1.5rem;
   }
 
   .text-headline-md {
-    font-size: 22px;
+    font-size: 1.3rem;
   }
 }
+
 
