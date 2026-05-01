@@ -63,6 +63,7 @@ body::before {
   width: 100%;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 /* Top Navigation */
@@ -345,7 +346,7 @@ html.dark-mode body::before {
   margin-left: 0;
   font-size: 12px;
   font-weight: 600;
-  margin-top: 20px; /* Reduced from 60px */
+  margin-top: auto;
 }
 
 /* Social Links */
@@ -453,9 +454,11 @@ html.dark-mode body::before {
   }
 
   .footer {
-    margin-top: 1.5rem;
+    margin-top: auto;
+    padding-top: 1rem;
   }
 }
+
 
 
 
