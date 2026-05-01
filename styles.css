@@ -404,6 +404,7 @@ html.dark-mode body::before {
   html, body {
     overflow: hidden;
     height: 100%;
+    height: 100dvh;
   }
 
   .top-nav {
@@ -413,8 +414,9 @@ html.dark-mode body::before {
 
   /* Optimize starting point (top padding) */
   .page-wrapper {
-    padding: 20px 20px 30px;
-    height: 100vh;
+    padding: 20px;
+    height: 100%;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
