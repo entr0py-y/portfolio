@@ -402,9 +402,9 @@ html.dark-mode body::before {
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   html, body {
-    overflow: hidden;
-    height: 100%;
-    height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-height: 100dvh;
   }
 
   .top-nav {
@@ -414,9 +414,8 @@ html.dark-mode body::before {
 
   /* Optimize starting point (top padding) */
   .page-wrapper {
-    padding: 20px;
-    height: 100%;
-    height: 100dvh;
+    padding: 15px 20px;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
@@ -436,7 +435,7 @@ html.dark-mode body::before {
   }
 
   .content-container {
-    height: 100%;
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
   }
@@ -445,18 +444,23 @@ html.dark-mode body::before {
   .player-top-row {
     position: relative;
     width: 100%;
-    height: 120px;
+    height: 100px;
     margin-bottom: 8px; /* Small gap before track info */
+  }
+
+  .album-art img {
+    width: 100px;
+    height: 100px;
   }
 
   .signature-img {
     position: absolute;
-    left: 120px;
+    left: 100px;
     right: 0;
     margin: 0 auto;
     top: 50%; /* Perfect vertical center of the album art row */
     transform: translateY(-50%) rotate(25deg);
-    width: 260px;
+    width: 220px;
     z-index: 2;
   }
 
@@ -481,6 +485,7 @@ html.dark-mode body::before {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    gap: 15px;
   }
 
   .footer {
