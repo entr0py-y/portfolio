@@ -111,34 +111,44 @@ html.dark-mode .theme-toggle .moon {
   display: none;
 }
 
-/* Dark Mode Inversion */
+/* Dark Mode Layering */
 html {
-  transition: filter 0.5s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: var(--color-background);
+  transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 html.dark-mode {
-  filter: invert(1) hue-rotate(180deg);
   background-color: #000;
 }
 
-/* Re-invert elements to preserve original appearance */
+body {
+  transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.dark-mode body {
+  filter: invert(1);
+  opacity: 0.5; /* The "layered" 50% opacity inversion */
+}
+
+/* Re-invert and restore opacity for protected elements */
 html.dark-mode .album-art img,
 html.dark-mode .bg-character img,
 html.dark-mode .highlight-name {
-  filter: invert(1) hue-rotate(180deg);
+  filter: invert(1);
+  opacity: 1 !important; /* Keep these clear and punchy */
 }
 
-/* Ensure smooth transition for re-inverted elements too */
+/* Transitions for elements */
 .album-art img,
 .bg-character img,
 .highlight-name {
-  transition: filter 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 
 html.dark-mode body::before {
-  opacity: 0.1; /* Slightly more grain visible in dark mode */
+  opacity: 0.03; /* Subtler grain in layered dark mode */
 }
+
 
 
 .theme-toggle svg {
