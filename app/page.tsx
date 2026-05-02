@@ -5,8 +5,8 @@ export default function Home() {
     <div className="w-full max-w-[650px] px-10 pt-20 pb-10 relative flex flex-col min-h-screen box-border z-[1] max-[768px]:px-5 max-[768px]:pt-16 max-[768px]:pb-4">
       <div className="flex flex-col flex-1">
         {/* Header */}
-        <header className="mb-12 ml-0" style={{ fontFamily: "var(--font-body)" }}>
-          <h1 className="text-[26px] font-semibold text-[var(--color-on-background)] m-0" style={{ fontFamily: "var(--font-body)" }}>
+        <header className="mb-6 ml-0" style={{ fontFamily: "var(--font-body)" }}>
+          <h1 className="text-[52px] font-semibold text-[var(--color-on-background)] m-0" style={{ fontFamily: "var(--font-body)" }}>
             Hi! I&apos;m <span className="text-[#aa8970]">Pushkar</span>
           </h1>
           <p className="text-[16px] leading-relaxed mt-2 mb-4 text-[var(--color-on-background)] font-normal" style={{ fontFamily: "var(--font-body)" }}>
@@ -52,7 +52,7 @@ export default function Home() {
         {/* Main Content */}
         <div className="w-full flex flex-col flex-1">
           {/* About */}
-          <section className="mb-12 max-w-[650px] ml-0" style={{ fontFamily: "var(--font-body)" }}>
+          <section className="mb-6 max-w-[650px] ml-0" style={{ fontFamily: "var(--font-body)" }}>
             <div className="flex items-start mb-4 mt-0">
               <h2 className="text-[24px] font-normal m-0 leading-none" style={{ fontFamily: "var(--font-body)" }}>about</h2>
             </div>
@@ -73,7 +73,7 @@ export default function Home() {
           </section>
 
           {/* Escape Widget / Music Player */}
-          <section className="mb-12 ml-0" style={{ fontFamily: "var(--font-body)" }}>
+          <section className="mb-6 ml-0" style={{ fontFamily: "var(--font-body)" }}>
             <div className="flex items-start mb-4 mt-0">
               <h2 className="text-[24px] font-normal m-0 leading-none" style={{ fontFamily: "var(--font-body)" }}>mah plelist.</h2>
             </div>
@@ -103,7 +103,7 @@ export default function Home() {
           </section>
 
           {/* Contact */}
-          <section className="mb-12 max-w-[650px] ml-0" style={{ fontFamily: "var(--font-body)" }}>
+          <section className="mb-6 max-w-[650px] ml-0" style={{ fontFamily: "var(--font-body)" }}>
             <div className="flex items-start mb-4 mt-0">
               <h2 className="text-[24px] font-normal m-0 leading-none" style={{ fontFamily: "var(--font-body)" }}>contact</h2>
             </div>
