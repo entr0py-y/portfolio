@@ -9,11 +9,11 @@ export default function SketchingPage() {
         </p>
 
         {/* Placeholder Grid */}
-        <div className="grid grid-cols-2 gap-4 max-[768px]:grid-cols-1">
+        <div className="grid grid-cols-2 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className="group relative aspect-[4/3] rounded-xl bg-[var(--color-surface)] border border-[var(--color-outline-variant)] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:border-[var(--color-accent)]"
+              className="group relative aspect-[4/3] rounded-xl bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02]"
             >
               {/* Subtle sketch pattern */}
               <div className="absolute inset-0 flex items-center justify-center">
