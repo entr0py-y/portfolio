@@ -63,7 +63,7 @@ export default function PlayingPage() {
   }, []);
 
   return (
-    <PageShell title="Playing">
+    <PageShell>
       <div className="fade-in fade-in-delay-2" style={{ fontFamily: "var(--font-body)" }}>
         {/* Stats Pills */}
         {loading ? (

@@ -2,7 +2,7 @@ import PageShell from "@/components/PageShell";
 
 export default function ListeningPage() {
   return (
-    <PageShell title="My Current Playlist">
+    <PageShell>
       <div className="fade-in fade-in-delay-2" style={{ fontFamily: "var(--font-body)" }}>
         <p className="text-[13px] leading-[1.6] font-medium text-[var(--color-on-background)] mb-8">
           Usually looping the same few tracks.

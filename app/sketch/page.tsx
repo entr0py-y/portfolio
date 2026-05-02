@@ -7,7 +7,7 @@ export default function SketchingPage() {
   const [selectedSketch, setSelectedSketch] = useState<number | null>(null);
 
   return (
-    <PageShell title="Sketching">
+    <PageShell>
       <div className="fade-in fade-in-delay-2" style={{ fontFamily: "var(--font-body)" }}>
         <p className="text-[13px] leading-[1.6] font-medium text-[var(--color-on-background)] mb-8">
           Random ideas, rough thoughts, unfinished things.
