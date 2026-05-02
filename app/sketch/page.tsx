@@ -36,7 +36,7 @@ export default function SketchingPage() {
             <div
               key={i}
               onClick={() => setSelectedSketch(i)}
-              className="absolute w-[50%] max-[768px]:w-[65%] p-2 rounded-sm bg-[#e8e8e8] shadow-[0_10px_30px_rgba(0,0,0,0.5)] cursor-pointer hover:!z-[100] transition-transform duration-300 hover:scale-[1.05] transform-gpu will-change-transform"
+              className="absolute w-[50%] max-[768px]:w-[65%] p-2 rounded-sm bg-[#e8e8e8] shadow-2xl cursor-pointer hover:!z-[100] transition-transform duration-300 hover:scale-[1.05]"
               style={{
                 top: sketch.top,
                 left: sketch.left,
@@ -57,8 +57,8 @@ export default function SketchingPage() {
           ))}
         </div>
 
-        <p className="text-[11px] text-[var(--color-outline)] mt-6 italic">
-          more coming soon.
+        <p className="text-[12px] text-[var(--color-outline)] mt-6 italic">
+          Consider following my <a href="https://instagram.com/yeagr.art" target="_blank" rel="noopener noreferrer" className="interactive-word">art page</a>
         </p>
       </div>
 
