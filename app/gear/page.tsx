@@ -23,18 +23,6 @@ const gearItems = [
     url: "https://www.oneplus.in/nord-5",
   },
   {
-    name: "Redragon K617 Fizz",
-    detail: "Keyboard",
-    image: "/gear/redragon-k617.png",
-    url: "https://www.amazon.in/s?k=Redragon+K617+Fizz",
-  },
-  {
-    name: "Redragon Predator Pro",
-    detail: "Mouse",
-    image: "/gear/redragon-predator.png",
-    url: "https://www.amazon.in/s?k=Redragon+Predator+Pro",
-  },
-  {
     name: "HyperX Cloud Stinger 2",
     detail: "Headphones",
     image: "/gear/hyperx-stinger2.jpg",
@@ -43,7 +31,7 @@ const gearItems = [
   {
     name: "Tangzu Wan'er SG2",
     detail: "IEMs · Red Lion Edition",
-    image: "/gear/tangzu-waner.png",
+    image: "/gear/tangzu-waner.jpg",
     url: "https://www.amazon.in/s?k=Tangzu+Wan%27er+SG2",
   },
   {
