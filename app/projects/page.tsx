@@ -7,7 +7,7 @@ export default function ProjectsPage() {
     <PageShell>
       <div className="fade-in fade-in-delay-2" style={{ fontFamily: "var(--font-body)" }}>
         {/* Header */}
-        <div className="mb-12">
+        <div className="mb-8">
           <h1 className="text-[32px] font-semibold text-[var(--color-on-background)] mb-2">
             Projects
           </h1>

@@ -10,7 +10,7 @@ export default function Home() {
             Hi! I&apos;m <span className="text-[var(--color-highlight)]">Pushkar</span>
           </h1>
           <p className="text-[16px] leading-relaxed mt-2 mb-4 text-[var(--color-on-background)] font-normal" style={{ fontFamily: "var(--font-body)" }}>
-            i build stuff.
+            i build <Link href="/projects" className="interactive-word">stuff</Link>.
           </p>
           <div className="flex gap-4 mt-0">
             <a href="https://instagram.com/endeavv0r" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-[var(--color-on-background)] no-underline flex items-center justify-center transition-opacity duration-200 hover:opacity-60">
