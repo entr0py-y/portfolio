@@ -31,7 +31,7 @@ export default function SketchingPage() {
         </p>
 
         {/* Scattered Collage */}
-        <div className="relative w-full h-[1200px] max-[768px]:h-[1000px] mb-20">
+        <div className="relative w-full h-[1200px] max-[768px]:h-[1000px] mb-[300px] max-[768px]:mb-[250px]">
           {sketches.map((sketch, i) => (
             <div
               key={i}
