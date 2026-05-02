@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="w-full max-w-[650px] px-10 pt-40 pb-10 relative flex flex-col min-h-screen box-border z-[1] max-[768px]:px-5 max-[768px]:pt-32 max-[768px]:pb-4">
+    <div className="w-full max-w-[650px] px-10 pt-24 pb-10 relative flex flex-col min-h-screen box-border z-[1] max-[768px]:px-5 max-[768px]:pt-16 max-[768px]:pb-4">
       <div className="flex flex-col flex-1">
         {/* Header */}
         <header className="mb-12 ml-0" style={{ fontFamily: "var(--font-body)" }}>
