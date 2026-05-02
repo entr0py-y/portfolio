@@ -23,7 +23,7 @@ export default function PageShell({ title, children }: PageShellProps) {
 
       {/* Footer */}
       <footer
-        className="text-[12px] font-semibold mt-auto pt-10"
+        className="text-[12px] font-semibold mt-6"
         style={{ fontFamily: "var(--font-body)" }}
       >
         <p>© 2026 Pushkar Jha</p>
