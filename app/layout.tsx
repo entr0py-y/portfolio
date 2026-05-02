@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Epilogue, Manrope, Caveat } from "next/font/google";
 import TopNav from "@/components/TopNav";
-import SiteLogo from "@/components/SiteLogo";
 import BackgroundCharacter from "@/components/BackgroundCharacter";
 import "./globals.css";
 
@@ -45,7 +44,6 @@ export default function RootLayout({
     >
       <body>
         <BackgroundCharacter />
-        <SiteLogo />
         <TopNav />
         {children}
       </body>
