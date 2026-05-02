@@ -18,7 +18,7 @@ export default function TopNav() {
         style={{ fontFamily: "var(--font-body)" }}
       >
         <span className="text-[26px] font-semibold leading-none">
-          <span className="text-[#aa8970]">sylk</span>
+          <span className="text-[#44372d]">sylk</span>
           <span className="text-[var(--color-on-background)]">.monster</span>
           {segment && (
             <span className="text-[var(--color-on-background)]">/{segment}</span>
@@ -31,7 +31,7 @@ export default function TopNav() {
         {isSubPage && (
           <Link
             href="/"
-            className="flex items-center justify-center border-[1.5px] border-[var(--color-on-background)] rounded-[4px] p-1.5 bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 hover:opacity-60"
+            className="flex items-center justify-center border-[1.5px] border-[var(--color-on-background)] rounded-xl p-1.5 bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 hover:opacity-60"
             aria-label="Back to home"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-[18px] h-[18px]">
@@ -42,7 +42,7 @@ export default function TopNav() {
         )}
         <Link
           href="/"
-          className="flex items-center justify-center border-[1.5px] border-[var(--color-on-background)] rounded-[4px] p-1.5 bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 hover:opacity-60"
+          className="flex items-center justify-center border-[1.5px] border-[var(--color-on-background)] rounded-xl p-1.5 bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 hover:opacity-60"
           aria-label="Portfolio"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-[18px] h-[18px]">
@@ -52,7 +52,7 @@ export default function TopNav() {
           </svg>
         </Link>
         <button
-          className="flex items-center justify-center border-[1.5px] border-[var(--color-on-background)] rounded-[4px] p-1.5 bg-transparent cursor-pointer text-[var(--color-on-background)] transition-opacity duration-200 hover:opacity-60"
+          className="flex items-center justify-center border-[1.5px] border-[var(--color-on-background)] rounded-xl p-1.5 bg-transparent cursor-pointer text-[var(--color-on-background)] transition-opacity duration-200 hover:opacity-60"
           aria-label="Code"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-[18px] h-[18px]">
