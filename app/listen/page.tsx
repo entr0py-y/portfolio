@@ -22,6 +22,18 @@ export default function ListeningPage() {
             style={{ maxWidth: "100%", overflow: "hidden", background: "transparent" }}
           />
         </div>
+
+        <div className="mt-10 flex flex-col gap-4 text-[13px] leading-[1.6] font-medium text-[var(--color-on-background)]">
+          <p>
+            Mostly alt, indie, and a lot of Radiohead, with some soundtracks and random tracks that just linger longer than expected.
+          </p>
+          <p>
+            I usually end up replaying the same few songs over and over until they wear out, then replace them with something that hits just as hard.
+          </p>
+          <p>
+            It’s less about what I listen to and more about what stays.
+          </p>
+        </div>
       </div>
     </PageShell>
   );
