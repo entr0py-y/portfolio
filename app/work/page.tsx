@@ -44,7 +44,7 @@ export default function WorkPage() {
             </div>
             <div>
               <div className="text-[14px] font-semibold text-[var(--color-on-background)]">
-                Finalist — Brainwave 2.0 Hackathon
+                Top 5 — Brainwave 2.0 Hackathon
               </div>
               <div className="text-[12px] text-[var(--color-outline)] mt-1 font-medium">
                 DTU · 800+ teams
@@ -52,7 +52,7 @@ export default function WorkPage() {
             </div>
             <div>
               <div className="text-[14px] font-semibold text-[var(--color-on-background)]">
-                Finalist — Innovision Ideathon
+                Top 5 — Innovision Ideathon
               </div>
               <div className="text-[12px] text-[var(--color-outline)] mt-1 font-medium">
                 150+ teams
