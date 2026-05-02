@@ -42,11 +42,11 @@ export default function TopNav() {
         ) : (
           <>
             <div className="flex items-center gap-3">
-              <span className="text-[9px] font-bold text-[var(--color-outline)] uppercase tracking-[0.15em] opacity-60">switch mode</span>
+              <span className="text-[11px] font-bold text-[var(--color-outline)] lowercase tracking-[0.05em] opacity-60">switch mode</span>
               <ThemeToggle />
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-[9px] font-bold text-[var(--color-outline)] uppercase tracking-[0.15em] opacity-60">projects</span>
+              <span className="text-[11px] font-bold text-[var(--color-outline)] lowercase tracking-[0.05em] opacity-60">projects</span>
               <Link
                 href="/projects"
                 className="flex items-center justify-center border-[1.5px] border-[var(--color-on-background)] rounded-xl px-2 py-1 bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 hover:opacity-60"
@@ -59,7 +59,7 @@ export default function TopNav() {
               </Link>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-[9px] font-bold text-[var(--color-outline)] uppercase tracking-[0.15em] opacity-60">experience</span>
+              <span className="text-[11px] font-bold text-[var(--color-outline)] lowercase tracking-[0.05em] opacity-60">experience</span>
               <Link
                 href="/work"
                 className="flex items-center justify-center border-[1.5px] border-[var(--color-on-background)] rounded-xl px-2 py-1 bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 hover:opacity-60"
