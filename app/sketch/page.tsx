@@ -71,7 +71,7 @@ export default function SketchingPage() {
           {/* Back Button (matching top-right style) */}
           <button
             onClick={() => setSelectedSketch(null)}
-            className="absolute top-10 right-10 flex items-center justify-center border-[1.5px] border-[var(--color-on-background)] rounded-xl px-2 py-1 bg-transparent cursor-pointer text-[var(--color-on-background)] transition-opacity duration-200 hover:opacity-60 z-[1010]"
+            className="absolute top-10 right-10 flex items-center justify-center bg-transparent cursor-pointer text-[var(--color-on-background)] transition-opacity duration-200 hover:opacity-60 z-[1010]"
             aria-label="Back to sketches"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-[14px] h-[14px]">

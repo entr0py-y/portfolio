@@ -41,11 +41,11 @@ export default function TopNav() {
           </Link>
         ) : (
           <>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5">
               <span className="text-[11px] font-bold text-[var(--color-outline)] lowercase tracking-[0.05em] opacity-60">switch mode</span>
               <ThemeToggle />
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5">
               <span className="text-[11px] font-bold text-[var(--color-outline)] lowercase tracking-[0.05em] opacity-60">projects</span>
               <Link
                 href="/projects"
@@ -58,7 +58,7 @@ export default function TopNav() {
                 </svg>
               </Link>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5">
               <span className="text-[11px] font-bold text-[var(--color-outline)] lowercase tracking-[0.05em] opacity-60">experience</span>
               <Link
                 href="/work"
