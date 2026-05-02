@@ -6,7 +6,7 @@ export default function Home() {
       <div className="flex flex-col flex-1">
         {/* Header */}
         <header className="mb-6 ml-0" style={{ fontFamily: "var(--font-body)" }}>
-          <h1 className="text-[52px] font-semibold text-[var(--color-on-background)] m-0" style={{ fontFamily: "var(--font-body)" }}>
+          <h1 className="text-[35px] font-semibold text-[var(--color-on-background)] m-0" style={{ fontFamily: "var(--font-body)" }}>
             Hi! I&apos;m <span className="text-[#aa8970]">Pushkar</span>
           </h1>
           <p className="text-[16px] leading-relaxed mt-2 mb-4 text-[var(--color-on-background)] font-normal" style={{ fontFamily: "var(--font-body)" }}>
