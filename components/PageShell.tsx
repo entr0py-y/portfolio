@@ -7,7 +7,7 @@ interface PageShellProps {
 
 export default function PageShell({ title, children }: PageShellProps) {
   return (
-    <div className="w-full max-w-[650px] px-10 pt-24 pb-10 relative flex flex-col min-h-screen box-border z-[1] max-[768px]:px-5 max-[768px]:pt-16 max-[768px]:pb-4">
+    <div className="w-full max-w-[650px] px-10 pt-20 pb-10 relative flex flex-col min-h-screen box-border z-[1] max-[768px]:px-5 max-[768px]:pt-16 max-[768px]:pb-4">
       {/* Title */}
       <h1
         className="text-[24px] font-normal m-0 mb-6 leading-none fade-in fade-in-delay-1"
