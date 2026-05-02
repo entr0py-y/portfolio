@@ -52,15 +52,16 @@ export default function TopNav() {
                 <line x1="12" y1="12" x2="12" y2="12.01" />
               </svg>
             </Link>
-            <button
-              className="flex items-center justify-center border-[1.5px] border-[var(--color-on-background)] rounded-xl px-2 py-1 bg-transparent cursor-pointer text-[var(--color-on-background)] transition-opacity duration-200 hover:opacity-60"
-              aria-label="Code"
+            <Link
+              href="/projects"
+              className="flex items-center justify-center border-[1.5px] border-[var(--color-on-background)] rounded-xl px-2 py-1 bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 hover:opacity-60"
+              aria-label="Projects"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-[14px] h-[14px]">
                 <polyline points="8 7 3 12 8 17" />
                 <polyline points="16 7 21 12 16 17" />
               </svg>
-            </button>
+            </Link>
             <ThemeToggle />
           </>
         )}
