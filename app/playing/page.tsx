@@ -78,10 +78,21 @@ export default function PlayingPage() {
         ) : (
           <div className="flex flex-wrap gap-3 mb-6">
             <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[12px] font-semibold bg-[var(--color-surface)] border border-[var(--color-outline-variant)] text-[var(--color-on-background)]">
-              🎮 {data!.totalGames} games
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70">
+                <line x1="6" x2="10" y1="12" y2="12"/>
+                <line x1="8" x2="8" y1="10" y2="14"/>
+                <line x1="15" x2="15.01" y1="13" y2="13"/>
+                <line x1="18" x2="18.01" y1="11" y2="11"/>
+                <rect width="20" height="12" x="2" y="6" rx="2"/>
+              </svg>
+              {data!.totalGames} games
             </span>
             <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[12px] font-semibold bg-[var(--color-surface)] border border-[var(--color-outline-variant)] text-[var(--color-on-background)]">
-              ⏱ {data!.totalPlaytimeHours} hrs on Steam
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              {data!.totalPlaytimeHours} hrs on Steam
             </span>
           </div>
         )}
