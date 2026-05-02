@@ -7,7 +7,7 @@ export default function Home() {
         {/* Header */}
         <header className="mb-6 ml-0" style={{ fontFamily: "var(--font-body)" }}>
           <h1 className="text-[35px] font-semibold text-[var(--color-on-background)] m-0" style={{ fontFamily: "var(--font-body)" }}>
-            Hi! I&apos;m <span className="text-[#aa8970]">Pushkar</span>
+            Hi! I&apos;m <span className="text-[#eeddd0]">Pushkar</span>
           </h1>
           <p className="text-[16px] leading-relaxed mt-2 mb-4 text-[var(--color-on-background)] font-normal" style={{ fontFamily: "var(--font-body)" }}>
             i build stuff.
@@ -54,7 +54,7 @@ export default function Home() {
           {/* About */}
           <section className="mb-6 max-w-[650px] ml-0" style={{ fontFamily: "var(--font-body)" }}>
             <div className="flex items-start mb-4 mt-0">
-              <h2 className="text-[24px] font-normal m-0 leading-none" style={{ fontFamily: "var(--font-body)" }}>about</h2>
+              <h2 className="text-[24px] font-normal m-0 leading-none text-[#eeddd0]" style={{ fontFamily: "var(--font-body)" }}>about</h2>
             </div>
             <p className="text-[13px] leading-[1.6] font-medium m-0 mb-4" style={{ fontFamily: "var(--font-body)" }}>
               I&apos;m a first-year computer science student and software developer focused on building clean, scalable applications and exploring new technologies.
@@ -75,7 +75,7 @@ export default function Home() {
           {/* Escape Widget / Music Player */}
           <section className="mb-6 ml-0" style={{ fontFamily: "var(--font-body)" }}>
             <div className="flex items-start mb-4 mt-0">
-              <h2 className="text-[24px] font-normal m-0 leading-none" style={{ fontFamily: "var(--font-body)" }}>mah plelist.</h2>
+              <h2 className="text-[24px] font-normal m-0 leading-none text-[#eeddd0]" style={{ fontFamily: "var(--font-body)" }}>mah plelist.</h2>
             </div>
             <div className="flex flex-col items-start gap-3">
               <div className="flex items-center relative w-full max-[768px]:relative max-[768px]:w-full max-[768px]:h-[180px] max-[768px]:mb-2">
@@ -105,7 +105,7 @@ export default function Home() {
           {/* Contact */}
           <section className="mb-6 max-w-[650px] ml-0" style={{ fontFamily: "var(--font-body)" }}>
             <div className="flex items-start mb-4 mt-0">
-              <h2 className="text-[24px] font-normal m-0 leading-none" style={{ fontFamily: "var(--font-body)" }}>contact</h2>
+              <h2 className="text-[24px] font-normal m-0 leading-none text-[#eeddd0]" style={{ fontFamily: "var(--font-body)" }}>contact</h2>
             </div>
             <p className="text-[13px] leading-[1.6] font-medium m-0 mb-4" style={{ fontFamily: "var(--font-body)" }}>
               Whether it&apos;s a project, collaboration, or just a random idea you want to talk about, I&apos;m down.
