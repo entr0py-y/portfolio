@@ -36,11 +36,11 @@ export default function SketchingPage() {
             <div
               key={i}
               onClick={() => setSelectedSketch(i)}
-              className="absolute w-[50%] max-[768px]:w-[65%] p-2 rounded-sm bg-[#e8e8e8] shadow-[0_10px_30px_rgba(0,0,0,0.5)] cursor-pointer hover:!z-[100] transition-transform duration-300 hover:scale-[1.05]"
+              className="absolute w-[50%] max-[768px]:w-[65%] p-2 rounded-sm bg-[#e8e8e8] shadow-[0_10px_30px_rgba(0,0,0,0.5)] cursor-pointer hover:!z-[100] transition-transform duration-300 hover:scale-[1.05] transform-gpu will-change-transform"
               style={{
                 top: sketch.top,
                 left: sketch.left,
-                transform: `rotate(${sketch.rotate})`,
+                transform: `rotate(${sketch.rotate}) translateZ(0)`,
                 zIndex: sketch.z,
               }}
             >
