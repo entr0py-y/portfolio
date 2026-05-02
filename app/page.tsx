@@ -78,13 +78,13 @@ export default function Home() {
               <h2 className="text-[24px] font-normal m-0 leading-none" style={{ fontFamily: "var(--font-body)" }}>mah plelist.</h2>
             </div>
             <div className="flex flex-col items-start gap-3">
-              <div className="flex items-center relative w-full max-[768px]:relative max-[768px]:w-full max-[768px]:h-[100px] max-[768px]:mb-2">
+              <div className="flex items-center relative w-full max-[768px]:relative max-[768px]:w-full max-[768px]:h-[120px] max-[768px]:mb-2">
                 <a href="https://music.apple.com/in/playlist/plastic-airbag/pl.u-8aAVZ5bUvqN74DV" target="_blank" rel="noopener noreferrer" className="no-underline">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="https://is1-ssl.mzstatic.com/image/thumb/SG-MQ-US-001-Image000001/v4/b2/e1/7b/b2e17b53-344a-8e14-d0bc-5d8835c2c00c/image/400x400cc.jpg"
                     alt="Plastic Airbag"
-                    className="w-[120px] h-[120px] rounded-[4px] object-cover block album-art max-[768px]:w-[100px] max-[768px]:h-[100px]"
+                    className="w-[150px] h-[150px] rounded-[4px] object-cover block album-art max-[768px]:w-[120px] max-[768px]:h-[120px]"
                     style={{ boxShadow: "0 2px 8px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0,0,0,0.2)" }}
                   />
                 </a>
@@ -92,7 +92,7 @@ export default function Home() {
                 <img
                   src="/signature.png"
                   alt="Signature"
-                  className="signature-img absolute left-[120px] right-0 mx-auto w-[420px] object-contain opacity-85 rotate-[30deg] pointer-events-none max-[768px]:absolute max-[768px]:left-[100px] max-[768px]:right-0 max-[768px]:mx-auto max-[768px]:top-1/2 max-[768px]:-translate-y-1/2 max-[768px]:rotate-[25deg] max-[768px]:w-[280px] max-[768px]:z-[2]"
+                  className="signature-img absolute left-[150px] right-0 mx-auto w-[420px] object-contain opacity-85 rotate-[30deg] pointer-events-none max-[768px]:absolute max-[768px]:left-[120px] max-[768px]:right-0 max-[768px]:mx-auto max-[768px]:top-1/2 max-[768px]:-translate-y-1/2 max-[768px]:rotate-[25deg] max-[768px]:w-[280px] max-[768px]:z-[2]"
                 />
               </div>
               <div className="flex flex-col">

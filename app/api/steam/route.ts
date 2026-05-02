@@ -47,8 +47,8 @@ export async function GET() {
     const ownedData = await ownedRes.json();
     const recentData = await recentRes.json();
 
-    const allGames: SteamGame[] = ownedData.response?.games || [];
-    const recentGames: SteamGame[] = recentData.response?.games || [];
+    const allGames: SteamGame[] = (ownedData.response?.games || []).filter((g: SteamGame) => g.appid !== 431960 && g.name !== "Wallpaper Engine");
+    const recentGames: SteamGame[] = (recentData.response?.games || []).filter((g: SteamGame) => g.appid !== 431960 && g.name !== "Wallpaper Engine");
 
     // Total stats
     const totalGames = ownedData.response?.game_count || allGames.length;
