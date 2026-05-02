@@ -70,7 +70,7 @@ export default function Home() {
               <Link href="/gear" className="interactive-word">gear</Link>{" "}
               just because I can, or just{" "}
               <Link href="/listen" className="interactive-word">listening</Link>{" "}
-              to something on repeat while figuring things out in my head.
+              to <a href="https://en.wikipedia.org/wiki/OK_Computer" target="_blank" rel="noopener noreferrer" className="interactive-word">something</a> on repeat while figuring things out in my head.
             </p>
           </section>
 
