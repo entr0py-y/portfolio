@@ -27,7 +27,7 @@ export default function TopNav() {
       </Link>
 
       {/* Icons — right */}
-      <nav className="flex gap-3 items-center">
+      <nav className="flex flex-col gap-2 items-end">
         {isSubPage ? (
           <Link
             href="/"
@@ -41,28 +41,37 @@ export default function TopNav() {
           </Link>
         ) : (
           <>
-            <Link
-              href="/work"
-              className="flex items-center justify-center border-[1.5px] border-[var(--color-on-background)] rounded-xl px-2 py-1 bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 hover:opacity-60"
-              aria-label="Work"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-[14px] h-[14px]">
-                <path d="M4 7h16v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7z" />
-                <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
-                <line x1="12" y1="12" x2="12" y2="12.01" />
-              </svg>
-            </Link>
-            <Link
-              href="/projects"
-              className="flex items-center justify-center border-[1.5px] border-[var(--color-on-background)] rounded-xl px-2 py-1 bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 hover:opacity-60"
-              aria-label="Projects"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-[14px] h-[14px]">
-                <polyline points="8 7 3 12 8 17" />
-                <polyline points="16 7 21 12 16 17" />
-              </svg>
-            </Link>
-            <ThemeToggle />
+            <div className="flex items-center gap-3">
+              <span className="text-[9px] font-bold text-[var(--color-outline)] uppercase tracking-[0.15em] opacity-60">switch mode</span>
+              <ThemeToggle />
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-[9px] font-bold text-[var(--color-outline)] uppercase tracking-[0.15em] opacity-60">projects</span>
+              <Link
+                href="/projects"
+                className="flex items-center justify-center border-[1.5px] border-[var(--color-on-background)] rounded-xl px-2 py-1 bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 hover:opacity-60"
+                aria-label="Projects"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-[14px] h-[14px]">
+                  <polyline points="8 7 3 12 8 17" />
+                  <polyline points="16 7 21 12 16 17" />
+                </svg>
+              </Link>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-[9px] font-bold text-[var(--color-outline)] uppercase tracking-[0.15em] opacity-60">experience</span>
+              <Link
+                href="/work"
+                className="flex items-center justify-center border-[1.5px] border-[var(--color-on-background)] rounded-xl px-2 py-1 bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 hover:opacity-60"
+                aria-label="Work"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-[14px] h-[14px]">
+                  <path d="M4 7h16v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7z" />
+                  <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+                  <line x1="12" y1="12" x2="12" y2="12.01" />
+                </svg>
+              </Link>
+            </div>
           </>
         )}
       </nav>
