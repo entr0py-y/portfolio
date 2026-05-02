@@ -1,6 +1,11 @@
+"use client";
+
+import { useState } from "react";
 import PageShell from "@/components/PageShell";
 
 export default function SketchingPage() {
+  const [selectedSketch, setSelectedSketch] = useState<number | null>(null);
+
   return (
     <PageShell title="Sketching">
       <div className="fade-in fade-in-delay-2" style={{ fontFamily: "var(--font-body)" }}>
@@ -13,7 +18,8 @@ export default function SketchingPage() {
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className="group relative aspect-[4/3] rounded-xl bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02]"
+              onClick={() => setSelectedSketch(i)}
+              className="group relative aspect-[4/3] rounded-xl bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] cursor-pointer"
             >
               {/* Subtle sketch pattern */}
               <div className="absolute inset-0 flex items-center justify-center">
@@ -42,6 +48,49 @@ export default function SketchingPage() {
           more coming soon.
         </p>
       </div>
+
+      {/* Maximized View Overlay */}
+      {selectedSketch !== null && (
+        <div 
+          className="fixed inset-0 z-[1000] bg-[var(--color-background)] flex flex-col items-center justify-center p-10 animate-in fade-in duration-300"
+          style={{ fontFamily: "var(--font-body)" }}
+        >
+          {/* Back Button (matching top-right style) */}
+          <button
+            onClick={() => setSelectedSketch(null)}
+            className="absolute top-10 right-10 flex items-center justify-center border-[1.5px] border-[var(--color-on-background)] rounded-xl px-2 py-1 bg-transparent cursor-pointer text-[var(--color-on-background)] transition-opacity duration-200 hover:opacity-60"
+            aria-label="Back to sketches"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-[14px] h-[14px]">
+              <path d="M19 12H5" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+          </button>
+
+          <div className="w-full max-w-[1000px] aspect-[4/3] relative rounded-2xl bg-[var(--color-surface)] border-[2px] border-[var(--color-on-background)] flex items-center justify-center overflow-hidden">
+            <svg
+              viewBox="0 0 100 100"
+              className="w-48 h-48 text-[var(--color-outline-variant)] opacity-20"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="0.5"
+            >
+              <path d="M20 80 L50 20 L80 80" />
+              <circle cx="50" cy="35" r="8" />
+              <path d="M15 85 H85" />
+            </svg>
+            
+            <div className="absolute bottom-10 left-10">
+              <h2 className="text-[24px] font-semibold text-[var(--color-on-background)]">
+                sketch_{String(selectedSketch + 1).padStart(2, "0")}
+              </h2>
+              <p className="text-[14px] text-[var(--color-outline)] mt-2">
+                Drafting some thoughts about the universe...
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </PageShell>
   );
 }
