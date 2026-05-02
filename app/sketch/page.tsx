@@ -5,14 +5,14 @@ import { createPortal } from "react-dom";
 import PageShell from "@/components/PageShell";
 
 const sketches = [
-  { src: "/sketch/sketch1.png", rotate: false },
-  { src: "/sketch/sketch2.jpeg", rotate: false },
-  { src: "/sketch/sketch3.jpeg", rotate: true },
-  { src: "/sketch/sketch4.jpeg", rotate: true },
-  { src: "/sketch/sketch5.jpeg", rotate: true },
-  { src: "/sketch/sketch6.jpeg", rotate: true },
-  { src: "/sketch/sketch7.jpeg", rotate: true },
-  { src: "/sketch/sketch8.jpeg", rotate: true },
+  { src: "/sketch/sketch1.png", top: "0%", left: "5%", rotate: "-12deg", z: 10 },
+  { src: "/sketch/sketch2.jpeg", top: "8%", left: "35%", rotate: "8deg", z: 20 },
+  { src: "/sketch/sketch3.jpeg", top: "20%", left: "-2%", rotate: "-6deg", z: 15 },
+  { src: "/sketch/sketch4.jpeg", top: "25%", left: "42%", rotate: "14deg", z: 25 },
+  { src: "/sketch/sketch5.jpeg", top: "45%", left: "8%", rotate: "-18deg", z: 5 },
+  { src: "/sketch/sketch6.jpeg", top: "48%", left: "48%", rotate: "5deg", z: 30 },
+  { src: "/sketch/sketch7.jpeg", top: "68%", left: "-5%", rotate: "-8deg", z: 20 },
+  { src: "/sketch/sketch8.jpeg", top: "72%", left: "40%", rotate: "12deg", z: 35 },
 ];
 
 export default function SketchingPage() {
@@ -26,31 +26,32 @@ export default function SketchingPage() {
   return (
     <PageShell>
       <div className="fade-in fade-in-delay-2" style={{ fontFamily: "var(--font-body)" }}>
-        <p className="text-[13px] leading-[1.6] font-medium text-[var(--color-on-background)] mb-8">
+        <p className="text-[13px] leading-[1.6] font-medium text-[var(--color-on-background)] mb-12">
           Random ideas, rough thoughts, unfinished things.
         </p>
 
-        {/* Sketches Grid */}
-        <div className="grid grid-cols-2 gap-4">
+        {/* Scattered Collage */}
+        <div className="relative w-full h-[1200px] max-[768px]:h-[1000px] mb-20">
           {sketches.map((sketch, i) => (
             <div
               key={i}
               onClick={() => setSelectedSketch(i)}
-              className="group relative aspect-[4/3] rounded-xl bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] cursor-pointer"
+              className="absolute w-[50%] max-[768px]:w-[65%] p-2 rounded-sm bg-[#e8e8e8] shadow-[0_10px_30px_rgba(0,0,0,0.5)] cursor-pointer hover:!z-[100] transition-transform duration-300 hover:scale-[1.05]"
+              style={{
+                top: sketch.top,
+                left: sketch.left,
+                transform: `rotate(${sketch.rotate})`,
+                zIndex: sketch.z,
+              }}
             >
-              <div className="absolute inset-0">
+              <div className="w-full relative pointer-events-none">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={sketch.src}
                   alt={`Sketch ${i + 1}`}
-                  className={`w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300 ${sketch.rotate ? "rotate-90 scale-[1.35]" : ""}`}
+                  className="w-full h-auto object-cover opacity-90 group-hover:opacity-100"
                   loading="lazy"
                 />
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-[var(--color-surface)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <span className="text-[10px] text-[var(--color-on-background)] font-medium drop-shadow-md">
-                  sketch_{String(i + 1).padStart(2, "0")}
-                </span>
               </div>
             </div>
           ))}
