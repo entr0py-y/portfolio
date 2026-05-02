@@ -9,15 +9,7 @@ export default function TopNav() {
   const isSubPage = pathname !== "/";
 
   return (
-    <>
-      <div className="fixed top-24 left-10 flex items-center gap-0 text-[18px] font-medium z-[100] max-[768px]:top-16 max-[768px]:left-5" style={{ fontFamily: "var(--font-body)" }}>
-        <span className="text-[#aa8970]">sylk</span>
-        <span className="opacity-30">.monster</span>
-        {pathname !== "/" && (
-          <span className="opacity-30">{pathname}</span>
-        )}
-      </div>
-      <nav className="fixed top-10 right-10 flex gap-3 z-[100] max-[768px]:top-5 max-[768px]:right-5">
+    <nav className="fixed top-10 right-10 flex gap-3 z-[100] max-[768px]:top-5 max-[768px]:right-5">
       {isSubPage && (
         <Link
           href="/"
@@ -51,7 +43,6 @@ export default function TopNav() {
         </svg>
       </button>
       <ThemeToggle />
-      </nav>
-    </>
+    </nav>
   );
 }
