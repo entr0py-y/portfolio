@@ -37,6 +37,7 @@ function GameImage({ game, sizes, className }: { game: SteamGame; sizes: string;
       className={className}
       sizes={sizes}
       onError={() => setError(true)}
+      unoptimized
     />
   );
 }
