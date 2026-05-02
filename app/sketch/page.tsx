@@ -5,14 +5,14 @@ import { createPortal } from "react-dom";
 import PageShell from "@/components/PageShell";
 
 const sketches = [
-  "/sketch/sketch1.png",
-  "/sketch/sketch2.jpeg",
-  "/sketch/sketch3.jpeg",
-  "/sketch/sketch4.jpeg",
-  "/sketch/sketch5.jpeg",
-  "/sketch/sketch6.jpeg",
-  "/sketch/sketch7.jpeg",
-  "/sketch/sketch8.jpeg",
+  { src: "/sketch/sketch1.png", rotate: false },
+  { src: "/sketch/sketch2.jpeg", rotate: false },
+  { src: "/sketch/sketch3.jpeg", rotate: true },
+  { src: "/sketch/sketch4.jpeg", rotate: true },
+  { src: "/sketch/sketch5.jpeg", rotate: true },
+  { src: "/sketch/sketch6.jpeg", rotate: true },
+  { src: "/sketch/sketch7.jpeg", rotate: true },
+  { src: "/sketch/sketch8.jpeg", rotate: true },
 ];
 
 export default function SketchingPage() {
@@ -32,7 +32,7 @@ export default function SketchingPage() {
 
         {/* Sketches Grid */}
         <div className="grid grid-cols-2 gap-4">
-          {sketches.map((src, i) => (
+          {sketches.map((sketch, i) => (
             <div
               key={i}
               onClick={() => setSelectedSketch(i)}
@@ -41,9 +41,9 @@ export default function SketchingPage() {
               <div className="absolute inset-0">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={src}
+                  src={sketch.src}
                   alt={`Sketch ${i + 1}`}
-                  className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300"
+                  className={`w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300 ${sketch.rotate ? "rotate-90 scale-[1.35]" : ""}`}
                   loading="lazy"
                 />
               </div>
@@ -82,7 +82,7 @@ export default function SketchingPage() {
           <div className="w-full max-w-[1000px] h-[80vh] relative rounded-2xl bg-[var(--color-surface)] border-[2px] border-[var(--color-on-background)] flex items-center justify-center overflow-hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={sketches[selectedSketch]}
+              src={sketches[selectedSketch].src}
               alt={`Sketch ${selectedSketch + 1}`}
               className="w-full h-full object-contain"
             />

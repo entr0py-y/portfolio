@@ -15,7 +15,7 @@ export default function ListeningPage() {
           <iframe
             allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
             frameBorder="0"
-            height="400"
+            height="700"
             sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
             src="https://embed.music.apple.com/in/playlist/plastic-airbag/pl.u-8aAVZ5bUvqN74DV?theme=dark"
             className="w-full rounded-xl"
