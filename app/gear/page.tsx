@@ -43,7 +43,7 @@ export default function GearPage() {
                 {section.items.map((item, i) => (
                   <div
                     key={i}
-                    className="flex items-center justify-between p-3.5 rounded-xl bg-[var(--color-surface)] border border-[var(--color-outline-variant)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.01] hover:border-[var(--color-accent)]"
+                    className="flex items-center justify-between p-3.5 rounded-xl bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.01]"
                   >
                     <span className="text-[13px] font-semibold text-[var(--color-on-background)]">
                       {item.name}

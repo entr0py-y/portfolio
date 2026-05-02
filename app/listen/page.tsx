@@ -13,7 +13,7 @@ export default function ListeningPage() {
           {Array.from({ length: 5 }).map((_, i) => (
             <div
               key={i}
-              className="flex items-center gap-4 p-3.5 rounded-xl bg-[var(--color-surface)] border border-[var(--color-outline-variant)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.01] hover:border-[var(--color-accent)]"
+              className="flex items-center gap-4 p-3.5 rounded-xl bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.01]"
             >
               {/* Album art placeholder */}
               <div className="w-10 h-10 rounded-lg bg-[var(--color-outline-variant)] flex items-center justify-center shrink-0">

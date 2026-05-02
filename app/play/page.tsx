@@ -77,7 +77,7 @@ export default function PlayingPage() {
           </div>
         ) : (
           <div className="flex flex-wrap gap-3 mb-6">
-            <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[12px] font-semibold bg-[var(--color-surface)] border border-[var(--color-outline-variant)] text-[var(--color-on-background)]">
+            <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-[12px] font-semibold bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] text-[var(--color-on-background)]">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70">
                 <line x1="6" x2="10" y1="12" y2="12"/>
                 <line x1="8" x2="8" y1="10" y2="14"/>
@@ -87,7 +87,7 @@ export default function PlayingPage() {
               </svg>
               {data!.totalGames} games
             </span>
-            <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[12px] font-semibold bg-[var(--color-surface)] border border-[var(--color-outline-variant)] text-[var(--color-on-background)]">
+            <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-[12px] font-semibold bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] text-[var(--color-on-background)]">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70">
                 <circle cx="12" cy="12" r="10" />
                 <polyline points="12 6 12 12 16 14" />
@@ -118,7 +118,7 @@ export default function PlayingPage() {
               data!.recentlyPlayed.map((game) => (
                 <div
                   key={game.appid}
-                  className="flex gap-4 items-center p-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-outline-variant)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.01]"
+                  className="flex gap-4 items-center p-3 rounded-xl bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.01]"
                 >
                   <div className="relative w-[160px] h-[75px] rounded-lg overflow-hidden shrink-0 max-[768px]:w-[120px] max-[768px]:h-[56px]">
                     <GameImage
@@ -156,7 +156,7 @@ export default function PlayingPage() {
               data!.library.map((game) => (
                 <div
                   key={game.appid}
-                  className="flex gap-3 items-center p-2.5 rounded-xl bg-[var(--color-surface)] border border-[var(--color-outline-variant)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.02]"
+                  className="flex gap-3 items-center p-2.5 rounded-xl bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.02]"
                 >
                   <div className="relative w-[80px] h-[38px] rounded-lg overflow-hidden shrink-0">
                     <GameImage
