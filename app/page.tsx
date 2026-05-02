@@ -116,7 +116,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="ml-0 text-[12px] font-semibold mt-12 pb-0" style={{ fontFamily: "var(--font-body)" }}>
+      <footer className="ml-0 text-[12px] font-semibold mt-0 pb-0" style={{ fontFamily: "var(--font-body)" }}>
         <p>© 2026 Pushkar Jha</p>
       </footer>
     </div>
