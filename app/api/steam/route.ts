@@ -63,6 +63,7 @@ export async function GET() {
       appid: g.appid,
       name: g.name,
       imageUrl: `https://cdn.cloudflare.steamstatic.com/steam/apps/${g.appid}/header.jpg`,
+      iconUrl: `https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/${g.appid}/${g.img_icon_url}.jpg`,
       playtimeThisWeek: Math.round((g.playtime_2weeks || 0) / 60 * 10) / 10,
       playtimeTotal: Math.round(g.playtime_forever / 60 * 10) / 10,
     }));
@@ -75,6 +76,7 @@ export async function GET() {
         appid: g.appid,
         name: g.name,
         imageUrl: `https://cdn.cloudflare.steamstatic.com/steam/apps/${g.appid}/header.jpg`,
+        iconUrl: `https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/${g.appid}/${g.img_icon_url}.jpg`,
         playtimeTotal: Math.round(g.playtime_forever / 60 * 10) / 10,
       }));
 

@@ -8,6 +8,7 @@ interface SteamGame {
   appid: number;
   name: string;
   imageUrl: string;
+  iconUrl?: string;
   playtimeThisWeek?: number;
   playtimeTotal: number;
 }
@@ -22,6 +23,21 @@ interface SteamData {
 function SkeletonCard({ wide = false }: { wide?: boolean }) {
   return (
     <div className={`skeleton ${wide ? "h-[120px]" : "h-[80px]"} w-full rounded-xl`} />
+  );
+}
+
+function GameImage({ game, sizes, className }: { game: SteamGame; sizes: string; className?: string }) {
+  const [error, setError] = useState(false);
+
+  return (
+    <Image
+      src={error && game.iconUrl ? game.iconUrl : game.imageUrl}
+      alt={game.name}
+      fill
+      className={className}
+      sizes={sizes}
+      onError={() => setError(true)}
+    />
   );
 }
 
@@ -94,10 +110,8 @@ export default function PlayingPage() {
                   className="flex gap-4 items-center p-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-outline-variant)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.01]"
                 >
                   <div className="relative w-[160px] h-[75px] rounded-lg overflow-hidden shrink-0 max-[768px]:w-[120px] max-[768px]:h-[56px]">
-                    <Image
-                      src={game.imageUrl}
-                      alt={game.name}
-                      fill
+                    <GameImage
+                      game={game}
                       className="object-cover"
                       sizes="160px"
                     />
@@ -134,10 +148,8 @@ export default function PlayingPage() {
                   className="flex gap-3 items-center p-2.5 rounded-xl bg-[var(--color-surface)] border border-[var(--color-outline-variant)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.02]"
                 >
                   <div className="relative w-[80px] h-[38px] rounded-lg overflow-hidden shrink-0">
-                    <Image
-                      src={game.imageUrl}
-                      alt={game.name}
-                      fill
+                    <GameImage
+                      game={game}
                       className="object-cover"
                       sizes="80px"
                     />
