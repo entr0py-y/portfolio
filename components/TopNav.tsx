@@ -17,11 +17,11 @@ export default function TopNav() {
         className="no-underline"
         style={{ fontFamily: "var(--font-body)" }}
       >
-        <span className="text-[26px] font-semibold leading-none">
-          <span className="text-[#aa8970]">sylk</span>
-          <span className="text-[var(--color-on-background)]">.monster</span>
+        <span className="text-[26px] font-semibold leading-none text-[#eeddd0]">
+          <span>sylk</span>
+          <span>.monster</span>
           {segment && (
-            <span className="text-[var(--color-on-background)]">/{segment}</span>
+            <span>/{segment}</span>
           )}
         </span>
       </Link>
