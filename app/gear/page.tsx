@@ -15,21 +15,18 @@ const gearItems = [
     detail: "Portable setup",
     image: "/gear/macbook-air-m1.jpg",
     url: "https://www.amazon.in/s?k=MacBook+Air+M1",
-    blend: true,
   },
   {
     name: "OnePlus Nord 5",
     detail: "Daily driver · 12/256",
     image: "/gear/oneplus-nord5.png",
     url: "https://www.oneplus.in/nord-5",
-    blend: true,
   },
   {
     name: "HyperX Cloud Stinger 2",
     detail: "Headphones",
     image: "/gear/hyperx-stinger2.jpg",
     url: "https://www.amazon.in/s?k=HyperX+Cloud+Stinger+2",
-    blend: true,
   },
   {
     name: "Tangzu Wan'er SG2",
@@ -42,14 +39,12 @@ const gearItems = [
     detail: "Wireless earbuds",
     image: "/gear/oneplus-buds4.png",
     url: "https://www.oneplus.in/buds-4",
-    blend: true,
   },
   {
     name: "Audiocular D07",
     detail: "Portable DAC",
     image: "/gear/audiocular-d07.png",
     url: "https://www.amazon.in/s?k=Audiocular+D07+DAC",
-    blend: true,
   },
 ];
 
@@ -105,7 +100,6 @@ export default function GearPage() {
                     src={item.image}
                     alt={item.name}
                     className="w-full h-full object-contain"
-                    style={{ mixBlendMode: item.blend ? "multiply" : "normal" }}
                     loading="lazy"
                   />
                 </div>
