@@ -80,19 +80,13 @@ export default function SketchingPage() {
             </svg>
           </button>
 
-          <div className="w-full max-w-[1000px] h-[80vh] relative rounded-2xl bg-[var(--color-surface)] border-[2px] border-[var(--color-on-background)] flex items-center justify-center overflow-hidden">
+          <div className="relative flex items-center justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={sketches[selectedSketch].src}
               alt={`Sketch ${selectedSketch + 1}`}
-              className="w-full h-full object-contain"
+              className="max-w-[90vw] max-h-[85vh] rounded-2xl border-[2px] border-[var(--color-on-background)] shadow-2xl bg-[var(--color-surface)] object-contain"
             />
-            
-            <div className="absolute bottom-0 left-0 right-0 p-10 bg-gradient-to-t from-[var(--color-surface)] via-[var(--color-surface)] to-transparent opacity-90 pointer-events-none">
-              <h2 className="text-[24px] font-semibold text-[var(--color-on-background)] drop-shadow-lg">
-                sketch_{String(selectedSketch + 1).padStart(2, "0")}
-              </h2>
-            </div>
           </div>
         </div>,
         document.body
