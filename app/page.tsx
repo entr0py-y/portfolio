@@ -7,7 +7,7 @@ export default function Home() {
         {/* Header */}
         <header className="mb-12 ml-0" style={{ fontFamily: "var(--font-body)" }}>
           <h1 className="text-[26px] font-semibold text-[var(--color-on-background)] m-0" style={{ fontFamily: "var(--font-body)" }}>
-            Hi! I&apos;m <span className="text-[#eeddd0]">Pushkar</span>
+            Hi! I&apos;m <span className="text-[#44372d]">Pushkar</span>
           </h1>
           <p className="text-[16px] leading-relaxed mt-2 mb-4 text-[var(--color-on-background)] font-normal" style={{ fontFamily: "var(--font-body)" }}>
             i build stuff.
