@@ -5,7 +5,7 @@ export default function Home() {
     <div className="w-full max-w-[650px] px-10 pt-10 pb-15 relative flex flex-col min-h-screen box-border z-[1] max-[768px]:px-5 max-[768px]:pt-4">
       <div className="flex flex-col flex-1">
         {/* Header */}
-        <header className="mb-15 ml-0 max-[768px]:mb-0" style={{ fontFamily: "var(--font-body)" }}>
+        <header className="mb-12 ml-0" style={{ fontFamily: "var(--font-body)" }}>
           <h1 className="text-[26px] font-semibold text-[var(--color-on-background)] m-0" style={{ fontFamily: "var(--font-body)" }}>
             Hi! I&apos;m <span className="text-[#aa8970]">Pushkar</span>
           </h1>
@@ -50,9 +50,9 @@ export default function Home() {
         </header>
 
         {/* Main Content */}
-        <div className="w-full flex flex-col flex-1 max-[768px]:flex-1 max-[768px]:flex max-[768px]:flex-col max-[768px]:justify-evenly max-[768px]:gap-4">
+        <div className="w-full flex flex-col flex-1">
           {/* About */}
-          <section className="mb-15 max-w-[650px] ml-0 max-[768px]:!mb-0" style={{ fontFamily: "var(--font-body)" }}>
+          <section className="mb-12 max-w-[650px] ml-0" style={{ fontFamily: "var(--font-body)" }}>
             <div className="flex items-start mb-4 mt-0">
               <h2 className="text-[24px] font-normal m-0 leading-none" style={{ fontFamily: "var(--font-body)" }}>about</h2>
             </div>
@@ -73,7 +73,7 @@ export default function Home() {
           </section>
 
           {/* Escape Widget / Music Player */}
-          <section className="mb-15 ml-0 max-[768px]:!mb-0" style={{ fontFamily: "var(--font-body)" }}>
+          <section className="mb-12 ml-0" style={{ fontFamily: "var(--font-body)" }}>
             <div className="flex items-start mb-4 mt-0">
               <h2 className="text-[24px] font-normal m-0 leading-none" style={{ fontFamily: "var(--font-body)" }}>mah plelist.</h2>
             </div>
@@ -103,7 +103,7 @@ export default function Home() {
           </section>
 
           {/* Contact */}
-          <section className="mb-15 max-w-[650px] ml-0 max-[768px]:!mb-0" style={{ fontFamily: "var(--font-body)" }}>
+          <section className="mb-12 max-w-[650px] ml-0" style={{ fontFamily: "var(--font-body)" }}>
             <div className="flex items-start mb-4 mt-0">
               <h2 className="text-[24px] font-normal m-0 leading-none" style={{ fontFamily: "var(--font-body)" }}>contact</h2>
             </div>
@@ -116,7 +116,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="ml-0 text-[12px] font-semibold mt-auto max-[768px]:mt-0 max-[768px]:pb-0" style={{ fontFamily: "var(--font-body)" }}>
+      <footer className="ml-0 text-[12px] font-semibold mt-12 pb-6" style={{ fontFamily: "var(--font-body)" }}>
         <p>© 2026 Pushkar Jha</p>
       </footer>
     </div>
