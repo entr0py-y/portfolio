@@ -16,6 +16,7 @@
   --color-accent: #22c55e;
   --color-accent-hover: #4ade80;
   --color-highlight: #aa8970;
+  --color-section-header: #1a1a1a;
   --color-muted: #e5e5e1;
 
   --font-signature: "Caveat", cursive;
@@ -78,6 +79,7 @@ html.dark-mode {
   --color-outline: #a0a0a0;
   --color-outline-variant: #404040;
   --color-highlight: #eeddd0;
+  --color-section-header: #aa8970;
 }
 
 html.dark-mode body::before {

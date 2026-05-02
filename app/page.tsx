@@ -54,7 +54,7 @@ export default function Home() {
           {/* About */}
           <section className="mb-6 max-w-[650px] ml-0" style={{ fontFamily: "var(--font-body)" }}>
             <div className="flex items-start mb-4 mt-0">
-              <h2 className="text-[24px] font-normal m-0 leading-none text-[#aa8970]" style={{ fontFamily: "var(--font-body)" }}>
+              <h2 className="text-[24px] font-normal m-0 leading-none text-[var(--color-section-header)]" style={{ fontFamily: "var(--font-body)" }}>
                 about <span className="text-[var(--color-highlight)] text-[24px] font-bold">/ 自己紹介</span>
               </h2>
             </div>
@@ -77,7 +77,7 @@ export default function Home() {
           {/* Escape Widget / Music Player */}
           <section className="mb-6 ml-0" style={{ fontFamily: "var(--font-body)" }}>
             <div className="flex items-start mb-4 mt-0">
-              <h2 className="text-[24px] font-normal m-0 leading-none text-[#aa8970]" style={{ fontFamily: "var(--font-body)" }}>
+              <h2 className="text-[24px] font-normal m-0 leading-none text-[var(--color-section-header)]" style={{ fontFamily: "var(--font-body)" }}>
                 mah plelist. <span className="text-[var(--color-highlight)] text-[24px] font-bold">/ プレイリスト</span>
               </h2>
             </div>
@@ -109,7 +109,7 @@ export default function Home() {
           {/* Contact */}
           <section className="mb-6 max-w-[650px] ml-0" style={{ fontFamily: "var(--font-body)" }}>
             <div className="flex items-start mb-4 mt-0">
-              <h2 className="text-[24px] font-normal m-0 leading-none text-[#aa8970]" style={{ fontFamily: "var(--font-body)" }}>
+              <h2 className="text-[24px] font-normal m-0 leading-none text-[var(--color-section-header)]" style={{ fontFamily: "var(--font-body)" }}>
                 contact <span className="text-[var(--color-highlight)] text-[24px] font-bold">/ 連絡先</span>
               </h2>
             </div>
