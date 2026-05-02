@@ -1,10 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import PageShell from "@/components/PageShell";
 
 export default function SketchingPage() {
   const [selectedSketch, setSelectedSketch] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <PageShell>
@@ -50,7 +56,7 @@ export default function SketchingPage() {
       </div>
 
       {/* Maximized View Overlay */}
-      {selectedSketch !== null && (
+      {mounted && selectedSketch !== null && createPortal(
         <div 
           className="fixed inset-0 z-[1000] bg-[var(--color-background)] flex flex-col items-center justify-center p-10 animate-in fade-in duration-300"
           style={{ fontFamily: "var(--font-body)" }}
@@ -89,7 +95,8 @@ export default function SketchingPage() {
               </p>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </PageShell>
   );
