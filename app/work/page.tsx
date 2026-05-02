@@ -29,11 +29,11 @@ export default function WorkPage() {
         </div>
 
         {/* ACHIEVEMENTS */}
-        <section className="mb-14">
-          <h2 className="text-[11px] font-bold tracking-widest uppercase text-[var(--color-outline)] mb-6">
+        <section className="mb-10">
+          <h2 className="text-[11px] font-bold tracking-widest uppercase text-[var(--color-outline)] mb-4">
             Achievements
           </h2>
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4">
             <div>
               <div className="text-[14px] font-semibold text-[var(--color-on-background)]">
                 Winner — GenCodeX Hackathon
@@ -62,11 +62,11 @@ export default function WorkPage() {
         </section>
 
         {/* CERTIFICATIONS */}
-        <section className="mb-14">
-          <h2 className="text-[11px] font-bold tracking-widest uppercase text-[var(--color-outline)] mb-6">
+        <section className="mb-10">
+          <h2 className="text-[11px] font-bold tracking-widest uppercase text-[var(--color-outline)] mb-4">
             Certifications
           </h2>
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-3">
             <div className="text-[14px] font-semibold text-[var(--color-on-background)]">
               JP Morgan Chase — Software Engineering Job Simulation
             </div>
@@ -77,11 +77,11 @@ export default function WorkPage() {
         </section>
 
         {/* TECH STACK */}
-        <section className="mb-10">
-          <h2 className="text-[11px] font-bold tracking-widest uppercase text-[var(--color-outline)] mb-6">
+        <section className="mb-8">
+          <h2 className="text-[11px] font-bold tracking-widest uppercase text-[var(--color-outline)] mb-4">
             Tech Stack
           </h2>
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4">
             <div>
               <div className="text-[13px] font-bold text-[var(--color-on-background)] mb-1">
                 Languages
