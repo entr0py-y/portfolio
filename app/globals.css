@@ -1,0 +1,191 @@
+@import "tailwindcss";
+
+/* =========================================
+   DESIGN TOKENS (CSS Custom Properties)
+   Ported from existing styles.css
+   ========================================= */
+
+@theme {
+  --color-background: #fdfdfb;
+  --color-on-background: #1a1a1a;
+  --color-surface: #faf9f5;
+  --color-on-surface: #1a1c1a;
+  --color-outline: #747878;
+  --color-outline-variant: #c4c7c7;
+  --color-secondary: #7c5357;
+  --color-accent: #22c55e;
+  --color-accent-hover: #4ade80;
+  --color-highlight: #aa8970;
+  --color-muted: #e5e5e1;
+
+  --font-signature: "Caveat", cursive;
+  --font-headline: "Epilogue", sans-serif;
+  --font-body: "Manrope", sans-serif;
+}
+
+/* =========================================
+   BASE / RESET
+   ========================================= */
+
+html {
+  background-color: var(--color-background);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+  font-family: var(--font-body);
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  justify-content: flex-start;
+  overflow-x: hidden;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* =========================================
+   GRAIN OVERLAY
+   ========================================= */
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)"/></svg>');
+  opacity: 0.05;
+  z-index: 9999;
+}
+
+/* =========================================
+   DARK MODE
+   ========================================= */
+
+html.dark-mode {
+  --color-background: #121212;
+  --color-on-background: #fdfdfb;
+  --color-surface: #1e1e1e;
+  --color-on-surface: #fdfdfb;
+  --color-outline: #a0a0a0;
+  --color-outline-variant: #404040;
+}
+
+html.dark-mode body::before {
+  opacity: 0.03;
+}
+
+html.dark-mode img {
+  filter: brightness(0.9);
+  transition: filter 0.4s ease;
+}
+
+html.dark-mode .bg-character img,
+html.dark-mode .album-art img {
+  filter: brightness(1);
+}
+
+html.dark-mode .signature-img {
+  filter: invert(1);
+}
+
+/* =========================================
+   INTERACTIVE LINK STYLE (for about words)
+   ========================================= */
+
+.interactive-word {
+  color: var(--color-highlight);
+  text-decoration: underline;
+  text-decoration-color: var(--color-highlight);
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  transition: opacity 0.2s;
+  font-weight: 600;
+}
+
+.interactive-word:hover {
+  opacity: 0.6;
+}
+
+/* =========================================
+   INLINE LINK (existing contact links)
+   ========================================= */
+
+.inline-link {
+  color: var(--color-highlight);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--color-highlight);
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.inline-link:hover {
+  opacity: 0.6;
+}
+
+/* =========================================
+   SKELETON LOADING
+   ========================================= */
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface) 25%,
+    var(--color-outline-variant) 50%,
+    var(--color-surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+/* =========================================
+   FADE IN ANIMATION
+   ========================================= */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.fade-in-delay-1 { animation-delay: 0.1s; opacity: 0; }
+.fade-in-delay-2 { animation-delay: 0.2s; opacity: 0; }
+.fade-in-delay-3 { animation-delay: 0.3s; opacity: 0; }
+.fade-in-delay-4 { animation-delay: 0.4s; opacity: 0; }
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-height: 100dvh;
+  }
+}
