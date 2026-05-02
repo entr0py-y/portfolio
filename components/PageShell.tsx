@@ -7,7 +7,7 @@ interface PageShellProps {
 
 export default function PageShell({ title, children }: PageShellProps) {
   return (
-    <div className="w-full max-w-[650px] px-10 pt-20 pb-10 relative flex flex-col min-h-screen box-border z-[1] max-[768px]:px-5 max-[768px]:pt-16 max-[768px]:pb-4">
+    <div className="w-full max-w-[650px] px-10 pt-20 pb-6 relative flex flex-col min-h-screen box-border z-[1] max-[768px]:px-5 max-[768px]:pt-16 max-[768px]:pb-4">
       {/* Title */}
       {title && (
         <h1
@@ -23,7 +23,7 @@ export default function PageShell({ title, children }: PageShellProps) {
 
       {/* Footer */}
       <footer
-        className="text-[12px] font-semibold mt-6"
+        className="text-[12px] font-semibold mt-2"
         style={{ fontFamily: "var(--font-body)" }}
       >
         <p>© 2026 Pushkar Jha</p>
