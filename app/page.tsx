@@ -61,13 +61,13 @@ export default function Home() {
             </p>
             <p className="text-[13px] leading-[1.6] font-medium m-0 mb-4" style={{ fontFamily: "var(--font-body)" }}>
               When I&apos;m not coding, I&apos;m usually{" "}
-              <Link href="/sketching" className="interactive-word">sketching</Link>{" "}
+              <Link href="/sketch" className="interactive-word">sketching</Link>{" "}
               random ideas that don&apos;t always make sense at first, playing{" "}
-              <Link href="/playing" className="interactive-word">games</Link>{" "}
+              <Link href="/play" className="interactive-word">games</Link>{" "}
               to slow things down, tweaking my{" "}
               <Link href="/gear" className="interactive-word">gear</Link>{" "}
               just because I can, or just{" "}
-              <Link href="/listening" className="interactive-word">listening</Link>{" "}
+              <Link href="/listen" className="interactive-word">listening</Link>{" "}
               to something on repeat while figuring things out in my head.
             </p>
           </section>
