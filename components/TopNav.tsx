@@ -19,9 +19,9 @@ export default function TopNav() {
       >
         <span className="text-[26px] font-semibold leading-none">
           <span className="text-[#aa8970]">sylk</span>
-          <span className="text-[var(--color-on-background)]">.monster</span>
+          <span className="text-[var(--color-highlight)]">.monster</span>
           {segment && (
-            <span className="text-[var(--color-on-background)]">/{segment}</span>
+            <span className="text-[var(--color-highlight)]">/{segment}</span>
           )}
         </span>
       </Link>
