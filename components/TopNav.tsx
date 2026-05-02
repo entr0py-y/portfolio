@@ -42,9 +42,9 @@ export default function TopNav() {
         ) : (
           <>
             <Link
-              href="/"
+              href="/work"
               className="flex items-center justify-center border-[1.5px] border-[var(--color-on-background)] rounded-xl px-2 py-1 bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 hover:opacity-60"
-              aria-label="Portfolio"
+              aria-label="Work"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-[14px] h-[14px]">
                 <path d="M4 7h16v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7z" />
