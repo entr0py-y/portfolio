@@ -17,7 +17,7 @@ export default function TopNav() {
         className="no-underline"
         style={{ fontFamily: "var(--font-body)" }}
       >
-        <span className="text-[26px] font-semibold leading-none text-[#eeddd0]">
+        <span className="text-[26px] font-semibold leading-none text-[#aa8970]">
           <span>sylk</span>
           <span>.monster</span>
           {segment && (
