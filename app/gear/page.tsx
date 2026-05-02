@@ -29,7 +29,7 @@ export default function GearPage() {
   return (
     <PageShell title="Gear">
       <div className="fade-in fade-in-delay-2" style={{ fontFamily: "var(--font-body)" }}>
-        <p className="text-[16px] leading-[1.6] font-medium text-[var(--color-on-background)] mb-8">
+        <p className="text-[13px] leading-[1.6] font-medium text-[var(--color-on-background)] mb-8">
           What I use day to day. Nothing fancy — just what works.
         </p>
 

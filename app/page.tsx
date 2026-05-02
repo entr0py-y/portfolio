@@ -56,10 +56,10 @@ export default function Home() {
             <div className="flex items-start mb-4 mt-0">
               <h2 className="text-[24px] font-normal m-0 leading-none text-[#aa8970]" style={{ fontFamily: "var(--font-body)" }}>about</h2>
             </div>
-            <p className="text-[16px] leading-[1.6] font-medium m-0 mb-4" style={{ fontFamily: "var(--font-body)" }}>
+            <p className="text-[13px] leading-[1.6] font-medium m-0 mb-4" style={{ fontFamily: "var(--font-body)" }}>
               I&apos;m a first-year computer science student and software developer focused on building clean, scalable applications and exploring new technologies.
             </p>
-            <p className="text-[16px] leading-[1.6] font-medium m-0 mb-4" style={{ fontFamily: "var(--font-body)" }}>
+            <p className="text-[13px] leading-[1.6] font-medium m-0 mb-4" style={{ fontFamily: "var(--font-body)" }}>
               When I&apos;m not coding, I&apos;m usually{" "}
               <Link href="/sketch" className="interactive-word">sketching</Link>{" "}
               random ideas that don&apos;t always make sense at first, playing{" "}
@@ -96,7 +96,7 @@ export default function Home() {
                 />
               </div>
               <div className="flex flex-col">
-                <div className="text-[16px] font-semibold mb-0.5">Plastic Airbag</div>
+                <div className="text-[13px] font-semibold mb-0.5">Plastic Airbag</div>
                 <div className="text-[12px] text-[var(--color-on-background)] opacity-70 mb-2">what I disappear into</div>
               </div>
             </div>
@@ -107,7 +107,7 @@ export default function Home() {
             <div className="flex items-start mb-4 mt-0">
               <h2 className="text-[24px] font-normal m-0 leading-none text-[#aa8970]" style={{ fontFamily: "var(--font-body)" }}>contact</h2>
             </div>
-            <p className="text-[16px] leading-[1.6] font-medium m-0 mb-4" style={{ fontFamily: "var(--font-body)" }}>
+            <p className="text-[13px] leading-[1.6] font-medium m-0 mb-4" style={{ fontFamily: "var(--font-body)" }}>
               Whether it&apos;s a project, collaboration, or just a random idea you want to talk about, I&apos;m down.
               Hit me up on <a href="https://wa.me/917982499778" className="inline-link" target="_blank">WhatsApp</a> or <a href="#" className="inline-link">Discord</a>. If you prefer keeping things simple, <a href="mailto:pushkarjha880@gmail.com" className="inline-link">email</a> works just as well.
             </p>

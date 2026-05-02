@@ -98,7 +98,7 @@ export default function PlayingPage() {
         )}
 
         {/* Description */}
-        <p className="text-[16px] leading-[1.6] font-medium text-[var(--color-on-background)] mb-8">
+        <p className="text-[13px] leading-[1.6] font-medium text-[var(--color-on-background)] mb-8">
           Big fan of story-driven games and JRPGs.
         </p>
 

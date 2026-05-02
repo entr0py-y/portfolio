@@ -4,7 +4,7 @@ export default function ListeningPage() {
   return (
     <PageShell title="Listening">
       <div className="fade-in fade-in-delay-2" style={{ fontFamily: "var(--font-body)" }}>
-        <p className="text-[16px] leading-[1.6] font-medium text-[var(--color-on-background)] mb-8">
+        <p className="text-[13px] leading-[1.6] font-medium text-[var(--color-on-background)] mb-8">
           Usually looping the same few tracks.
         </p>
 
