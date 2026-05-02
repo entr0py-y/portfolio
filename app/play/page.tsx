@@ -159,13 +159,6 @@ export default function PlayingPage() {
                   key={game.appid}
                   className="flex gap-3 items-center py-2 transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.02]"
                 >
-                  <div className="relative w-[80px] h-[38px] rounded-md overflow-hidden shrink-0 shadow-sm border-[1px] border-[var(--color-on-background)]">
-                    <GameImage
-                      game={game}
-                      className="object-cover"
-                      sizes="80px"
-                    />
-                  </div>
                   <div className="flex flex-col min-w-0">
                     <span className="text-[12px] font-semibold text-[var(--color-on-background)] truncate">{game.name}</span>
                     <span className="text-[10px] text-[var(--color-outline)]">{game.playtimeTotal} hrs</span>
