@@ -92,12 +92,7 @@ export default function Home() {
                 <img
                   src="/signature.png"
                   alt="Signature"
-                  className="signature-img absolute pointer-events-none opacity-85 rotate-[30deg] w-[300px] object-contain max-[768px]:w-[200px] max-[768px]:rotate-[25deg] max-[768px]:z-[20]"
-                  style={{
-                    left: "calc(200px + (100% - 200px) / 2)",
-                    top: "50%",
-                    transform: "translate(-50%, -50%) rotate(30deg)",
-                  }}
+                  className="signature-img absolute left-[200px] right-0 mx-auto w-[420px] object-contain opacity-85 rotate-[30deg] pointer-events-none max-[768px]:absolute max-[768px]:left-[140px] max-[768px]:right-0 max-[768px]:mx-auto max-[768px]:top-1/2 max-[768px]:-translate-y-1/2 max-[768px]:rotate-[25deg] max-[768px]:w-[240px] max-[768px]:z-[20]"
                 />
               </div>
               <div className="flex flex-col">
