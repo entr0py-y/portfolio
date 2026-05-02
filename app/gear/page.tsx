@@ -54,28 +54,23 @@ export default function GearPage() {
       <div className="fade-in fade-in-delay-2" style={{ fontFamily: "var(--font-body)" }}>
 
         {/* Main Workstation */}
-        <div className="mb-8">
-          <h3 className="text-[12px] font-semibold mb-3 text-[var(--color-outline)] uppercase tracking-wider">
-            Workstation
-          </h3>
-          <div className="p-4 rounded-xl bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.01]">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-[13px] font-semibold text-[var(--color-on-background)]">
-                Main Workstation
-              </span>
-            </div>
-            <div className="flex flex-col gap-1.5">
-              {pcSpecs.map((spec) => (
-                <div key={spec.label} className="flex items-baseline justify-between">
-                  <span className="text-[11px] font-medium text-[var(--color-outline)]">
-                    {spec.label}
-                  </span>
-                  <span className="text-[11px] text-[var(--color-on-background)] opacity-80 text-right ml-4">
-                    {spec.value}
-                  </span>
-                </div>
-              ))}
-            </div>
+        <div className="mb-10">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-[14px] font-bold text-[var(--color-on-background)]">
+              Main Workstation
+            </span>
+          </div>
+          <div className="flex flex-col gap-2">
+            {pcSpecs.map((spec) => (
+              <div key={spec.label} className="flex items-baseline justify-between">
+                <span className="text-[12px] font-medium text-[var(--color-outline)]">
+                  {spec.label}
+                </span>
+                <span className="text-[12px] text-[var(--color-on-background)] opacity-80 text-right ml-4">
+                  {spec.value}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
 
