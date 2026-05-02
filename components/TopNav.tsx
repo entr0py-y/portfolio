@@ -10,7 +10,7 @@ export default function TopNav() {
   const segment = isSubPage ? pathname.split("/").filter(Boolean)[0] : null;
 
   return (
-    <div className="w-full max-w-none px-10 pt-10 pb-0 flex items-center justify-between z-[100] max-[768px]:px-5 max-[768px]:pt-5 absolute top-0 left-0 right-0">
+    <div className="w-full max-w-none px-10 pt-10 pb-0 flex items-start justify-between z-[100] max-[768px]:px-5 max-[768px]:pt-5 absolute top-0 left-0 right-0">
       {/* Logo — left */}
       <Link
         href="/"
