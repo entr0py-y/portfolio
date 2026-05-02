@@ -6,11 +6,11 @@ export default function Home() {
       <div className="flex flex-col flex-1">
         {/* Header */}
         <header className="mb-6 ml-0" style={{ fontFamily: "var(--font-body)" }}>
-          <h1 className="font-semibold text-[var(--color-on-background)] m-0" style={{ fontFamily: "var(--font-body)" }}>
-            <span className="text-[26px]">Hi! I&apos;m,</span><br />
+          <h1 className="font-semibold text-[var(--color-on-background)] m-0 leading-[1.3]" style={{ fontFamily: "var(--font-body)" }}>
+            <span className="text-[16px]">Hi! I&apos;m,</span><br />
             <span className="text-[35px] text-[var(--color-highlight)]">Pushkar</span>
           </h1>
-          <p className="text-[16px] leading-relaxed mt-2 mb-4 text-[var(--color-on-background)] font-normal" style={{ fontFamily: "var(--font-body)" }}>
+          <p className="text-[16px] leading-relaxed mt-[6px] mb-4 text-[var(--color-on-background)] font-normal" style={{ fontFamily: "var(--font-body)" }}>
             i build <Link href="/projects" className="interactive-word">stuff</Link>.
           </p>
           <div className="flex gap-4 mt-0">
