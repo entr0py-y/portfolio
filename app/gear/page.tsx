@@ -13,49 +13,49 @@ const gearItems = [
   {
     name: "MacBook Air M1",
     detail: "Portable setup",
-    image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/macbook-air-space-gray-select-201810?wid=400&hei=400&fmt=jpeg",
+    image: "/gear/macbook-air-m1.jpg",
     url: "https://www.amazon.in/s?k=MacBook+Air+M1",
   },
   {
     name: "OnePlus Nord 5",
     detail: "Daily driver · 12/256",
-    image: "https://image01.oneplus.net/ebp/202504/28/1-m00-71-75-ckvxbl0wfniaa3x5aafabamz5ee406.png",
-    url: "https://www.amazon.in/s?k=OnePlus+Nord+5",
+    image: "/gear/oneplus-nord5.png",
+    url: "https://www.oneplus.in/nord-5",
   },
   {
     name: "Redragon K617 Fizz",
     detail: "Keyboard",
-    image: "https://redragonshop.com/cdn/shop/files/K617-RGB_01.jpg?v=1695289038&width=400",
+    image: "/gear/redragon-k617.png",
     url: "https://www.amazon.in/s?k=Redragon+K617+Fizz",
   },
   {
     name: "Redragon Predator Pro",
     detail: "Mouse",
-    image: "https://redragonshop.com/cdn/shop/files/M612-Predator-Pro_03.jpg?v=1721633753&width=400",
+    image: "/gear/redragon-predator.png",
     url: "https://www.amazon.in/s?k=Redragon+Predator+Pro",
   },
   {
     name: "HyperX Cloud Stinger 2",
     detail: "Headphones",
-    image: "https://hyperx.com/cdn/shop/files/hyperx_cloud_stinger_2_1_main.jpg?v=1694551462&width=400",
+    image: "/gear/hyperx-stinger2.jpg",
     url: "https://www.amazon.in/s?k=HyperX+Cloud+Stinger+2",
   },
   {
     name: "Tangzu Wan'er SG2",
     detail: "IEMs · Red Lion Edition",
-    image: "https://m.media-amazon.com/images/I/61YwGm9PXCL._SL1500_.jpg",
-    url: "https://www.amazon.in/s?k=Tangzu+Wan%27er+SG2+Red+Lion",
+    image: "/gear/tangzu-waner.png",
+    url: "https://www.amazon.in/s?k=Tangzu+Wan%27er+SG2",
   },
   {
     name: "OnePlus Buds 4",
     detail: "Wireless earbuds",
-    image: "https://image01.oneplus.net/ebp/202502/20/1-m00-58-e9-ckvxbl0e_dqaet0faai0-ahfkam860.png",
-    url: "https://www.amazon.in/s?k=OnePlus+Buds+4",
+    image: "/gear/oneplus-buds4.png",
+    url: "https://www.oneplus.in/buds-4",
   },
   {
     name: "Audiocular D07",
     detail: "Portable DAC",
-    image: "https://m.media-amazon.com/images/I/51gXKqVfURL._SL1500_.jpg",
+    image: "/gear/audiocular-d07.png",
     url: "https://www.amazon.in/s?k=Audiocular+D07+DAC",
   },
 ];
@@ -65,7 +65,7 @@ export default function GearPage() {
     <PageShell>
       <div className="fade-in fade-in-delay-2" style={{ fontFamily: "var(--font-body)" }}>
 
-        {/* Custom PC Build */}
+        {/* Main Workstation */}
         <div className="mb-8">
           <h3 className="text-[12px] font-semibold mb-3 text-[var(--color-outline)] uppercase tracking-wider">
             Workstation
@@ -73,10 +73,7 @@ export default function GearPage() {
           <div className="p-4 rounded-xl bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.01]">
             <div className="flex items-center justify-between mb-3">
               <span className="text-[13px] font-semibold text-[var(--color-on-background)]">
-                Custom PC
-              </span>
-              <span className="text-[11px] text-[var(--color-outline)]">
-                Main workstation
+                Main Workstation
               </span>
             </div>
             <div className="flex flex-col gap-1.5">
