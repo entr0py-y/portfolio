@@ -77,8 +77,8 @@ export default function PlayingPage() {
             ⚠️ Could not load Steam data. Make sure <code className="text-[12px]">STEAM_API_KEY</code> and <code className="text-[12px]">STEAM_ID</code> are set in your environment variables.
           </div>
         ) : (
-          <div className="flex flex-wrap gap-3 mb-6">
-            <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-[12px] font-semibold bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] text-[var(--color-on-background)]">
+          <div className="flex flex-wrap gap-4 mb-6">
+            <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[var(--color-on-background)]">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70">
                 <line x1="6" x2="10" y1="12" y2="12"/>
                 <line x1="8" x2="8" y1="10" y2="14"/>
@@ -88,7 +88,7 @@ export default function PlayingPage() {
               </svg>
               {data!.totalGames} games
             </span>
-            <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-[12px] font-semibold bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] text-[var(--color-on-background)]">
+            <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[var(--color-on-background)]">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70">
                 <circle cx="12" cy="12" r="10" />
                 <polyline points="12 6 12 12 16 14" />
@@ -119,9 +119,9 @@ export default function PlayingPage() {
               data!.recentlyPlayed.map((game) => (
                 <div
                   key={game.appid}
-                  className="flex gap-4 items-center p-3 rounded-xl bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.01]"
+                  className="flex gap-4 items-center py-2 transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.01]"
                 >
-                  <div className="relative w-[160px] h-[75px] rounded-lg overflow-hidden shrink-0 max-[768px]:w-[120px] max-[768px]:h-[56px]">
+                  <div className="relative w-[160px] h-[75px] rounded-lg overflow-hidden shrink-0 max-[768px]:w-[120px] max-[768px]:h-[56px] shadow-md border-[1.5px] border-[var(--color-on-background)]">
                     <GameImage
                       game={game}
                       className="object-cover"
@@ -157,9 +157,9 @@ export default function PlayingPage() {
               data!.library.map((game) => (
                 <div
                   key={game.appid}
-                  className="flex gap-3 items-center p-2.5 rounded-xl bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.02]"
+                  className="flex gap-3 items-center py-2 transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.02]"
                 >
-                  <div className="relative w-[80px] h-[38px] rounded-lg overflow-hidden shrink-0">
+                  <div className="relative w-[80px] h-[38px] rounded-md overflow-hidden shrink-0 shadow-sm border-[1px] border-[var(--color-on-background)]">
                     <GameImage
                       game={game}
                       className="object-cover"
