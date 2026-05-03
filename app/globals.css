@@ -98,6 +98,16 @@ html.dark-mode .signature-img {
   filter: invert(1);
 }
 
+/* Background character color grading */
+.bg-character-img {
+  filter: saturate(0.3) brightness(1.1) sepia(0.15);
+  transition: filter 0.6s ease;
+}
+
+html.dark-mode .bg-character-img {
+  filter: saturate(0.25) brightness(0.7) hue-rotate(10deg);
+}
+
 /* =========================================
    INTERACTIVE LINK STYLE (for about words)
    ========================================= */
@@ -195,15 +205,6 @@ html.dark-mode .signature-img {
    VIEW TRANSITIONS (theme toggle)
    ========================================= */
 
-@keyframes cat-reveal {
-  from {
-    mask-size: 0 0;
-  }
-  to {
-    mask-size: 300vmax 300vmax;
-  }
-}
-
 ::view-transition-old(root) {
   animation: none;
   z-index: 1;
@@ -211,10 +212,7 @@ html.dark-mode .signature-img {
 }
 
 ::view-transition-new(root) {
-  animation: cat-reveal 0.9s ease-in-out forwards;
-  mask-image: url("/spider-mask.svg");
-  mask-repeat: no-repeat;
-  mask-position: center center;
+  animation: none;
   z-index: 9999;
   mix-blend-mode: normal;
 }

@@ -7,10 +7,10 @@ export default function BackgroundCharacter() {
       {/* Using img tag to match original behavior exactly */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/character.png"
+        src="/listen.png"
         alt=""
-        className="w-full h-auto block"
-        style={{ imageRendering: "pixelated", opacity: 0.12 }}
+        className="w-full h-auto block bg-character-img"
+        style={{ imageRendering: "pixelated", opacity: 0.14 }}
       />
     </div>
   );

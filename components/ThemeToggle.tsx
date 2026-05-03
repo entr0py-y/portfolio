@@ -34,7 +34,6 @@ export default function ThemeToggle() {
       }
     };
 
-    // Use View Transitions API if available — CSS handles the cat mask animation
     const doc = document as unknown as {
       startViewTransition?: (cb: () => void) => { ready: Promise<void>; finished: Promise<void> };
     };
@@ -44,11 +43,23 @@ export default function ThemeToggle() {
         applyTheme();
       });
 
+      transition.ready.then(() => {
+        document.documentElement.animate(
+          {
+            clipPath: ["circle(0% at 50% 50%)", "circle(150% at 50% 50%)"],
+          },
+          {
+            duration: 1400,
+            easing: "ease-in-out",
+            pseudoElement: "::view-transition-new(root)",
+          }
+        );
+      });
+
       transition.finished.then(() => {
         setIsAnimating(false);
       });
     } else {
-      // Fallback: instant switch
       applyTheme();
       setIsAnimating(false);
     }

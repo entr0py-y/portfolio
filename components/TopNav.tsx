@@ -29,16 +29,19 @@ export default function TopNav() {
       {/* Icons — right */}
       <nav className="flex gap-4 items-center">
         {isSubPage ? (
-          <Link
-            href="/"
-            className="flex items-center justify-center bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 hover:opacity-60"
-            aria-label="Back to home"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-[17px] h-[17px]">
-              <path d="M19 12H5" />
-              <polyline points="12 19 5 12 12 5" />
-            </svg>
-          </Link>
+          <>
+            <Link
+              href="/"
+              className="flex items-center justify-center bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 hover:opacity-60"
+              aria-label="Back to home"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-[17px] h-[17px]">
+                <path d="M19 12H5" />
+                <polyline points="12 19 5 12 12 5" />
+              </svg>
+            </Link>
+            <ThemeToggle />
+          </>
         ) : (
           <>
             <Link
