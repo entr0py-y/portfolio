@@ -169,25 +169,15 @@ html.dark-mode .bg-character-img {
    FADE IN ANIMATION
    ========================================= */
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+/* Fade in animations disabled to allow View Transitions to load immediately without lag */
 .fade-in {
-  animation: fadeInUp 0.5s ease forwards;
+  /* animation: fadeInUp 0.5s ease forwards; */
 }
 
-.fade-in-delay-1 { animation-delay: 0.1s; opacity: 0; }
-.fade-in-delay-2 { animation-delay: 0.2s; opacity: 0; }
-.fade-in-delay-3 { animation-delay: 0.3s; opacity: 0; }
-.fade-in-delay-4 { animation-delay: 0.4s; opacity: 0; }
+.fade-in-delay-1 {}
+.fade-in-delay-2 {}
+.fade-in-delay-3 {}
+.fade-in-delay-4 {}
 
 /* =========================================
    RESPONSIVE
