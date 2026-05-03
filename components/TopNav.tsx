@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import TransitionLink from "./TransitionLink";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
 
@@ -12,7 +12,7 @@ export default function TopNav() {
   return (
     <div className="w-full max-w-none px-10 pt-10 pb-0 flex items-center justify-between z-[100] max-[768px]:px-5 max-[768px]:pt-5 absolute top-0 left-0 right-0">
       {/* Logo — left */}
-      <Link
+      <TransitionLink
         href="/"
         className="no-underline"
         style={{ fontFamily: "var(--font-body)" }}
@@ -30,7 +30,7 @@ export default function TopNav() {
       <nav className="flex gap-4 items-center">
         {isSubPage ? (
           <>
-            <Link
+            <TransitionLink
               href="/"
               className="flex items-center justify-center bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 hover:opacity-60"
               aria-label="Back to home"
@@ -44,7 +44,7 @@ export default function TopNav() {
           </>
         ) : (
           <>
-            <Link
+            <TransitionLink
               href="/work"
               className="flex items-center justify-center bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 hover:opacity-60"
               aria-label="Work"
@@ -55,7 +55,7 @@ export default function TopNav() {
                 <line x1="12" y1="14" x2="12" y2="14.01" />
               </svg>
             </Link>
-            <Link
+            <TransitionLink
               href="/projects"
               className="flex items-center justify-center bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 hover:opacity-60"
               aria-label="Projects"

@@ -17,9 +17,12 @@ export default function ThemeToggle() {
     }
   }, []);
 
-  const toggle = useCallback(() => {
+  const toggle = useCallback((e: React.MouseEvent) => {
     if (isAnimating) return;
     setIsAnimating(true);
+
+    const x = e.clientX;
+    const y = e.clientY;
 
     const next = !isDark;
 
@@ -46,7 +49,7 @@ export default function ThemeToggle() {
       transition.ready.then(() => {
         document.documentElement.animate(
           {
-            clipPath: ["circle(0% at 50% 50%)", "circle(150% at 50% 50%)"],
+            clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(150% at ${x}px ${y}px)`],
           },
           {
             duration: 1400,

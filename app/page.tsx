@@ -1,4 +1,4 @@
-import Link from "next/link";
+import TransitionLink from "@/components/TransitionLink";
 
 export default function Home() {
   return (
@@ -10,7 +10,7 @@ export default function Home() {
             Hi! I&apos;m <span className="text-[var(--color-highlight)]">Pushkar</span>
           </h1>
           <p className="text-[16px] leading-relaxed mt-[6px] mb-4 text-[var(--color-on-background)] font-normal" style={{ fontFamily: "var(--font-body)" }}>
-            i build <Link href="/projects" className="interactive-word">stuff</Link>.
+            i build <TransitionLink href="/projects" className="interactive-word">stuff</TransitionLink>.
           </p>
           <div className="flex gap-4 mt-0">
             <a href="https://instagram.com/endeavv0r" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-[var(--color-on-background)] no-underline flex items-center justify-center transition-opacity duration-200 hover:opacity-60">
@@ -63,13 +63,13 @@ export default function Home() {
             </p>
             <p className="text-[13px] leading-[1.6] font-medium m-0 mb-4" style={{ fontFamily: "var(--font-body)" }}>
               When I&apos;m not coding, I&apos;m usually{" "}
-              <Link href="/sketch" className="interactive-word">sketching</Link>{" "}
+              <TransitionLink href="/sketch" className="interactive-word">sketching</TransitionLink>{" "}
               random ideas that don&apos;t always make sense at first, playing{" "}
-              <Link href="/play" className="interactive-word">games</Link>{" "}
+              <TransitionLink href="/play" className="interactive-word">games</TransitionLink>{" "}
               to slow things down, tweaking my{" "}
-              <Link href="/gear" className="interactive-word">gear</Link>{" "}
+              <TransitionLink href="/gear" className="interactive-word">gear</TransitionLink>{" "}
               just because I can, or just{" "}
-              <Link href="/listen" className="interactive-word">listening</Link>{" "}
+              <TransitionLink href="/listen" className="interactive-word">listening</TransitionLink>{" "}
               to <a href="https://en.wikipedia.org/wiki/OK_Computer" target="_blank" rel="noopener noreferrer" className="interactive-word">something</a> on repeat while figuring things out in my head.
             </p>
           </section>
@@ -83,7 +83,7 @@ export default function Home() {
             </div>
             <div className="flex flex-col items-start gap-3">
               <div className="flex items-center relative w-full max-[768px]:relative max-[768px]:w-full max-[768px]:h-[180px] max-[768px]:mb-2">
-                <Link href="/listen" className="no-underline shrink-0 z-10">
+                <TransitionLink href="/listen" className="no-underline shrink-0 z-10">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="https://is1-ssl.mzstatic.com/image/thumb/SG-MQ-US-001-Image000001/v4/b2/e1/7b/b2e17b53-344a-8e14-d0bc-5d8835c2c00c/image/400x400cc.jpg"
@@ -91,7 +91,7 @@ export default function Home() {
                     className="w-[200px] h-[200px] rounded-[6px] object-cover block album-art max-[768px]:w-[180px] max-[768px]:h-[180px]"
                     style={{ boxShadow: "0 4px 12px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0,0,0,0.2)" }}
                   />
-                </Link>
+                </TransitionLink>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/signature.png"
