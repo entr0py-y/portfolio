@@ -18,6 +18,7 @@ export default function BackgroundCharacter() {
     imgClassName = "w-full h-auto block bg-character-img";
     imgOpacity = 0.14;
   } else if (isWorkPage) {
+    containerClassName = "fixed bottom-0 right-[-20px] w-[350px] pointer-events-none z-0 scale-x-[-1] max-[768px]:w-[250px] max-[768px]:opacity-80 max-[768px]:bottom-0 max-[768px]:right-[-10px]";
     imgSrc = "/work.png";
     imgClassName = "w-full h-auto block bg-character-img";
     imgOpacity = 0.14;

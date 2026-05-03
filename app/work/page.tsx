@@ -61,20 +61,6 @@ export default function WorkPage() {
           </div>
         </section>
 
-        {/* CERTIFICATIONS */}
-        <section className="mb-10">
-          <h2 className="text-[11px] font-bold tracking-widest uppercase text-[var(--color-outline)] mb-4">
-            Certifications
-          </h2>
-          <div className="flex flex-col gap-3">
-            <div className="text-[14px] font-semibold text-[var(--color-on-background)]">
-              JP Morgan Chase — Software Engineering Job Simulation
-            </div>
-            <div className="text-[14px] font-semibold text-[var(--color-on-background)]">
-              Deloitte — Cyber Security Job Simulation
-            </div>
-          </div>
-        </section>
 
         {/* TECH STACK */}
         <section className="mb-8">
