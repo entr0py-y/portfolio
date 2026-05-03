@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useThemeTransition } from "./ThemeTransition";
+import { useEffect, useState, useCallback } from "react";
 
 export default function ThemeToggle() {
   const [isDark, setIsDark] = useState(true);
-  const { triggerTransition } = useThemeTransition();
+  const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("theme");
@@ -18,11 +17,38 @@ export default function ThemeToggle() {
     }
   }, []);
 
-  const toggle = () => {
-    const next = !isDark;
-    const nextTheme = next ? "dark" : "light";
+  const toggle = useCallback(() => {
+    if (isAnimating) return;
+    setIsAnimating(true);
 
-    triggerTransition(nextTheme, () => {
+    const next = !isDark;
+    // The overlay color is the NEXT theme's background
+    const overlayColor = next ? "#121212" : "#fdfdfb";
+
+    // Create overlay
+    const overlay = document.createElement("div");
+    overlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 99999;
+      pointer-events: none;
+      background: ${overlayColor};
+      clip-path: circle(0% at 50% 50%);
+    `;
+    document.body.appendChild(overlay);
+
+    // Force reflow
+    overlay.getBoundingClientRect();
+
+    // Start slow, then snap to full screen
+    overlay.style.transition = "clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
+    overlay.style.clipPath = "circle(150% at 50% 50%)";
+
+    // Switch theme midway through the animation
+    setTimeout(() => {
       setIsDark(next);
       if (next) {
         document.documentElement.classList.add("dark-mode");
@@ -31,8 +57,20 @@ export default function ThemeToggle() {
         document.documentElement.classList.remove("dark-mode");
         localStorage.setItem("theme", "light");
       }
-    });
-  };
+    }, 400);
+
+    // Fade out overlay after theme is applied
+    setTimeout(() => {
+      overlay.style.transition = "opacity 0.3s ease";
+      overlay.style.opacity = "0";
+    }, 700);
+
+    // Clean up
+    setTimeout(() => {
+      overlay.remove();
+      setIsAnimating(false);
+    }, 1000);
+  }, [isDark, isAnimating]);
 
   return (
     <button

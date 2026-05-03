@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Epilogue, Manrope, Caveat } from "next/font/google";
 import TopNav from "@/components/TopNav";
 import BackgroundCharacter from "@/components/BackgroundCharacter";
-import { ThemeTransitionProvider } from "@/components/ThemeTransition";
 import "./globals.css";
 
 const epilogue = Epilogue({
@@ -44,11 +43,9 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body>
-        <ThemeTransitionProvider>
-          <BackgroundCharacter />
-          <TopNav />
-          {children}
-        </ThemeTransitionProvider>
+        <BackgroundCharacter />
+        <TopNav />
+        {children}
       </body>
     </html>
   );
