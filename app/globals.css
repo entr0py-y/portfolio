@@ -195,16 +195,26 @@ html.dark-mode .signature-img {
    VIEW TRANSITIONS (theme toggle)
    ========================================= */
 
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
+@keyframes cat-reveal {
+  from {
+    mask-size: 0 0;
+  }
+  to {
+    mask-size: 300vmax 300vmax;
+  }
 }
 
 ::view-transition-old(root) {
+  animation: none;
   z-index: 1;
+  mix-blend-mode: normal;
 }
 
 ::view-transition-new(root) {
+  animation: cat-reveal 0.9s ease-in-out forwards;
+  mask-image: url("/cat-mask.svg");
+  mask-repeat: no-repeat;
+  mask-position: center center;
   z-index: 9999;
+  mix-blend-mode: normal;
 }
