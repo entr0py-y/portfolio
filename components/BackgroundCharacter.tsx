@@ -10,7 +10,7 @@ export default function BackgroundCharacter() {
     <div
       className={
         isListenPage
-          ? "fixed bottom-[-60px] right-[-50px] w-[575px] pointer-events-none z-0 scale-x-[-1] max-[768px]:w-[130vw] max-[768px]:max-w-[550px] max-[768px]:opacity-80 max-[768px]:bottom-[-30px] max-[768px]:right-[-30px]"
+          ? "fixed bottom-[-90px] right-[-50px] w-[575px] pointer-events-none z-0 scale-x-[-1] max-[768px]:w-[130vw] max-[768px]:max-w-[550px] max-[768px]:opacity-80 max-[768px]:bottom-[-50px] max-[768px]:right-[-30px]"
           : "fixed bottom-[-20px] right-[-20px] w-[575px] pointer-events-none z-0 scale-x-[-1] max-[768px]:w-[130vw] max-[768px]:max-w-[550px] max-[768px]:opacity-80 max-[768px]:bottom-[-10px]"
       }
       aria-hidden="true"
