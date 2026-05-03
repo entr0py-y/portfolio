@@ -24,8 +24,9 @@ export default function TransitionLink({ children, href, className, onClick, ...
 
     e.preventDefault();
 
-    const x = e.clientX;
-    const y = e.clientY;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
 
     const doc = document as any;
     if (!doc.startViewTransition) {

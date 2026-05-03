@@ -44,6 +44,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body>
+        <link rel="preload" as="document" href="https://embed.music.apple.com/in/playlist/plastic-airbag/pl.u-8aAVZ5bUvqN74DV?theme=dark" />
         <Preloader />
         <BackgroundCharacter />
         <TopNav />

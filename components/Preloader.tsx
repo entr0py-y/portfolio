@@ -26,7 +26,6 @@ const ASSETS_TO_PRELOAD = [
 
 export default function Preloader() {
   const [progress, setProgress] = useState(0);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [hasEntered, setHasEntered] = useState(true); // Default to true for SSR mismatch prevention
   const [isFadingOut, setIsFadingOut] = useState(false);
 
@@ -43,9 +42,19 @@ export default function Preloader() {
     let loadedCount = 0;
     const totalAssets = ASSETS_TO_PRELOAD.length;
 
-    if (totalAssets === 0) {
+    const finishLoading = () => {
       setProgress(100);
-      setIsLoaded(true);
+      setTimeout(() => {
+        setIsFadingOut(true);
+        setTimeout(() => {
+          sessionStorage.setItem("portfolio_entered", "true");
+          setHasEntered(true);
+        }, 600); // Wait for fade out animation
+      }, 400); // Wait a bit at 100% so it looks smooth
+    };
+
+    if (totalAssets === 0) {
+      finishLoading();
       return;
     }
 
@@ -60,7 +69,6 @@ export default function Preloader() {
             resolve();
           };
           img.onerror = () => {
-            // Even if an image fails, we must increment so we don't get stuck
             loadedCount++;
             setProgress((loadedCount / totalAssets) * 100);
             resolve();
@@ -69,23 +77,11 @@ export default function Preloader() {
       });
 
       await Promise.all(promises);
-      
-      // Ensure the progress bar visually completes before showing the button
-      setTimeout(() => {
-        setIsLoaded(true);
-      }, 400); 
+      finishLoading();
     };
 
     loadImages();
   }, []);
-
-  const handleEnter = () => {
-    setIsFadingOut(true);
-    setTimeout(() => {
-      sessionStorage.setItem("portfolio_entered", "true");
-      setHasEntered(true);
-    }, 600); // Wait for fade out animation
-  };
 
   if (hasEntered) return null;
 
@@ -100,21 +96,6 @@ export default function Preloader() {
             className="absolute top-0 left-0 h-full bg-[var(--color-on-background)] transition-all duration-300 ease-out"
             style={{ width: `${progress}%` }}
           />
-        </div>
-        
-        {/* Enter Text */}
-        <div className="h-[20px] flex items-center justify-center overflow-hidden">
-          <button 
-            onClick={handleEnter}
-            className={`
-              bg-transparent border-none cursor-pointer p-0 text-[10px] font-bold tracking-widest uppercase text-[var(--color-on-background)]
-              transition-all duration-500 hover:text-[var(--color-highlight)]
-              ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[10px] pointer-events-none"}
-            `}
-            style={{ fontFamily: "var(--font-body)" }}
-          >
-            enter portfolio
-          </button>
         </div>
       </div>
     </div>
