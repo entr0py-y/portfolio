@@ -119,7 +119,7 @@ export default function PlayingPage() {
               data!.recentlyPlayed.map((game) => (
                 <div
                   key={game.appid}
-                  className="flex gap-4 items-center py-2 transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.01]"
+                  className="flex gap-4 items-center py-2 smooth-card"
                 >
                   <div className="relative w-[160px] h-[75px] rounded-lg overflow-hidden shrink-0 max-[768px]:w-[120px] max-[768px]:h-[56px] shadow-md border-[1.5px] border-[var(--color-on-background)]">
                     <GameImage
@@ -157,7 +157,7 @@ export default function PlayingPage() {
               data!.library.map((game) => (
                 <div
                   key={game.appid}
-                  className="flex gap-3 items-center py-2 transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.02]"
+                  className="flex gap-3 items-center py-2 smooth-card"
                 >
                   <div className="flex flex-col min-w-0">
                     <span className="text-[12px] font-semibold text-[var(--color-on-background)] truncate">{game.name}</span>

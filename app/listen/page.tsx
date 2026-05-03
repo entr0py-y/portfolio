@@ -9,7 +9,7 @@ export default function ListeningPage() {
         </p>
 
         <div
-          className="rounded-2xl bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] p-3 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5"
+          className="rounded-2xl bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] p-3 backdrop-blur-sm smooth-card"
           style={{ backdropFilter: "blur(8px)" }}
         >
           <iframe

@@ -115,7 +115,7 @@ export default function Home() {
             </div>
             <p className="text-[13px] leading-[1.6] font-medium m-0 mb-4" style={{ fontFamily: "var(--font-body)" }}>
               Whether it&apos;s a project, collaboration, or just a random idea you want to talk about, I&apos;m down.
-              Hit me up on <a href="https://wa.me/917982499778" className="inline-link" target="_blank">WhatsApp</a> or <a href="#" className="inline-link">Discord</a>. If you prefer keeping things simple, <a href="mailto:pushkarjha880@gmail.com" className="inline-link">email</a> works just as well.
+              Hit me up on <a href="https://wa.me/917982499778" className="inline-link" target="_blank">WhatsApp</a> or <a href="https://discord.com/users/870170395448320040" className="inline-link" target="_blank" rel="noopener noreferrer">Discord</a>. If you prefer keeping things simple, <a href="mailto:pushkarjha880@gmail.com" className="inline-link">email</a> works just as well.
             </p>
           </section>
         </div>

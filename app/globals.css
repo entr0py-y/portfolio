@@ -25,8 +25,12 @@
 }
 
 /* =========================================
-   BASE / RESET
+   BASE / RESET — GPU OPTIMIZED
    ========================================= */
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
 
 html {
   background-color: var(--color-background);
@@ -41,6 +45,7 @@ body {
   font-size: 13px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   position: relative;
   min-height: 100vh;
   display: flex;
@@ -63,6 +68,57 @@ body::before {
   background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)"/></svg>');
   opacity: 0.05;
   z-index: 9999;
+  will-change: auto;
+}
+
+/* =========================================
+   PRELOADER
+   ========================================= */
+
+.preloader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background-color: var(--color-background);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity;
+}
+
+.preloader-fadeout {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.preloader-bar-container {
+  width: 200px;
+  max-width: 80vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.preloader-bar-track {
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-outline-variant);
+  position: relative;
+  overflow: hidden;
+}
+
+.preloader-bar-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: var(--color-on-background);
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: width;
 }
 
 /* =========================================
@@ -86,7 +142,7 @@ html.dark-mode body::before {
 
 html.dark-mode img {
   filter: brightness(0.9);
-  transition: filter 0.6s ease;
+  transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 html.dark-mode .bg-character img,
@@ -101,11 +157,35 @@ html.dark-mode .signature-img {
 /* Background character color grading */
 .bg-character-img {
   filter: saturate(0.3) brightness(1.1) sepia(0.15);
-  transition: filter 0.6s ease;
+  transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 html.dark-mode .bg-character-img {
   filter: saturate(0.25) brightness(0.7) hue-rotate(10deg);
+}
+
+/* =========================================
+   SMOOTH GLOBAL TRANSITIONS
+   All interactive elements get buttery
+   GPU-accelerated transitions
+   ========================================= */
+
+a, button {
+  transition:
+    opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* Active press feel for all clickable elements */
+a:active, button:active {
+  transform: scale(0.97);
+  transition-duration: 0.1s;
 }
 
 /* =========================================
@@ -118,7 +198,9 @@ html.dark-mode .bg-character-img {
   text-decoration-color: var(--color-highlight);
   text-underline-offset: 4px;
   text-decoration-thickness: 1px;
-  transition: opacity 0.2s;
+  transition:
+    opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    text-decoration-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-weight: 600;
 }
 
@@ -137,7 +219,9 @@ html.dark-mode .bg-character-img {
   text-decoration-thickness: 1px;
   text-decoration-color: var(--color-highlight);
   font-weight: 600;
-  transition: opacity 0.2s;
+  transition:
+    opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    text-decoration-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .inline-link:hover {
@@ -161,7 +245,7 @@ html.dark-mode .bg-character-img {
     var(--color-surface) 75%
   );
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: shimmer 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   border-radius: 8px;
 }
 
@@ -192,7 +276,7 @@ html.dark-mode .bg-character-img {
 }
 
 /* =========================================
-   VIEW TRANSITIONS (theme toggle)
+   VIEW TRANSITIONS (theme toggle + nav)
    ========================================= */
 
 ::view-transition-old(root) {
@@ -205,4 +289,106 @@ html.dark-mode .bg-character-img {
   animation: none;
   z-index: 9999;
   mix-blend-mode: normal;
+}
+
+/* =========================================
+   SMOOTH HOVER CARDS (gear, games, etc.)
+   GPU-accelerated transforms only
+   ========================================= */
+
+.smooth-card {
+  transition:
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.smooth-card:hover {
+  transform: translateY(-2px) scale(1.02) translateZ(0);
+}
+
+.smooth-card:active {
+  transform: translateY(0) scale(0.99) translateZ(0);
+  transition-duration: 0.1s;
+}
+
+/* =========================================
+   SMOOTH IMAGE REVEAL
+   Images that fade in once loaded
+   ========================================= */
+
+img {
+  transition:
+    opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    filter 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =========================================
+   SKETCH PAGE — smooth photo interactions
+   ========================================= */
+
+.sketch-photo {
+  transition:
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    z-index 0s,
+    box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform-origin: center center;
+}
+
+.sketch-photo:hover {
+  z-index: 100 !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* =========================================
+   SKETCH LIGHTBOX — smooth open/close
+   ========================================= */
+
+.sketch-lightbox {
+  animation: lightboxIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes lightboxIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+.sketch-lightbox img {
+  animation: lightboxImgIn 0.4s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+}
+
+@keyframes lightboxImgIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* =========================================
+   ACCESSIBILITY — REDUCED MOTION
+   ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

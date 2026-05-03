@@ -36,7 +36,7 @@ export default function SketchingPage() {
             <div
               key={i}
               onClick={() => setSelectedSketch(i)}
-              className="absolute w-[50%] max-[768px]:w-[65%] p-2 rounded-sm bg-[#e8e8e8] shadow-2xl cursor-pointer hover:!z-[100] transition-transform duration-300 hover:scale-[1.05]"
+              className="absolute w-[50%] max-[768px]:w-[65%] p-2 rounded-sm bg-[#e8e8e8] shadow-2xl cursor-pointer sketch-photo hover:scale-[1.05]"
               style={{
                 top: sketch.top,
                 left: sketch.left,
@@ -50,7 +50,7 @@ export default function SketchingPage() {
                   src={sketch.src}
                   alt={`Sketch ${i + 1}`}
                   className="w-full h-auto object-cover opacity-90 group-hover:opacity-100"
-                  loading="lazy"
+
                 />
               </div>
             </div>
@@ -65,7 +65,7 @@ export default function SketchingPage() {
       {/* Maximized View Overlay */}
       {mounted && selectedSketch !== null && createPortal(
         <div 
-          className="fixed inset-0 z-[1000] bg-[var(--color-background)] flex flex-col items-center justify-center p-10 animate-in fade-in duration-300"
+          className="fixed inset-0 z-[1000] bg-[var(--color-background)] flex flex-col items-center justify-center p-10 sketch-lightbox"
           style={{ fontFamily: "var(--font-body)" }}
         >
           {/* Back Button (matching top-right style) */}

@@ -42,9 +42,9 @@ export default function RootLayout({
       lang="en"
       className={`dark-mode ${epilogue.variable} ${manrope.variable} ${caveat.variable}`}
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
     >
       <body>
-        <link rel="preload" as="document" href="https://embed.music.apple.com/in/playlist/plastic-airbag/pl.u-8aAVZ5bUvqN74DV?theme=dark" />
         <Preloader />
         <BackgroundCharacter />
         <TopNav />

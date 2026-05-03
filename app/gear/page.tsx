@@ -86,7 +86,7 @@ export default function GearPage() {
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-col rounded-xl bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.02] no-underline"
+                className="flex flex-col rounded-xl bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] overflow-hidden smooth-card no-underline"
               >
                 {/* Product Image */}
                 <div className="w-full aspect-square bg-[#1a1a1a] flex items-center justify-center p-4">
@@ -95,7 +95,7 @@ export default function GearPage() {
                     src={item.image}
                     alt={item.name}
                     className="w-full h-full object-contain"
-                    loading="lazy"
+
                   />
                 </div>
                 {/* Info */}
