@@ -6,6 +6,7 @@ export default function BackgroundCharacter() {
   const pathname = usePathname();
   const isListenPage = pathname === "/listen";
   const isWorkPage = pathname === "/work";
+  const isProjectsPage = pathname === "/projects";
 
   let containerClassName = "fixed bottom-[-20px] right-[-20px] w-[575px] pointer-events-none z-0 scale-x-[-1] max-[768px]:w-[130vw] max-[768px]:max-w-[550px] max-[768px]:opacity-80 max-[768px]:bottom-[-10px]";
   let imgSrc = "/character.png";
@@ -17,7 +18,7 @@ export default function BackgroundCharacter() {
     imgSrc = "/listen.png";
     imgClassName = "w-full h-auto block bg-character-img";
     imgOpacity = 0.14;
-  } else if (isWorkPage) {
+  } else if (isWorkPage || isProjectsPage) {
     containerClassName = "fixed bottom-[-15px] right-[-20px] w-[400px] pointer-events-none z-0 scale-x-[-1] max-[768px]:w-[280px] max-[768px]:opacity-80 max-[768px]:bottom-[-10px] max-[768px]:right-[-10px]";
     imgSrc = "/work.png";
     imgClassName = "w-full h-auto block bg-character-img";
