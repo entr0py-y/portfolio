@@ -88,13 +88,13 @@ export default function ThemeToggle() {
 
     // Phase 1: Cat appears and grows slowly
     requestAnimationFrame(() => {
-      cat.style.transition = "transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1)";
+      cat.style.transition = "transform 0.7s ease-in-out";
       cat.style.transform = "translate(-50%, -50%) scale(2)";
     });
 
     // Phase 2: Cat expands rapidly + background fills
     setTimeout(() => {
-      cat.style.transition = "transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease";
+      cat.style.transition = "transform 0.5s ease-in-out, opacity 0.2s ease";
       cat.style.transform = "translate(-50%, -50%) scale(18)";
       bg.style.transition = "opacity 0.3s ease";
       bg.style.opacity = "1";
