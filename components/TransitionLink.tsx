@@ -56,7 +56,7 @@ export default function TransitionLink({ children, href, className, onClick, ...
           ],
         },
         {
-          duration: 1000,
+          duration: 1400,
           easing: "ease-in-out",
           pseudoElement: "::view-transition-new(root)",
         }
