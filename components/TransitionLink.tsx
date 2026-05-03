@@ -2,7 +2,7 @@
 
 import Link, { LinkProps } from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useCallback } from "react";
+import React, { useCallback, useTransition } from "react";
 
 interface TransitionLinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps>, LinkProps {
   children: React.ReactNode;
@@ -12,6 +12,7 @@ interface TransitionLinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchor
 
 export default function TransitionLink({ children, href, className, onClick, ...props }: TransitionLinkProps) {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   
   const handleTransition = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
     if (onClick) {
@@ -24,18 +25,26 @@ export default function TransitionLink({ children, href, className, onClick, ...
 
     e.preventDefault();
 
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const y = rect.top + rect.height / 2;
+    const x = e.clientX;
+    const y = e.clientY;
 
     const doc = document as any;
     if (!doc.startViewTransition) {
-      router.push(href.toString());
+      startTransition(() => {
+        router.push(href.toString());
+      });
       return;
     }
 
     const transition = doc.startViewTransition(() => {
-      router.push(href.toString());
+      return new Promise<void>((resolve) => {
+        startTransition(() => {
+          router.push(href.toString());
+          // Since startTransition doesn't await the actual React commit natively,
+          // a short timeout ensures the new page has at least started rendering.
+          setTimeout(resolve, 50);
+        });
+      });
     });
 
     transition.ready.then(() => {

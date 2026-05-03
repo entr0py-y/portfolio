@@ -21,9 +21,8 @@ export default function ThemeToggle() {
     if (isAnimating) return;
     setIsAnimating(true);
 
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const y = rect.top + rect.height / 2;
+    const x = e.clientX;
+    const y = e.clientY;
 
     const next = !isDark;
 
