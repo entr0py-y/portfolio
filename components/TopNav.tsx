@@ -24,7 +24,7 @@ export default function TopNav() {
             <span className="text-[#aa8970]">/{segment}</span>
           )}
         </span>
-      </Link>
+      </TransitionLink>
  
       {/* Icons — right */}
       <nav className="flex gap-4 items-center">
@@ -39,7 +39,7 @@ export default function TopNav() {
                 <path d="M19 12H5" />
                 <polyline points="12 19 5 12 12 5" />
               </svg>
-            </Link>
+            </TransitionLink>
             <ThemeToggle />
           </>
         ) : (
@@ -54,7 +54,7 @@ export default function TopNav() {
                 <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
                 <line x1="12" y1="14" x2="12" y2="14.01" />
               </svg>
-            </Link>
+            </TransitionLink>
             <TransitionLink
               href="/projects"
               className="flex items-center justify-center bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 hover:opacity-60"
@@ -64,7 +64,7 @@ export default function TopNav() {
                 <polyline points="8 7 3 12 8 17" />
                 <polyline points="16 7 21 12 16 17" />
               </svg>
-            </Link>
+            </TransitionLink>
             <ThemeToggle />
           </>
         )}
