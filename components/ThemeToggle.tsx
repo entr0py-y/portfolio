@@ -2,28 +2,48 @@
 
 import { useEffect, useState, useCallback } from "react";
 
-// Cat face SVG matching reference: round head, pointy ears, eyes, nose, whiskers
-const catFaceSvg = (color: string) => `
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-  <path fill="${color}" d="
-    M60 55 L48 15 Q47 12 50 14 L78 42
-    Q90 32 100 30 Q110 32 122 42
-    L150 14 Q153 12 152 15 L140 55
-    Q165 75 165 110
-    Q165 155 100 170
-    Q35 155 35 110
-    Q35 75 60 55Z
-  "/>
-  <ellipse cx="75" cy="95" rx="10" ry="12" fill="${color === '#121212' ? '#fdfdfb' : '#121212'}"/>
-  <ellipse cx="125" cy="95" rx="10" ry="12" fill="${color === '#121212' ? '#fdfdfb' : '#121212'}"/>
-  <path d="M95 118 L100 125 L105 118Z" fill="${color === '#121212' ? '#fdfdfb' : '#121212'}"/>
-  <line x1="60" y1="112" x2="30" y2="105" stroke="${color === '#121212' ? '#fdfdfb' : '#121212'}" stroke-width="2.5" stroke-linecap="round"/>
-  <line x1="60" y1="120" x2="28" y2="122" stroke="${color === '#121212' ? '#fdfdfb' : '#121212'}" stroke-width="2.5" stroke-linecap="round"/>
-  <line x1="60" y1="128" x2="30" y2="138" stroke="${color === '#121212' ? '#fdfdfb' : '#121212'}" stroke-width="2.5" stroke-linecap="round"/>
-  <line x1="140" y1="112" x2="170" y2="105" stroke="${color === '#121212' ? '#fdfdfb' : '#121212'}" stroke-width="2.5" stroke-linecap="round"/>
-  <line x1="140" y1="120" x2="172" y2="122" stroke="${color === '#121212' ? '#fdfdfb' : '#121212'}" stroke-width="2.5" stroke-linecap="round"/>
-  <line x1="140" y1="128" x2="170" y2="138" stroke="${color === '#121212' ? '#fdfdfb' : '#121212'}" stroke-width="2.5" stroke-linecap="round"/>
-</svg>`;
+// Cat face SVG matching the reference exactly: round head, pointy ears with inner lines,
+// filled circle eyes, triangle nose, small mouth, 3 whiskers each side
+const createCatSvg = (fillColor: string) => {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("viewBox", "0 0 200 180");
+  svg.setAttribute("fill", "none");
+  svg.style.width = "100%";
+  svg.style.height = "100%";
+
+  svg.innerHTML = `
+    <!-- Head outline -->
+    <path d="
+      M58 60
+      L45 18 Q44 14 48 17 L75 48
+      Q88 38 100 36 Q112 38 125 48
+      L152 17 Q156 14 155 18 L142 60
+      Q168 80 168 112
+      Q168 158 100 165
+      Q32 158 32 112
+      Q32 80 58 60Z
+    " stroke="${fillColor}" stroke-width="5" fill="none"/>
+    <!-- Inner ear lines -->
+    <line x1="55" y1="56" x2="50" y2="30" stroke="${fillColor}" stroke-width="3" stroke-linecap="round"/>
+    <line x1="145" y1="56" x2="150" y2="30" stroke="${fillColor}" stroke-width="3" stroke-linecap="round"/>
+    <!-- Eyes -->
+    <circle cx="75" cy="100" r="10" fill="${fillColor}"/>
+    <circle cx="125" cy="100" r="10" fill="${fillColor}"/>
+    <!-- Nose -->
+    <path d="M95 122 L100 130 L105 122Z" fill="${fillColor}"/>
+    <!-- Mouth -->
+    <path d="M90 136 Q95 142 100 136 Q105 142 110 136" stroke="${fillColor}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <!-- Left whiskers -->
+    <line x1="62" y1="118" x2="22" y2="110" stroke="${fillColor}" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="60" y1="126" x2="18" y2="126" stroke="${fillColor}" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="62" y1="134" x2="22" y2="142" stroke="${fillColor}" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Right whiskers -->
+    <line x1="138" y1="118" x2="178" y2="110" stroke="${fillColor}" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="140" y1="126" x2="182" y2="126" stroke="${fillColor}" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="138" y1="134" x2="178" y2="142" stroke="${fillColor}" stroke-width="2.5" stroke-linecap="round"/>
+  `;
+  return svg;
+};
 
 export default function ThemeToggle() {
   const [isDark, setIsDark] = useState(true);
@@ -45,63 +65,25 @@ export default function ThemeToggle() {
     setIsAnimating(true);
 
     const next = !isDark;
-    const bgColor = next ? "#121212" : "#fdfdfb";
-    const svg = catFaceSvg(bgColor);
-    const encoded = btoa(unescape(encodeURIComponent(svg.trim())));
+    const catColor = next ? "#fdfdfb" : "#1a1a1a";
 
-    // Create the cat element — sits BEHIND all content (z-index: 0)
-    const cat = document.createElement("div");
-    cat.style.cssText = `
+    // Create cat element
+    const catContainer = document.createElement("div");
+    catContainer.style.cssText = `
       position: fixed;
       top: 50%;
       left: 50%;
-      width: 220px;
-      height: 220px;
+      width: 180px;
+      height: 180px;
       transform: translate(-50%, -50%) scale(0);
-      background-image: url("data:image/svg+xml;base64,${encoded}");
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      z-index: 0;
+      z-index: 999999;
       pointer-events: none;
-      opacity: 1;
     `;
-    document.body.appendChild(cat);
+    const catSvg = createCatSvg(catColor);
+    catContainer.appendChild(catSvg);
+    document.body.appendChild(catContainer);
 
-    // Full-screen background layer behind content
-    const bg = document.createElement("div");
-    bg.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: ${bgColor};
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0;
-    `;
-    document.body.appendChild(bg);
-
-    // Force reflow
-    cat.getBoundingClientRect();
-
-    // Phase 1: Cat appears and grows slowly
-    requestAnimationFrame(() => {
-      cat.style.transition = "transform 0.7s ease-in-out";
-      cat.style.transform = "translate(-50%, -50%) scale(2)";
-    });
-
-    // Phase 2: Cat expands rapidly + background fills
-    setTimeout(() => {
-      cat.style.transition = "transform 0.5s ease-in-out, opacity 0.2s ease";
-      cat.style.transform = "translate(-50%, -50%) scale(18)";
-      bg.style.transition = "opacity 0.3s ease";
-      bg.style.opacity = "1";
-    }, 550);
-
-    // Phase 3: Switch theme while cat covers screen
-    setTimeout(() => {
+    const applyTheme = () => {
       setIsDark(next);
       if (next) {
         document.documentElement.classList.add("dark-mode");
@@ -110,22 +92,68 @@ export default function ThemeToggle() {
         document.documentElement.classList.remove("dark-mode");
         localStorage.setItem("theme", "light");
       }
-    }, 750);
+    };
 
-    // Phase 4: Remove overlays (theme is now applied to body)
-    setTimeout(() => {
-      cat.style.transition = "opacity 0.3s ease";
-      cat.style.opacity = "0";
-      bg.style.transition = "opacity 0.3s ease";
-      bg.style.opacity = "0";
-    }, 900);
+    // Try View Transitions API for pixel-perfect theme change as circle passes
+    const doc = document as unknown as { startViewTransition?: (cb: () => void) => { ready: Promise<void>; finished: Promise<void> } };
 
-    // Cleanup
-    setTimeout(() => {
-      cat.remove();
-      bg.remove();
-      setIsAnimating(false);
-    }, 1250);
+    if (doc.startViewTransition) {
+      const transition = doc.startViewTransition(() => {
+        applyTheme();
+      });
+
+      transition.ready.then(() => {
+        // Animate the NEW view revealing with expanding circle — elements change
+        // theme exactly when the circle reaches them
+        document.documentElement.animate(
+          {
+            clipPath: ["circle(0% at 50% 50%)", "circle(150% at 50% 50%)"],
+          },
+          {
+            duration: 900,
+            easing: "ease-in-out",
+            pseudoElement: "::view-transition-new(root)",
+          }
+        );
+
+        // Cat appears and grows alongside the circle
+        catContainer.animate(
+          [
+            { transform: "translate(-50%, -50%) scale(0)", opacity: "1" },
+            { transform: "translate(-50%, -50%) scale(2.5)", opacity: "1", offset: 0.6 },
+            { transform: "translate(-50%, -50%) scale(3.5)", opacity: "0" },
+          ],
+          {
+            duration: 900,
+            easing: "ease-in-out",
+            fill: "forwards",
+          }
+        );
+      });
+
+      transition.finished.then(() => {
+        catContainer.remove();
+        setIsAnimating(false);
+      });
+    } else {
+      // Fallback for browsers without View Transitions API
+      // Cat animation
+      catContainer.style.transition = "transform 0.8s ease-in-out, opacity 0.3s ease";
+      requestAnimationFrame(() => {
+        catContainer.style.transform = "translate(-50%, -50%) scale(2.5)";
+      });
+
+      setTimeout(() => {
+        applyTheme();
+        catContainer.style.transform = "translate(-50%, -50%) scale(4)";
+        catContainer.style.opacity = "0";
+      }, 500);
+
+      setTimeout(() => {
+        catContainer.remove();
+        setIsAnimating(false);
+      }, 900);
+    }
   }, [isDark, isAnimating]);
 
   return (
@@ -135,7 +163,6 @@ export default function ThemeToggle() {
       aria-label="Toggle theme"
     >
       {isDark ? (
-        /* Sun icon */
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-[17px] h-[17px]">
           <circle cx="12" cy="12" r="4" />
           <line x1="12" y1="2" x2="12" y2="4" />
@@ -148,7 +175,6 @@ export default function ThemeToggle() {
           <line x1="17.66" y1="6.34" x2="19.07" y2="4.93" />
         </svg>
       ) : (
-        /* Moon icon */
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-[17px] h-[17px]">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
         </svg>
