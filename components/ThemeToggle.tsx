@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useThemeTransition } from "./ThemeTransition";
 
 export default function ThemeToggle() {
   const [isDark, setIsDark] = useState(true);
+  const { triggerTransition } = useThemeTransition();
 
   useEffect(() => {
     const saved = localStorage.getItem("theme");
@@ -18,14 +20,18 @@ export default function ThemeToggle() {
 
   const toggle = () => {
     const next = !isDark;
-    setIsDark(next);
-    if (next) {
-      document.documentElement.classList.add("dark-mode");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark-mode");
-      localStorage.setItem("theme", "light");
-    }
+    const nextTheme = next ? "dark" : "light";
+
+    triggerTransition(nextTheme, () => {
+      setIsDark(next);
+      if (next) {
+        document.documentElement.classList.add("dark-mode");
+        localStorage.setItem("theme", "dark");
+      } else {
+        document.documentElement.classList.remove("dark-mode");
+        localStorage.setItem("theme", "light");
+      }
+    });
   };
 
   return (
