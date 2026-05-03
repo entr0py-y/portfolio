@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Epilogue, Manrope, Caveat } from "next/font/google";
 import TopNav from "@/components/TopNav";
 import BackgroundCharacter from "@/components/BackgroundCharacter";
+import Preloader from "@/components/Preloader";
 import "./globals.css";
 
 const epilogue = Epilogue({
@@ -43,6 +44,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body>
+        <Preloader />
         <BackgroundCharacter />
         <TopNav />
         {children}
