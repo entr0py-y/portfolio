@@ -76,7 +76,7 @@ function prefetchRoute(path: string): Promise<void> {
 
 export default function Preloader() {
   const [progress, setProgress] = useState(0);
-  const [hasEntered, setHasEntered] = useState(true); // SSR default
+  const [hasEntered, setHasEntered] = useState(false); // SSR default to false to prevent initial flash
   const [isFadingOut, setIsFadingOut] = useState(false);
   const startTimeRef = useRef(0);
 

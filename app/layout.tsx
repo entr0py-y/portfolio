@@ -40,10 +40,33 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`dark-mode ${epilogue.variable} ${manrope.variable} ${caveat.variable}`}
+      className={`${epilogue.variable} ${manrope.variable} ${caveat.variable}`}
       suppressHydrationWarning
       data-scroll-behavior="smooth"
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var saved = localStorage.getItem('theme');
+                  var isDark = saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                  if (isDark) {
+                    document.documentElement.classList.add('dark-mode');
+                  } else {
+                    document.documentElement.classList.remove('dark-mode');
+                  }
+
+                  if (sessionStorage.getItem('portfolio_entered') === 'true') {
+                    document.documentElement.classList.add('has-entered');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body>
         <Preloader />
         <BackgroundCharacter />

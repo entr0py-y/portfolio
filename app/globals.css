@@ -94,6 +94,10 @@ body::before {
   pointer-events: none;
 }
 
+html.has-entered .preloader-overlay {
+  display: none !important;
+}
+
 .preloader-bar-container {
   width: 200px;
   max-width: 80vw;
