@@ -35,23 +35,27 @@ export default function SketchingPage() {
           {sketches.map((sketch, i) => (
             <div
               key={i}
-              onClick={() => setSelectedSketch(i)}
-              className="absolute w-[50%] max-[768px]:w-[65%] p-2 rounded-sm bg-[#e8e8e8] shadow-2xl cursor-pointer sketch-photo hover:scale-[1.05]"
+              className="absolute w-[50%] max-[768px]:w-[65%] cursor-pointer group"
               style={{
                 top: sketch.top,
                 left: sketch.left,
-                transform: `rotate(${sketch.rotate}) translateZ(0)`,
                 zIndex: sketch.z,
               }}
+              onClick={() => setSelectedSketch(i)}
             >
-              <div className="w-full relative pointer-events-none">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={sketch.src}
-                  alt={`Sketch ${i + 1}`}
-                  className="w-full h-auto object-cover opacity-90 group-hover:opacity-100"
-
-                />
+              <div style={{ transform: `rotate(${sketch.rotate})` }}>
+                <div className="w-full p-2 rounded-sm bg-[#e8e8e8] shadow-md sketch-photo group-hover:scale-[1.03]">
+                  <div className="w-full relative pointer-events-none">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={sketch.src}
+                      alt={`Sketch ${i + 1}`}
+                      className="w-full h-auto object-cover opacity-90 transition-opacity duration-300 group-hover:opacity-100"
+                      decoding="async"
+                      loading={i > 2 ? "lazy" : "eager"}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           ))}
