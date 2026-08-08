@@ -74,7 +74,7 @@ export default function PlayingPage() {
           </div>
         ) : error ? (
           <div className="text-[13px] text-[var(--color-outline)] mb-6 px-4 py-3 rounded-xl border border-[var(--color-outline-variant)]">
-            ⚠️ Could not load Steam data. Make sure <code className="text-[12px]">STEAM_API_KEY</code> and <code className="text-[12px]">STEAM_ID</code> are set in your environment variables.
+            ⚠️ Could not load Steam data. Make sure <code className="text-[12px]">STEAM_API_KEY</code> and at least one of <code className="text-[12px]">STEAM_ID_1</code> or <code className="text-[12px]">STEAM_ID_2</code> are set in your environment variables.
           </div>
         ) : (
           <div className="flex flex-wrap gap-4 mb-6">
