@@ -82,13 +82,13 @@ export default function Home() {
               </h2>
             </div>
             <div className="flex flex-col items-start gap-3">
-              <div className="flex items-center relative w-full max-[768px]:relative max-[768px]:w-full max-[768px]:h-[180px] max-[768px]:mb-2">
+              <div className="flex items-center relative w-full max-[768px]:relative max-[768px]:w-full max-[768px]:h-[160px] max-[768px]:mb-2">
                 <TransitionLink href="/listen" className="no-underline shrink-0 z-10">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="https://is1-ssl.mzstatic.com/image/thumb/SG-MQ-US-001-Image000001/v4/b2/e1/7b/b2e17b53-344a-8e14-d0bc-5d8835c2c00c/image/400x400cc.jpg"
                     alt="Plastic Airbag"
-                    className="w-[200px] h-[200px] rounded-[6px] object-cover block album-art max-[768px]:w-[180px] max-[768px]:h-[180px]"
+                    className="w-[180px] h-[180px] rounded-[6px] object-cover block album-art max-[768px]:w-[160px] max-[768px]:h-[160px]"
                     style={{ boxShadow: "0 4px 12px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0,0,0,0.2)" }}
                   />
                 </TransitionLink>
