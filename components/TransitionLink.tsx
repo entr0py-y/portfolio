@@ -2,7 +2,7 @@
 
 import Link, { LinkProps } from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useRef, useTransition } from "react";
+import React, { useCallback, useEffect, useTransition } from "react";
 
 interface TransitionLinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps>, LinkProps {
   children: React.ReactNode;
@@ -10,29 +10,44 @@ interface TransitionLinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchor
   className?: string;
 }
 
+// Global touch coordinate tracker — captures every touch on the page.
+// This is far more reliable than per-element listeners because it doesn't
+// depend on ref forwarding, event propagation, or React synthetic events.
+let lastTouchX = 0;
+let lastTouchY = 0;
+let touchListenerAttached = false;
+
+function ensureTouchListener() {
+  if (touchListenerAttached || typeof window === "undefined") return;
+  touchListenerAttached = true;
+  document.addEventListener(
+    "touchstart",
+    (e) => {
+      const touch = e.touches[0];
+      if (touch) {
+        lastTouchX = touch.clientX;
+        lastTouchY = touch.clientY;
+      }
+    },
+    { passive: true }
+  );
+  // Also capture pointerdown for devices that use Pointer Events
+  document.addEventListener(
+    "pointerdown",
+    (e) => {
+      lastTouchX = e.clientX;
+      lastTouchY = e.clientY;
+    },
+    { passive: true }
+  );
+}
+
 export default function TransitionLink({ children, href, className, onClick, ...props }: TransitionLinkProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const lastTouchPos = useRef<{ x: number; y: number } | null>(null);
-  const linkRef = useRef<HTMLAnchorElement>(null);
 
-  // Attach a native touchstart listener directly to the DOM element.
-  // This is the most reliable way to capture touch coordinates on mobile,
-  // since React synthetic events and Next.js Link can sometimes swallow
-  // or misreport coordinates from touch-originated click events.
   useEffect(() => {
-    const el = linkRef.current;
-    if (!el) return;
-
-    const onTouchStart = (e: TouchEvent) => {
-      const touch = e.touches[0];
-      if (touch) {
-        lastTouchPos.current = { x: touch.clientX, y: touch.clientY };
-      }
-    };
-
-    el.addEventListener("touchstart", onTouchStart, { passive: true });
-    return () => el.removeEventListener("touchstart", onTouchStart);
+    ensureTouchListener();
   }, []);
 
   const handleTransition = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -46,22 +61,10 @@ export default function TransitionLink({ children, href, className, onClick, ...
 
     e.preventDefault();
 
-    // Priority: stored touch coords > click event coords > element center
-    let x: number;
-    let y: number;
-
-    if (lastTouchPos.current) {
-      x = lastTouchPos.current.x;
-      y = lastTouchPos.current.y;
-      lastTouchPos.current = null;
-    } else if (e.clientX !== 0 || e.clientY !== 0) {
-      x = e.clientX;
-      y = e.clientY;
-    } else {
-      const rect = e.currentTarget.getBoundingClientRect();
-      x = rect.left + rect.width / 2;
-      y = rect.top + rect.height / 2;
-    }
+    // Use click event coords if available (desktop), otherwise fall back
+    // to the globally captured touch/pointer coords (mobile).
+    const x = (e.clientX !== 0 || e.clientY !== 0) ? e.clientX : lastTouchX;
+    const y = (e.clientX !== 0 || e.clientY !== 0) ? e.clientY : lastTouchY;
 
     const doc = document as any;
     if (!doc.startViewTransition) {
@@ -98,7 +101,7 @@ export default function TransitionLink({ children, href, className, onClick, ...
   }, [href, router, onClick]);
 
   return (
-    <Link {...props} href={href} ref={linkRef} onClick={handleTransition} className={className}>
+    <Link {...props} href={href} onClick={handleTransition} className={className}>
       {children}
     </Link>
   );
