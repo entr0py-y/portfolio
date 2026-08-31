@@ -61,10 +61,13 @@ export default function TransitionLink({ children, href, className, onClick, ...
 
     e.preventDefault();
 
-    // Use click event coords if available (desktop), otherwise fall back
-    // to the globally captured touch/pointer coords (mobile).
-    const x = (e.clientX !== 0 || e.clientY !== 0) ? e.clientX : lastTouchX;
-    const y = (e.clientX !== 0 || e.clientY !== 0) ? e.clientY : lastTouchY;
+    // Always prefer the globally captured touch/pointer coordinates.
+    // touchstart and pointerdown fire BEFORE click and always have the
+    // correct tap position. The click event's clientX/Y can be unreliable
+    // on some mobile browsers. On desktop (no prior touch), lastTouchX/Y
+    // will be 0, so we fall back to click event coords.
+    const x = lastTouchX || e.clientX;
+    const y = lastTouchY || e.clientY;
 
     const doc = document as any;
     if (!doc.startViewTransition) {
