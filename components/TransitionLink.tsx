@@ -2,7 +2,7 @@
 
 import Link, { LinkProps } from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useRef, useTransition } from "react";
+import React, { useCallback, useEffect, useRef, useTransition } from "react";
 
 interface TransitionLinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps>, LinkProps {
   children: React.ReactNode;
@@ -13,13 +13,26 @@ interface TransitionLinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchor
 export default function TransitionLink({ children, href, className, onClick, ...props }: TransitionLinkProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  // Store the last touch/pointer coordinates so we can use them in the click handler.
-  // On mobile, the synthetic click event can report clientX/clientY as 0,
-  // but touchstart/pointerdown always have the correct coordinates.
-  const lastPointerPos = useRef<{ x: number; y: number } | null>(null);
+  const lastTouchPos = useRef<{ x: number; y: number } | null>(null);
+  const linkRef = useRef<HTMLAnchorElement>(null);
 
-  const handlePointerDown = useCallback((e: React.PointerEvent<HTMLAnchorElement>) => {
-    lastPointerPos.current = { x: e.clientX, y: e.clientY };
+  // Attach a native touchstart listener directly to the DOM element.
+  // This is the most reliable way to capture touch coordinates on mobile,
+  // since React synthetic events and Next.js Link can sometimes swallow
+  // or misreport coordinates from touch-originated click events.
+  useEffect(() => {
+    const el = linkRef.current;
+    if (!el) return;
+
+    const onTouchStart = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      if (touch) {
+        lastTouchPos.current = { x: touch.clientX, y: touch.clientY };
+      }
+    };
+
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    return () => el.removeEventListener("touchstart", onTouchStart);
   }, []);
 
   const handleTransition = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -33,16 +46,15 @@ export default function TransitionLink({ children, href, className, onClick, ...
 
     e.preventDefault();
 
-    // Prefer stored pointer/touch coordinates (always accurate on mobile),
-    // then try click event coordinates, then fall back to element center.
+    // Priority: stored touch coords > click event coords > element center
     let x: number;
     let y: number;
 
-    if (lastPointerPos.current) {
-      x = lastPointerPos.current.x;
-      y = lastPointerPos.current.y;
-      lastPointerPos.current = null;
-    } else if (e.clientX || e.clientY) {
+    if (lastTouchPos.current) {
+      x = lastTouchPos.current.x;
+      y = lastTouchPos.current.y;
+      lastTouchPos.current = null;
+    } else if (e.clientX !== 0 || e.clientY !== 0) {
       x = e.clientX;
       y = e.clientY;
     } else {
@@ -86,7 +98,7 @@ export default function TransitionLink({ children, href, className, onClick, ...
   }, [href, router, onClick]);
 
   return (
-    <Link {...props} href={href} onPointerDown={handlePointerDown} onClick={handleTransition} className={className}>
+    <Link {...props} href={href} ref={linkRef} onClick={handleTransition} className={className}>
       {children}
     </Link>
   );
