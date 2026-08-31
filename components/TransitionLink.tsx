@@ -37,33 +37,29 @@ export default function TransitionLink({ children, href, className, onClick, ...
       return;
     }
 
-    const transition = doc.startViewTransition(async () => {
-      startTransition(() => {
-        router.push(href.toString());
+    const transition = doc.startViewTransition(() => {
+      return new Promise<void>((resolve) => {
+        startTransition(() => {
+          router.push(href.toString());
+          // Since startTransition doesn't await the actual React commit natively,
+          // a short timeout ensures the new page has at least started rendering.
+          setTimeout(resolve, 50);
+        });
       });
-      await new Promise((resolve) => setTimeout(resolve, 150));
     });
 
     transition.ready.then(() => {
-      const right = window.innerWidth - x;
-      const bottom = window.innerHeight - y;
-      const maxRadius = Math.hypot(
-        Math.max(x, right),
-        Math.max(y, bottom)
-      );
-
       document.documentElement.animate(
         {
           clipPath: [
             `circle(0px at ${x}px ${y}px)`,
-            `circle(${maxRadius}px at ${x}px ${y}px)`,
+            `circle(150% at ${x}px ${y}px)`,
           ],
         },
         {
           duration: 1400,
-          easing: "linear",
+          easing: "ease-in-out",
           pseudoElement: "::view-transition-new(root)",
-          fill: "forwards",
         }
       );
     });

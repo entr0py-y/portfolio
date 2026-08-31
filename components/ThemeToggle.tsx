@@ -48,25 +48,14 @@ export default function ThemeToggle() {
       });
 
       transition.ready.then(() => {
-        const right = window.innerWidth - x;
-        const bottom = window.innerHeight - y;
-        const maxRadius = Math.hypot(
-          Math.max(x, right),
-          Math.max(y, bottom)
-        );
-
         document.documentElement.animate(
           {
-            clipPath: [
-              `circle(0px at ${x}px ${y}px)`,
-              `circle(${maxRadius}px at ${x}px ${y}px)`,
-            ],
+            clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(150% at ${x}px ${y}px)`],
           },
           {
             duration: 1400,
-            easing: "linear",
+            easing: "ease-in-out",
             pseudoElement: "::view-transition-new(root)",
-            fill: "forwards",
           }
         );
       });
