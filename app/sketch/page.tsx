@@ -6,13 +6,17 @@ import PageShell from "@/components/PageShell";
 
 const sketches = [
   { src: "/sketch/sketch1.png", top: "0%", left: "5%", rotate: "-12deg", z: 10 },
-  { src: "/sketch/sketch2.jpeg", top: "8%", left: "35%", rotate: "8deg", z: 20 },
-  { src: "/sketch/sketch3.jpeg", top: "20%", left: "-2%", rotate: "-6deg", z: 15 },
-  { src: "/sketch/sketch4.jpeg", top: "25%", left: "42%", rotate: "14deg", z: 25 },
-  { src: "/sketch/sketch5.jpeg", top: "45%", left: "8%", rotate: "-18deg", z: 5 },
-  { src: "/sketch/sketch6.jpeg", top: "48%", left: "48%", rotate: "5deg", z: 30 },
-  { src: "/sketch/sketch7.jpeg", top: "68%", left: "-5%", rotate: "-8deg", z: 20 },
-  { src: "/sketch/sketch8.jpeg", top: "72%", left: "40%", rotate: "12deg", z: 35 },
+  { src: "/sketch/sketch2.jpeg", top: "6%", left: "35%", rotate: "8deg", z: 20 },
+  { src: "/sketch/sketch3.jpeg", top: "14%", left: "-2%", rotate: "-6deg", z: 15 },
+  { src: "/sketch/sketch4.jpeg", top: "18%", left: "42%", rotate: "14deg", z: 25 },
+  { src: "/sketch/sketch5.jpeg", top: "32%", left: "8%", rotate: "-18deg", z: 5 },
+  { src: "/sketch/sketch6.jpeg", top: "34%", left: "48%", rotate: "5deg", z: 30 },
+  { src: "/sketch/sketch7.jpeg", top: "48%", left: "-5%", rotate: "-8deg", z: 20 },
+  { src: "/sketch/sketch8.jpeg", top: "51%", left: "40%", rotate: "12deg", z: 35 },
+  { src: "/Sketch/23.jpg", top: "65%", left: "2%", rotate: "-10deg", z: 10 },
+  { src: "/Sketch/24.jpg", top: "68%", left: "38%", rotate: "6deg", z: 25 },
+  { src: "/Sketch/25.jpg", top: "82%", left: "-8%", rotate: "15deg", z: 15 },
+  { src: "/Sketch/26.jpg", top: "85%", left: "45%", rotate: "-5deg", z: 30 },
 ];
 
 export default function SketchingPage() {
@@ -31,7 +35,7 @@ export default function SketchingPage() {
         </p>
 
         {/* Scattered Collage */}
-        <div className="relative w-full h-[1200px] max-[768px]:h-[1000px] mb-[300px] max-[768px]:mb-[250px]">
+        <div className="relative w-full h-[1700px] max-[768px]:h-[1400px] mb-[300px] max-[768px]:mb-[250px]">
           {sketches.map((sketch, i) => (
             <div
               key={i}
