@@ -37,13 +37,11 @@ export default function TransitionLink({ children, href, className, onClick, ...
       return;
     }
 
-    const transition = doc.startViewTransition(() => {
-      return new Promise<void>((resolve) => {
-        startTransition(() => {
-          router.push(href.toString());
-          setTimeout(resolve, 80);
-        });
+    const transition = doc.startViewTransition(async () => {
+      startTransition(() => {
+        router.push(href.toString());
       });
+      await new Promise((resolve) => setTimeout(resolve, 150));
     });
 
     transition.ready.then(() => {
@@ -62,9 +60,10 @@ export default function TransitionLink({ children, href, className, onClick, ...
           ],
         },
         {
-          duration: 700,
-          easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+          duration: 1400,
+          easing: "linear",
           pseudoElement: "::view-transition-new(root)",
+          fill: "forwards",
         }
       );
     });
