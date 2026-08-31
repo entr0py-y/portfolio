@@ -2,7 +2,7 @@
 
 import Link, { LinkProps } from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useTransition } from "react";
+import React, { useCallback, useRef, useTransition } from "react";
 
 interface TransitionLinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps>, LinkProps {
   children: React.ReactNode;
@@ -13,7 +13,15 @@ interface TransitionLinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchor
 export default function TransitionLink({ children, href, className, onClick, ...props }: TransitionLinkProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  
+  // Store the last touch/pointer coordinates so we can use them in the click handler.
+  // On mobile, the synthetic click event can report clientX/clientY as 0,
+  // but touchstart/pointerdown always have the correct coordinates.
+  const lastPointerPos = useRef<{ x: number; y: number } | null>(null);
+
+  const handlePointerDown = useCallback((e: React.PointerEvent<HTMLAnchorElement>) => {
+    lastPointerPos.current = { x: e.clientX, y: e.clientY };
+  }, []);
+
   const handleTransition = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
     if (onClick) {
       onClick(e);
@@ -25,11 +33,23 @@ export default function TransitionLink({ children, href, className, onClick, ...
 
     e.preventDefault();
 
-    // Use the actual click/tap coordinates so the circle animation
-    // originates from where the user tapped, not the element center.
-    // Fall back to element center if coordinates are missing (some edge cases).
-    const x = e.clientX || e.currentTarget.getBoundingClientRect().left + e.currentTarget.getBoundingClientRect().width / 2;
-    const y = e.clientY || e.currentTarget.getBoundingClientRect().top + e.currentTarget.getBoundingClientRect().height / 2;
+    // Prefer stored pointer/touch coordinates (always accurate on mobile),
+    // then try click event coordinates, then fall back to element center.
+    let x: number;
+    let y: number;
+
+    if (lastPointerPos.current) {
+      x = lastPointerPos.current.x;
+      y = lastPointerPos.current.y;
+      lastPointerPos.current = null;
+    } else if (e.clientX || e.clientY) {
+      x = e.clientX;
+      y = e.clientY;
+    } else {
+      const rect = e.currentTarget.getBoundingClientRect();
+      x = rect.left + rect.width / 2;
+      y = rect.top + rect.height / 2;
+    }
 
     const doc = document as any;
     if (!doc.startViewTransition) {
@@ -43,8 +63,6 @@ export default function TransitionLink({ children, href, className, onClick, ...
       return new Promise<void>((resolve) => {
         startTransition(() => {
           router.push(href.toString());
-          // Since startTransition doesn't await the actual React commit natively,
-          // a short timeout ensures the new page has at least started rendering.
           setTimeout(resolve, 50);
         });
       });
@@ -68,7 +86,7 @@ export default function TransitionLink({ children, href, className, onClick, ...
   }, [href, router, onClick]);
 
   return (
-    <Link {...props} href={href} onClick={handleTransition} className={className}>
+    <Link {...props} href={href} onPointerDown={handlePointerDown} onClick={handleTransition} className={className}>
       {children}
     </Link>
   );
