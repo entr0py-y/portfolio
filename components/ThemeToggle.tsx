@@ -25,6 +25,11 @@ export default function ThemeToggle() {
     const x = e.clientX;
     const y = e.clientY;
 
+    // Set the click coordinates as CSS custom properties so the
+    // CSS @keyframes vt-reveal animation uses the correct origin.
+    document.documentElement.style.setProperty("--vt-x", `${x}px`);
+    document.documentElement.style.setProperty("--vt-y", `${y}px`);
+
     const next = !isDark;
 
     const applyTheme = () => {
@@ -45,19 +50,6 @@ export default function ThemeToggle() {
     if (doc.startViewTransition) {
       const transition = doc.startViewTransition(() => {
         applyTheme();
-      });
-
-      transition.ready.then(() => {
-        document.documentElement.animate(
-          {
-            clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(150% at ${x}px ${y}px)`],
-          },
-          {
-            duration: 1400,
-            easing: "ease-in-out",
-            pseudoElement: "::view-transition-new(root)",
-          }
-        );
       });
 
       transition.finished.then(() => {

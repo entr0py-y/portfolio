@@ -10,98 +10,54 @@ interface TransitionLinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchor
   className?: string;
 }
 
-// Global touch coordinate tracker — captures every touch on the page.
-// This is far more reliable than per-element listeners because it doesn't
-// depend on ref forwarding, event propagation, or React synthetic events.
-let lastTouchX = 0;
-let lastTouchY = 0;
-let touchListenerAttached = false;
+// Store the last interaction coordinates globally.
+// Both touchstart and pointerdown fire before click and always have correct coordinates.
+let lastX = 0;
+let lastY = 0;
+let listenerAttached = false;
 
-function ensureTouchListener() {
-  if (touchListenerAttached || typeof window === "undefined") return;
-  touchListenerAttached = true;
-  document.addEventListener(
-    "touchstart",
-    (e) => {
-      const touch = e.touches[0];
-      if (touch) {
-        lastTouchX = touch.clientX;
-        lastTouchY = touch.clientY;
-      }
-    },
-    { passive: true }
-  );
-  // Also capture pointerdown for devices that use Pointer Events
-  document.addEventListener(
-    "pointerdown",
-    (e) => {
-      lastTouchX = e.clientX;
-      lastTouchY = e.clientY;
-    },
-    { passive: true }
-  );
+function ensureListeners() {
+  if (listenerAttached || typeof window === "undefined") return;
+  listenerAttached = true;
+  document.addEventListener("pointerdown", (e) => {
+    lastX = e.clientX;
+    lastY = e.clientY;
+  }, { passive: true });
 }
 
 export default function TransitionLink({ children, href, className, onClick, ...props }: TransitionLinkProps) {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   useEffect(() => {
-    ensureTouchListener();
+    ensureListeners();
   }, []);
 
   const handleTransition = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
     if (onClick) {
       onClick(e);
     }
-    
+
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
       return;
     }
 
     e.preventDefault();
 
-    // Always prefer the globally captured touch/pointer coordinates.
-    // touchstart and pointerdown fire BEFORE click and always have the
-    // correct tap position. The click event's clientX/Y can be unreliable
-    // on some mobile browsers. On desktop (no prior touch), lastTouchX/Y
-    // will be 0, so we fall back to click event coords.
-    const x = lastTouchX || e.clientX;
-    const y = lastTouchY || e.clientY;
+    // Use the globally captured pointer coordinates (reliable on both desktop and mobile).
+    // Fall back to click event coords if pointerdown hasn't fired yet (shouldn't happen).
+    const x = lastX || e.clientX;
+    const y = lastY || e.clientY;
 
-    const doc = document as any;
-    if (!doc.startViewTransition) {
-      startTransition(() => {
-        router.push(href.toString());
-      });
-      return;
-    }
+    // Set the click coordinates as CSS custom properties on the root element.
+    // The view transition CSS will use these to position the clip-path circle.
+    document.documentElement.style.setProperty("--vt-x", `${x}px`);
+    document.documentElement.style.setProperty("--vt-y", `${y}px`);
 
-    const transition = doc.startViewTransition(() => {
-      return new Promise<void>((resolve) => {
-        startTransition(() => {
-          router.push(href.toString());
-          setTimeout(resolve, 50);
-        });
-      });
+    startTransition(() => {
+      router.push(href.toString());
     });
-
-    transition.ready.then(() => {
-      document.documentElement.animate(
-        {
-          clipPath: [
-            `circle(0px at ${x}px ${y}px)`,
-            `circle(150% at ${x}px ${y}px)`,
-          ],
-        },
-        {
-          duration: 1400,
-          easing: "ease-in-out",
-          pseudoElement: "::view-transition-new(root)",
-        }
-      );
-    });
-  }, [href, router, onClick]);
+  }, [href, router, onClick, startTransition]);
 
   return (
     <Link {...props} href={href} onClick={handleTransition} className={className}>

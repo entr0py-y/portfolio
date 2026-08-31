@@ -281,7 +281,14 @@ a:active, button:active {
 
 /* =========================================
    VIEW TRANSITIONS (theme toggle + nav)
+   Uses CSS custom properties --vt-x and --vt-y
+   set by JS on click for the circle origin.
    ========================================= */
+
+:root {
+  --vt-x: 50vw;
+  --vt-y: 50vh;
+}
 
 ::view-transition-old(root) {
   animation: none;
@@ -290,9 +297,18 @@ a:active, button:active {
 }
 
 ::view-transition-new(root) {
-  animation: none;
+  animation: vt-reveal 1400ms ease-in-out;
   z-index: 9999;
   mix-blend-mode: normal;
+}
+
+@keyframes vt-reveal {
+  from {
+    clip-path: circle(0px at var(--vt-x) var(--vt-y));
+  }
+  to {
+    clip-path: circle(150% at var(--vt-x) var(--vt-y));
+  }
 }
 
 /* =========================================
