@@ -29,7 +29,7 @@ const caveat = Caveat({
 export const metadata: Metadata = {
   title: "Quiet Space — Pushkar Jha",
   description:
-    "Personal portfolio of Pushkar Jha — a first-year CS student and software developer building clean, scalable applications.",
+    "Personal portfolio of Pushkar Jha — a second-year CS student and software developer building clean, scalable applications.",
 };
 
 export default function RootLayout({

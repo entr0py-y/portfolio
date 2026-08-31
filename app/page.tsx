@@ -59,7 +59,7 @@ export default function Home() {
               </h2>
             </div>
             <p className="text-[13px] leading-[1.6] font-medium m-0 mb-4" style={{ fontFamily: "var(--font-body)" }}>
-              I&apos;m a first-year computer science student and software developer focused on building clean, scalable applications and exploring new technologies.
+              I&apos;m a second-year computer science student and software developer focused on building clean, scalable applications and exploring new technologies.
             </p>
             <p className="text-[13px] leading-[1.6] font-medium m-0 mb-4" style={{ fontFamily: "var(--font-body)" }}>
               When I&apos;m not coding, I&apos;m usually{" "}
