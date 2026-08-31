@@ -25,9 +25,11 @@ export default function TransitionLink({ children, href, className, onClick, ...
 
     e.preventDefault();
 
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const y = rect.top + rect.height / 2;
+    // Use the actual click/tap coordinates so the circle animation
+    // originates from where the user tapped, not the element center.
+    // Fall back to element center if coordinates are missing (some edge cases).
+    const x = e.clientX || e.currentTarget.getBoundingClientRect().left + e.currentTarget.getBoundingClientRect().width / 2;
+    const y = e.clientY || e.currentTarget.getBoundingClientRect().top + e.currentTarget.getBoundingClientRect().height / 2;
 
     const doc = document as any;
     if (!doc.startViewTransition) {
