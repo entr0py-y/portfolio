@@ -15,8 +15,8 @@ const sketches = [
   { src: "/sketch/sketch8.jpeg", top: "51%", left: "40%", rotate: "12deg", z: 35 },
   { src: "/Sketch/23.jpg", top: "69%", left: "-12%", rotate: "-10deg", z: 10 },
   { src: "/Sketch/24.jpg", top: "75%", left: "48%", rotate: "6deg", z: 25 },
-  { src: "/Sketch/25.jpg", top: "92%", left: "-8%", rotate: "15deg", z: 15 },
-  { src: "/Sketch/26.jpg", top: "96%", left: "40%", rotate: "-5deg", z: 30 },
+  { src: "/Sketch/25.jpg", top: "85%", left: "-8%", rotate: "15deg", z: 15 },
+  { src: "/Sketch/26.jpg", top: "88%", left: "40%", rotate: "-5deg", z: 30 },
 ];
 
 export default function SketchingPage() {
