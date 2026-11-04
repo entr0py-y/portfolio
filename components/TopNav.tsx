@@ -48,21 +48,9 @@ export default function TopNav() {
           <div className="relative w-[83px] flex flex-col items-end">
             {/* Row 1: The 3 compact symbols pinned to the right edge */}
             <div className="flex gap-4 items-center w-[83px] justify-between">
-              <TransitionLink
-                href="/work"
-                className={`flex items-center justify-center w-[17px] h-[17px] bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 ${
-                  hovered === "work" ? "opacity-60" : "hover:opacity-60"
-                }`}
-                aria-label="Work"
-                onMouseEnter={() => setHovered("work")}
-                onMouseLeave={() => setHovered(null)}
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-[17px] h-[17px]">
-                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-                  <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
-                  <line x1="12" y1="14" x2="12" y2="14.01" />
-                </svg>
-              </TransitionLink>
+              <div className="flex items-center justify-center w-[17px] h-[17px]">
+                <ThemeToggle />
+              </div>
 
               <TransitionLink
                 href="/projects"
@@ -79,9 +67,21 @@ export default function TopNav() {
                 </svg>
               </TransitionLink>
 
-              <div className="flex items-center justify-center w-[17px] h-[17px]">
-                <ThemeToggle />
-              </div>
+              <TransitionLink
+                href="/work"
+                className={`flex items-center justify-center w-[17px] h-[17px] bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 ${
+                  hovered === "work" ? "opacity-60" : "hover:opacity-60"
+                }`}
+                aria-label="Work"
+                onMouseEnter={() => setHovered("work")}
+                onMouseLeave={() => setHovered(null)}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-[17px] h-[17px]">
+                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                  <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+                  <line x1="12" y1="14" x2="12" y2="14.01" />
+                </svg>
+              </TransitionLink>
             </div>
 
             {/* Stacked words & connecting lines */}
@@ -109,9 +109,9 @@ export default function TopNav() {
                       : "text-[var(--color-outline)]"
                   }`}
                 />
-                {/* Line from Briefcase leading horizontally right to the side of 'work' */}
+                {/* Line from Briefcase leading horizontally left to the side of 'work' */}
                 <path
-                  d="M 8.5 0 V 36 Q 8.5 41 13.5 41 H 18"
+                  d="M 74.5 0 V 36 Q 74.5 41 69.5 41 H 65"
                   stroke="currentColor"
                   strokeWidth="1.2"
                   strokeLinecap="round"
@@ -150,7 +150,7 @@ export default function TopNav() {
                 style={{
                   top: "41px",
                   transform: "translateY(-50%)",
-                  left: "22px",
+                  right: "22px",
                 }}
               >
                 <TransitionLink
