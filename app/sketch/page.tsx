@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
 import PageShell from "@/components/PageShell";
 import { stopSwarm } from "@/components/swarm-rebuild";
 
@@ -99,7 +98,7 @@ export default function SketchingPage() {
       </div>
 
       {/* Maximized View Overlay */}
-      {mounted && selectedSketch !== null && createPortal(
+      {selectedSketch !== null && (
         <div
           className="fixed inset-0 z-[2147483648] bg-[var(--color-background)]/90 backdrop-blur-md flex flex-col items-center justify-center p-6 sm:p-10 sketch-lightbox cursor-zoom-out"
           style={{ fontFamily: "var(--font-body)" }}
@@ -128,8 +127,7 @@ export default function SketchingPage() {
               className="max-w-[92vw] max-h-[85vh] rounded-2xl border border-[var(--color-outline)]/20 shadow-2xl bg-[var(--color-surface)] object-contain"
             />
           </div>
-        </div>,
-        document.body
+        </div>
       )}
     </PageShell>
   );

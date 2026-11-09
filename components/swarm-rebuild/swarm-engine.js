@@ -1882,8 +1882,6 @@
       document.documentElement.appendChild(host);
       document.documentElement.classList.add("swarm-ready");
       document.documentElement.classList.remove("swarm-navigating");
-      const preVeil = document.getElementById("pre-veil");
-      if (preVeil) preVeil.remove();
       this.measure();
     }
 
@@ -3809,9 +3807,7 @@
         const isDark = chosenMode === "moonshine";
 
         // Disable transitions temporarily so all computed colors update instantly without 300ms transition lag
-        const disableTransitions = document.createElement("style");
-        disableTransitions.textContent = "*, *::before, *::after { transition: none !important; }";
-        document.head.appendChild(disableTransitions);
+        document.documentElement.classList.add("no-transitions");
 
         document.documentElement.classList.toggle("dark-mode", isDark);
         try {
@@ -3833,7 +3829,7 @@
         this.env.pageBg = pageBackground();
 
         await nextFrame();
-        disableTransitions.remove();
+        document.documentElement.classList.remove("no-transitions");
         await sleep(100);
       }
 
