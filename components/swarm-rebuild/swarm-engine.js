@@ -1392,59 +1392,8 @@
       });
     }
 
-    // -------------------------------------------------- guides & snapping
+    // -------------------------------------------------- guides & snapping (disabled: remove left margin red line)
     const guides = [];
-    const texts = items.filter((it) => it.kind === "text" && it.task && it.layer === "world" && it.fs >= 13 && it.tb.w > 30);
-    const BAND = 900;
-    const bands = new Map();
-    for (const it of texts) {
-      const k = Math.floor(it.tb.y / BAND);
-      if (!bands.has(k)) bands.set(k, []);
-      bands.get(k).push(it);
-    }
-    for (const [, list] of [...bands.entries()].sort((a, b) => a[0] - b[0])) {
-      if (guides.length >= 16) break;
-      const byX = new Map();
-      for (const it of list) {
-        const x = Math.round(it.tb.x);
-        if (!byX.has(x)) byX.set(x, []);
-        byX.get(x).push(it);
-      }
-      let best = null;
-      for (const [x, l] of byX) if (l.length >= 3 && (!best || l.length > best[1].length)) best = [x, l];
-      if (best) {
-        const top = Math.min(...best[1].map((m) => m.tb.y));
-        const members = best[1].filter((m) => m.tb.y < top + 450).sort((a, b) => b.fs - a.fs).slice(0, 2);
-        const g = { axis: "x", pos: best[0], cur: best[0], op: 1, flash: 0, dragging: false, vis: false };
-        guides.push(g);
-        const gy = Math.min(...members.map((m) => m.tb.y)) - 30;
-        g.task = mk(gy, { type: "guide", g }, [], "world");
-        g.deps = [];
-        for (const m of members) {
-          m.task.spec.snap = g;
-          m.task.spec.snapDx = m.tb.x - best[0];
-          g.deps.push(m.task);
-        }
-      }
-      const byY = new Map();
-      for (const it of list) {
-        const y = Math.round(it.tb.y);
-        if (!byY.has(y)) byY.set(y, []);
-        byY.get(y).push(it);
-      }
-      let row = null;
-      for (const [y, l] of byY) if (l.length >= 3 && (!row || l.length > row[1].length)) row = [y, l];
-      if (row) {
-        const m = row[1].find((it) => !it.task.spec.snap);
-        if (m) {
-          const g = { axis: "y", pos: row[0], cur: row[0], op: 1, flash: 0, dragging: false, vis: false };
-          guides.push(g);
-          g.task = mk(row[0] - 30, { type: "guide", g }, [], "world");
-          g.deps = [m.task];
-          m.task.spec.snap = g;
-        }
-      }
-    }
     for (const it of items) if (it.kind === "text" && it.task && it.fs >= 28 && it.tb.h < 400) it.task.spec.grow = true;
     // deps always have lower ids, so one reverse pass propagates the earliest need
     for (const t of tasks) t.gate = t.y;
@@ -1613,7 +1562,7 @@
 .cursor{display:none!important}
 .hud .dots{display:none!important}
 .badge{position:absolute;transform:translate(-50%);padding:1px 4px;border-radius:2px;color:#fff;font:600 11px/16px Inter,system-ui,-apple-system,"Segoe UI",sans-serif;white-space:nowrap;font-variant-numeric:tabular-nums}
-.rulers{position:absolute;inset:0;pointer-events:none}
+.rulers{display:none!important}
 .ruler{position:absolute;background:#2c2c2c;pointer-events:none}
 .ruler svg{display:block}
 .ruler-top{top:0;left:0;right:0;height:20px;border-bottom:1px solid #3a3a3a}
@@ -1627,7 +1576,7 @@
 .intro .preloader-bar-container{width:200px;max-width:80vw;display:flex;flex-direction:column;align-items:center;gap:12px}
 .intro .preloader-bar-track{width:100%;height:1px;background-color:var(--color-outline-variant,#c4c7c7);position:relative;overflow:hidden}
 .intro .preloader-bar-fill{position:absolute;top:0;left:0;height:100%;width:0%;background-color:var(--color-on-background,#1a1a1a);transition:width .35s cubic-bezier(0.4,0,0.2,1);will-change:width}
-.hud{position:absolute;left:50%;bottom:20px;transform:translate(-50%,18px);opacity:0;display:flex;align-items:center;gap:10px;padding:6px 6px 6px 10px;background:rgba(30,30,30,.94);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:#fff;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.28),inset 0 0 0 1px rgba(255,255,255,.07);font:500 12px/1 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;pointer-events:auto;transition:opacity .45s ease,transform .45s cubic-bezier(.2,.8,.2,1);white-space:nowrap;user-select:none;z-index:5}
+.hud{display:none!important}
 .hud.on{opacity:1;transform:translate(-50%,0)}
 .hud .dots{display:flex;padding-left:5px}
 .hud .dots i{display:block;width:18px;height:18px;margin-left:-5px;border-radius:50%;border:2px solid #1e1e1e;font:700 9px/14px Inter,system-ui,sans-serif;font-style:normal;text-align:center;color:#fff;transition:background .3s}
@@ -2071,18 +2020,7 @@
       const Y = (y, st) => f1(st ? y : y - vp.sy + vp.oy);
       let s = "";
       let b = "";
-      for (const g of E.guides) {
-        if (!g.vis || g.op <= 0) continue;
-        const sw = 1 + g.flash;
-        const flt = g.flash > 0 ? ` style="filter:drop-shadow(0 0 ${f1(2 + g.flash * 3)}px ${RED})"` : "";
-        if (g.axis === "x") {
-          const x = X(g.cur);
-          s += `<line x1="${x}" x2="${x}" y1="0" y2="${H}" stroke="${RED}" stroke-width="${sw}" opacity="${f1(g.op)}"${flt}/>`;
-        } else {
-          const y = Y(g.cur);
-          s += `<line x1="0" x2="${W}" y1="${y}" y2="${y}" stroke="${RED}" stroke-width="${sw}" opacity="${f1(g.op)}"${flt}/>`;
-        }
-      }
+      // Guides disabled (no red margin lines)
       for (const it of E.editLines) {
         const st = it.layer !== "world";
         const pts = it.pts.slice(0, it.placed).map((p) => [X(p.x + it.dx, st), Y(p.y + it.dy, st)]);
@@ -2101,7 +2039,7 @@
             const y = Y(v.b.y, st);
             const w = f1(v.b.w);
             const h = f1(v.b.h);
-            const col = v.color === "red" ? RED : BLUE;
+            const col = BLUE;
             const tfAttr = v.transform ? ` transform="${v.transform}" transform-origin="${X(v.b.x + v.b.w / 2, st)}px ${Y(v.b.y + v.b.h / 2, st)}px"` : "";
             s += `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="none" stroke="${col}" stroke-width="1"${tfAttr}/>`;
             if (v.underline && v.underline.w > 0) {
@@ -2117,9 +2055,9 @@
           } else if (v.t === "measure") {
             const a = { x: X(v.a.x, st), y: Y(v.a.y, st) };
             const z = { x: X(v.b.x, st), y: Y(v.b.y, st) };
-            s += `<line x1="${a.x}" y1="${a.y}" x2="${z.x}" y2="${z.y}" stroke="${RED}" stroke-width="1"/>`;
+            s += `<line x1="${a.x}" y1="${a.y}" x2="${z.x}" y2="${z.y}" stroke="${BLUE}" stroke-width="1"/>`;
             const horiz = a.y === z.y;
-            b += `<div class="badge" style="left:${f1(horiz ? (a.x + z.x) / 2 : a.x + 18)}px;top:${f1(horiz ? a.y + 8 : (a.y + z.y) / 2 - 9)}px;background:${RED}">${v.label}</div>`;
+            b += `<div class="badge" style="left:${f1(horiz ? (a.x + z.x) / 2 : a.x + 18)}px;top:${f1(horiz ? a.y + 8 : (a.y + z.y) / 2 - 9)}px;background:${BLUE}">${v.label}</div>`;
           }
         }
       }
@@ -3832,22 +3770,12 @@
     onComplete() {
       this.complete = true;
       if (this.sfx) this.sfx.finale();
-      const E = this.engine;
-      const v = this.view;
-      const secs = (E.endTime - E.startTime).toFixed(1);
-      v.status.innerHTML = `Rebuilt in <b>${secs}s</b>`;
-      v.barFill.style.width = "100%";
-      v.dots.innerHTML = "";
-      v.root.querySelector('[data-a="live"]').hidden = false;
-      // Replay button disabled/hidden
-      v.root.querySelector('[data-a="tour"]').hidden = true;
-      v.root.querySelector('[data-a="speed"]').hidden = true;
       this.tour = false;
       setTimeout(() => {
         if (!this.dead && this.complete) {
           stop(true);
         }
-      }, 3000);
+      }, 350);
     }
 
     destroy(reveal) {
