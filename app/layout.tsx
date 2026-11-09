@@ -48,11 +48,9 @@ export default function RootLayout({
             __html: `
               html:not(.swarm-ready) body {
                 opacity: 0 !important;
-                visibility: hidden !important;
               }
               html.swarm-navigating body {
-                opacity: 0 !important;
-                visibility: hidden !important;
+                opacity: 0.15 !important;
               }
               #pre-veil {
                 position: fixed;
@@ -89,7 +87,8 @@ export default function RootLayout({
 
                   setTimeout(function() {
                     document.documentElement.classList.add('swarm-ready');
-                  }, 2500);
+                    document.documentElement.classList.remove('swarm-navigating');
+                  }, 2000);
                 } catch (e) {}
               })();
             `,

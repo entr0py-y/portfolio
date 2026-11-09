@@ -54,9 +54,22 @@ export default function TransitionLink({ children, href, className, onClick, ...
     document.documentElement.style.setProperty("--vt-x", `${x}px`);
     document.documentElement.style.setProperty("--vt-y", `${y}px`);
 
-    startTransition(() => {
-      router.push(href.toString());
-    });
+    try {
+      startTransition(() => {
+        router.push(href.toString());
+      });
+    } catch (_) {
+      window.location.href = href.toString();
+      return;
+    }
+
+    // Safety fallback: if client-side router transition hangs in an in-app browser webview,
+    // ensure hard navigation occurs rather than remaining stuck on a dead document state.
+    setTimeout(() => {
+      if (typeof window !== "undefined" && window.location.pathname !== href.toString()) {
+        window.location.href = href.toString();
+      }
+    }, 2000);
   }, [href, router, onClick, startTransition]);
 
   return (

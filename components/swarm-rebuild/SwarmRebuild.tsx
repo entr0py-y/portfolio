@@ -38,11 +38,18 @@ export default function SwarmRebuild() {
       return;
     }
 
+    // Safety fallback timer: guarantees that the page is never stuck in swarm-navigating
+    const safetyTimer = setTimeout(() => {
+      document.documentElement.classList.add("swarm-ready");
+      document.documentElement.classList.remove("swarm-navigating");
+    }, 800);
+
     // Do not repeat when returning to the home page; only initiate on initial visit or refresh
     if (pathname === "/") {
       if (homePlayed) {
         document.documentElement.classList.add("swarm-ready");
         document.documentElement.classList.remove("swarm-navigating");
+        clearTimeout(safetyTimer);
         return;
       }
       homePlayed = true;
@@ -56,6 +63,7 @@ export default function SwarmRebuild() {
     if (isHome) {
       restartSwarm({ showIntro: true });
       return () => {
+        clearTimeout(safetyTimer);
         stopSwarm(false);
       };
     }
@@ -67,6 +75,7 @@ export default function SwarmRebuild() {
 
     return () => {
       clearTimeout(timer);
+      clearTimeout(safetyTimer);
       stopSwarm(false);
     };
   }, [mounted, pathname]);

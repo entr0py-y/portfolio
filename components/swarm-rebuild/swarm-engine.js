@@ -1670,8 +1670,6 @@
 :host(.dark-mode) .theme-sep{color:#525252}
 .theme-hint{margin:0;padding:0;font-family:var(--font-body,Epilogue,system-ui,-apple-system,sans-serif);font-size:11px;font-style:italic;font-weight:400;color:#8f8f8f;letter-spacing:0.02em;user-select:none;pointer-events:none;text-align:center}
 :host(.dark-mode) .theme-hint{color:#6b6b6b}
-.theme-subhint{margin:0;padding:0;font-family:var(--font-body,Epilogue,system-ui,-apple-system,sans-serif);font-size:10.5px;color:#9e9e9e;letter-spacing:0.02em;user-select:none;pointer-events:none;text-align:center;opacity:0.85}
-:host(.dark-mode) .theme-subhint{color:#787878}
 .hud{display:none!important}
 .hud.on{opacity:1;transform:translate(-50%,0)}
 .hud .dots{display:flex;padding-left:5px}
@@ -1918,7 +1916,6 @@
             <button type="button" class="theme-opt opt-sunlight" aria-label="Sunlight mode">sunlight</button>
           </div>
           <p class="theme-hint">don&apos;t worry, you can change it later</p>
-          <p class="theme-subhint">(underlined texts are interactive)</p>
         `;
 
         this.intro.style.pointerEvents = "auto";
@@ -4041,43 +4038,71 @@
     }
 
     destroy(reveal) {
-      unhidePage();
-      if (this.sfx) {
-        if (reveal) this.sfx.release();
-        this.sfx.close(reveal ? 1.4 : 0.25);
-      }
+      try {
+        unhidePage();
+      } catch (_) {}
+      try {
+        if (this.sfx) {
+          if (reveal) this.sfx.release();
+          this.sfx.close(reveal ? 1.4 : 0.25);
+        }
+      } catch (_) {}
+
       const finish = () => {
-        this.dead = true;
-        cancelAnimationFrame(this.raf);
-        for (const u of this.unbinds || []) u();
-        if (this.view && this.view.cleanup) this.view.cleanup();
-        this.view.host.remove();
+        try {
+          this.dead = true;
+          if (this.raf) cancelAnimationFrame(this.raf);
+          for (const u of this.unbinds || []) {
+            try { u(); } catch (_) {}
+          }
+          if (this.view && this.view.cleanup) {
+            try { this.view.cleanup(); } catch (_) {}
+          }
+          if (this.view && this.view.host && typeof this.view.host.remove === "function") {
+            this.view.host.remove();
+          }
+        } catch (_) {}
         document.documentElement.classList.add("swarm-ready");
         document.documentElement.classList.remove("swarm-navigating");
       };
+
       if (reveal) {
-        this.engine.releasing = true;
-        this.engine.flocking = true;
-        for (const c of this.engine.cursors) {
-          c.gen = null;
-          c.follow = false;
-        }
-        this.view.hud.classList.remove("on");
-        setTimeout(() => {
-          this.view.host.style.setProperty("opacity", "0", "important");
-        }, 450);
+        try {
+          if (this.engine) {
+            this.engine.releasing = true;
+            this.engine.flocking = true;
+            for (const c of this.engine.cursors || []) {
+              c.gen = null;
+              c.follow = false;
+            }
+          }
+          if (this.view && this.view.hud) {
+            this.view.hud.classList.remove("on");
+          }
+          setTimeout(() => {
+            if (this.view && this.view.host && this.view.host.style) {
+              this.view.host.style.setProperty("opacity", "0", "important");
+            }
+          }, 450);
+        } catch (_) {}
         setTimeout(finish, 1150);
       } else {
-        this.view.host.style.setProperty("transition", "opacity .25s ease", "important");
-        this.view.host.style.setProperty("opacity", "0", "important");
-        this.dead = true;
-        cancelAnimationFrame(this.raf);
-        for (const u of this.unbinds || []) u();
-        if (this.view && this.view.cleanup) this.view.cleanup();
+        try {
+          if (this.view && this.view.host && this.view.host.style) {
+            this.view.host.style.setProperty("transition", "opacity .25s ease", "important");
+            this.view.host.style.setProperty("opacity", "0", "important");
+          }
+          this.dead = true;
+          if (this.raf) cancelAnimationFrame(this.raf);
+          for (const u of this.unbinds || []) {
+            try { u(); } catch (_) {}
+          }
+          if (this.view && this.view.cleanup) {
+            try { this.view.cleanup(); } catch (_) {}
+          }
+        } catch (_) {}
         setTimeout(() => {
-          this.view.host.remove();
-          document.documentElement.classList.add("swarm-ready");
-          document.documentElement.classList.remove("swarm-navigating");
+          finish();
         }, 260);
       }
     }
@@ -4104,31 +4129,63 @@
 
   function start(opts = {}) {
     if (app) return;
-    app = new App(opts);
-    app.run().catch((err) => console.error("[swarm-rebuild]", err));
+    try {
+      app = new App(opts);
+      app.run().catch((err) => console.error("[swarm-rebuild]", err));
+    } catch (err) {
+      console.error("[swarm-rebuild] failed to initialize app", err);
+      document.documentElement.classList.add("swarm-ready");
+      document.documentElement.classList.remove("swarm-navigating");
+    }
   }
 
   function stop(reveal) {
     if (!app) return;
     const a = app;
     app = null;
-    a.destroy(reveal);
+    try {
+      a.destroy(reveal);
+    } catch (err) {
+      console.error("[swarm-rebuild] error in stop", err);
+      document.documentElement.classList.add("swarm-ready");
+      document.documentElement.classList.remove("swarm-navigating");
+    }
   }
 
   function restart(opts = {}) {
-    if (app) {
-      const a = app;
-      app = null;
-      a.dead = true;
-      cancelAnimationFrame(a.raf);
-      for (const u of a.unbinds || []) u();
-      if (a.view && a.view.cleanup) a.view.cleanup();
-      a.view.host.remove();
-      if (a.sfx) a.sfx.close(0.1);
-      // rebuild from where the first run started so screenshot crops line up again
-      if (lastShot) a.env.scrollTo(lastShot.at.sy, lastShot.at.sx);
+    try {
+      if (app) {
+        const a = app;
+        app = null;
+        a.dead = true;
+        if (a.raf) cancelAnimationFrame(a.raf);
+        for (const u of a.unbinds || []) {
+          try { u(); } catch (_) {}
+        }
+        if (a.view && a.view.cleanup) {
+          try { a.view.cleanup(); } catch (_) {}
+        }
+        if (a.view && a.view.host && typeof a.view.host.remove === "function") {
+          a.view.host.remove();
+        }
+        if (a.sfx && typeof a.sfx.close === "function") {
+          try { a.sfx.close(0.1); } catch (_) {}
+        }
+        // rebuild from where the first run started so screenshot crops line up again
+        if (lastShot && a.env && typeof a.env.scrollTo === "function") {
+          try { a.env.scrollTo(lastShot.at.sy, lastShot.at.sx); } catch (_) {}
+        }
+      }
+    } catch (err) {
+      console.error("[swarm-rebuild] error during restart teardown", err);
     }
-    start(opts);
+    try {
+      start(opts);
+    } catch (err) {
+      console.error("[swarm-rebuild] start failed in restart", err);
+      document.documentElement.classList.add("swarm-ready");
+      document.documentElement.classList.remove("swarm-navigating");
+    }
   }
 
   window[KEY] = {
@@ -4147,26 +4204,40 @@
 })();
 
 export function startSwarm(opts = {}) {
-  if (typeof window !== "undefined" && window.__swarmRebuild) {
-    window.__swarmRebuild.start(opts);
+  try {
+    if (typeof window !== "undefined" && window.__swarmRebuild) {
+      window.__swarmRebuild.start(opts);
+    }
+  } catch (err) {
+    console.error("[swarm-rebuild] startSwarm err", err);
   }
 }
 
 export function stopSwarm(reveal = true) {
-  if (typeof window !== "undefined" && window.__swarmRebuild) {
-    window.__swarmRebuild.stop(reveal);
+  try {
+    if (typeof window !== "undefined" && window.__swarmRebuild) {
+      window.__swarmRebuild.stop(reveal);
+    }
+  } catch (err) {
+    console.error("[swarm-rebuild] stopSwarm err", err);
   }
 }
 
 export function restartSwarm(opts = {}) {
-  if (typeof window !== "undefined" && window.__swarmRebuild) {
-    window.__swarmRebuild.restart(opts);
+  try {
+    if (typeof window !== "undefined" && window.__swarmRebuild) {
+      window.__swarmRebuild.restart(opts);
+    }
+  } catch (err) {
+    console.error("[swarm-rebuild] restartSwarm err", err);
   }
 }
 
 export function isSwarmRunning() {
-  if (typeof window !== "undefined" && window.__swarmRebuild) {
-    return !!window.__swarmRebuild.app;
-  }
+  try {
+    if (typeof window !== "undefined" && window.__swarmRebuild) {
+      return !!window.__swarmRebuild.app;
+    }
+  } catch (_) {}
   return false;
 }

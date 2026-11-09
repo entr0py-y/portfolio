@@ -62,7 +62,7 @@ export default function SketchingPage() {
                       style={{ aspectRatio: sketch.aspect }}
                       className="w-full h-auto object-cover opacity-90 transition-opacity duration-300 group-hover:opacity-100"
                       decoding="async"
-                      loading="eager"
+                      loading={i < 3 ? "eager" : "lazy"}
                     />
                   </div>
                 </div>
