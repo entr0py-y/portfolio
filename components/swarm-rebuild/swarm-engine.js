@@ -276,6 +276,21 @@
     }
     const isSvg = src instanceof SVGElement;
     let st = styleString(cs, isSvg ? SVG_PROPS : ELEM_PROPS);
+    if (isSvg) {
+      const isDark = document.documentElement.classList.contains("dark-mode");
+      const strokeVal = cs.stroke || cs.getPropertyValue("stroke");
+      const colorVal = cs.color || cs.getPropertyValue("color");
+      const isDarkStroke = (strokeVal && (/rgb\((\s*([0-4]?\d|5[0-9])\s*,){2}\s*([0-4]?\d|5[0-9])\s*\)/.test(strokeVal) || strokeVal === "black" || strokeVal === "#000" || strokeVal === "#1a1a1a"))
+        || (colorVal && (/rgb\((\s*([0-4]?\d|5[0-9])\s*,){2}\s*([0-4]?\d|5[0-9])\s*\)/.test(colorVal) || colorVal === "black" || colorVal === "#000" || colorVal === "#1a1a1a"));
+      const isLightStroke = (strokeVal && (/rgb\((\s*(2[0-5][0-9])\s*,){2}\s*(2[0-5][0-9])\s*\)/.test(strokeVal) || strokeVal === "white" || strokeVal === "#fff" || strokeVal === "#fdfdfb"))
+        || (colorVal && (/rgb\((\s*(2[0-5][0-9])\s*,){2}\s*(2[0-5][0-9])\s*\)/.test(colorVal) || colorVal === "white" || colorVal === "#fff" || colorVal === "#fdfdfb"));
+
+      if (isDark && isDarkStroke) {
+        st += "stroke:#fdfdfb !important;color:#fdfdfb !important;";
+      } else if (!isDark && isLightStroke) {
+        st += "stroke:#1a1a1a !important;color:#1a1a1a !important;";
+      }
+    }
     if (isSvg && tag === "svg" && !src.ownerSVGElement) {
       dst.setAttribute("width", src.clientWidth || src.getBoundingClientRect().width);
       dst.setAttribute("height", src.clientHeight || src.getBoundingClientRect().height);
@@ -936,6 +951,8 @@
         m.style.overflow = "visible";
         m.style.margin = "0";
         m.style.position = "static";
+        const isDark = document.documentElement.classList.contains("dark-mode");
+        m.style.color = isDark ? "#fdfdfb" : "#1a1a1a";
         // the box we draw is the transformed bounding box; keep only a pure rotation/flip
         const mt = cs.transform.match(/^matrix\(([^)]+)\)$/);
         const k = mt ? mt[1].split(",").map(Number) : null;
@@ -1044,8 +1061,22 @@
       let unrotatedR = r;
 
       if (hasTransform) {
-        const parsedW = el.offsetWidth || el.naturalWidth || parseFloat(cs.width) || (isSig ? (window.innerWidth < 768 ? 110 : 190) : r.width);
-        const parsedH = el.offsetHeight || el.naturalHeight || parseFloat(cs.height) || (isSig ? (window.innerWidth < 768 ? 110 : 190) : r.height);
+        let parsedW = el.offsetWidth || el.naturalWidth || parseFloat(cs.width) || (isSig ? (window.innerWidth < 768 ? 110 : 190) : r.width);
+        let parsedH = el.offsetHeight || el.naturalHeight || parseFloat(cs.height) || (isSig ? (window.innerWidth < 768 ? 110 : 190) : r.height);
+
+        // Failsafe for unrendered/lazy images: if height is collapsed (< 45px) but natural aspect ratio or container aspect ratio exists
+        if (el.naturalWidth > 0 && el.naturalHeight > 0 && parsedH < 45 && parsedW > 60) {
+          parsedH = Math.round(parsedW * (el.naturalHeight / el.naturalWidth));
+        } else if (parsedH < 45 && parsedW > 60 && el.parentElement) {
+          const parentAspect = el.parentElement.style.aspectRatio || getComputedStyle(el.parentElement).aspectRatio;
+          if (parentAspect && parentAspect !== "auto") {
+            const parts = parentAspect.split("/").map(Number);
+            if (parts.length === 2 && parts[0] > 0 && parts[1] > 0) {
+              parsedH = Math.round(parsedW * (parts[1] / parts[0]));
+            }
+          }
+        }
+
         if (parsedW > 0 && parsedH > 0) {
           const cx = r.left + r.width / 2;
           const cy = r.top + r.height / 2;
@@ -1060,6 +1091,13 @@
             bottom: top + parsedH,
           };
         }
+      } else if (el.naturalWidth > 0 && el.naturalHeight > 0 && unrotatedR.height < 45 && unrotatedR.width > 60) {
+        const correctH = Math.round(unrotatedR.width * (el.naturalHeight / el.naturalWidth));
+        unrotatedR = {
+          ...unrotatedR,
+          height: correctH,
+          bottom: unrotatedR.top + correctH,
+        };
       }
 
       const b = conv(unrotatedR, ctx.layer);
@@ -1513,7 +1551,9 @@
   // ------------------------------------------------------------------ styles
 
   const STYLE = `
-:host{all:initial}
+:host{all:initial;color:#1a1a1a;--color-on-background:#1a1a1a;--color-outline:#747878;--color-outline-variant:#c4c7c7;--color-highlight:#aa8970;--color-section-header:#1a1a1a}
+:host(.dark-mode){color:#fdfdfb;--color-on-background:#fdfdfb;--color-outline:#a0a0a0;--color-outline-variant:#404040;--color-highlight:#eeddd0;--color-section-header:#aa8970}
+:host(.dark-mode) svg{color:#fdfdfb}
 *{box-sizing:border-box}
 .bg{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;overflow:hidden}
 .bg.on{opacity:1}
@@ -3708,10 +3748,38 @@
         try {
           localStorage.setItem("theme", isDark ? "dark" : "light");
         } catch (_) {}
+        window.dispatchEvent(new Event("storage"));
+
+        this.view.host.classList.toggle("dark-mode", isDark);
+        this.view.bg.classList.toggle("dark-mode", isDark);
+        if (this.view.grainOverlay) this.view.grainOverlay.classList.toggle("dark-mode", isDark);
+        this.view.bg.style.backgroundColor = isDark ? "#121212" : "#fdfdfb";
+        this.env = detectEnv();
 
         await nextFrame();
-        await sleep(50);
+        await sleep(80);
       }
+
+      // Wait for visible images to ensure natural dimensions and layout are fully ready
+      try {
+        const pendingImages = Array.from(document.querySelectorAll("img")).filter(
+          (img) => !img.complete || img.naturalHeight === 0
+        );
+        if (pendingImages.length > 0) {
+          await Promise.race([
+            Promise.all(
+              pendingImages.map(
+                (img) =>
+                  new Promise((resolve) => {
+                    img.addEventListener("load", resolve, { once: true });
+                    img.addEventListener("error", resolve, { once: true });
+                  })
+              ),
+            ),
+            sleep(400),
+          ]);
+        }
+      } catch (_) {}
 
       let model;
       try {

@@ -7,15 +7,30 @@ export default function ThemeToggle() {
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
+    const syncTheme = () => {
+      const isCurrentlyDark = document.documentElement.classList.contains("dark-mode");
+      setIsDark(isCurrentlyDark);
+    };
+
     const saved = localStorage.getItem("theme");
-    
     if (saved === "dark") {
       document.documentElement.classList.add("dark-mode");
       setIsDark(true);
-    } else {
+    } else if (saved === "light") {
       document.documentElement.classList.remove("dark-mode");
       setIsDark(false);
+    } else {
+      syncTheme();
     }
+
+    const observer = new MutationObserver(() => syncTheme());
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    window.addEventListener("storage", syncTheme);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("storage", syncTheme);
+    };
   }, []);
 
   const toggle = useCallback((e: React.MouseEvent) => {

@@ -5,18 +5,18 @@ import { createPortal } from "react-dom";
 import PageShell from "@/components/PageShell";
 
 const sketches = [
-  { src: "/sketch/sketch1.png", top: "0%", left: "5%", rotate: "-12deg", z: 10 },
-  { src: "/sketch/sketch2.jpeg", top: "6%", left: "35%", rotate: "8deg", z: 20 },
-  { src: "/sketch/sketch3.jpeg", top: "14%", left: "-2%", rotate: "-6deg", z: 15 },
-  { src: "/sketch/sketch4.jpeg", top: "18%", left: "42%", rotate: "14deg", z: 25 },
-  { src: "/sketch/sketch5.jpeg", top: "32%", left: "8%", rotate: "-18deg", z: 5 },
-  { src: "/sketch/sketch6.jpeg", top: "34%", left: "48%", rotate: "5deg", z: 30 },
-  { src: "/sketch/sketch7.jpeg", top: "48%", left: "-5%", rotate: "-8deg", z: 20 },
-  { src: "/sketch/sketch8.jpeg", top: "51%", left: "40%", rotate: "12deg", z: 35 },
-  { src: "/sketch/23.jpg", top: "69%", left: "-12%", rotate: "-10deg", z: 10 },
-  { src: "/sketch/24.jpg", top: "75%", left: "48%", rotate: "6deg", z: 25 },
-  { src: "/sketch/25.jpg", top: "85%", left: "-8%", rotate: "15deg", z: 15 },
-  { src: "/sketch/26.jpg", top: "88%", left: "40%", rotate: "-5deg", z: 30 },
+  { src: "/sketch/sketch1.png", top: "0%", left: "5%", rotate: "-12deg", z: 10, aspectRatio: "1000/732" },
+  { src: "/sketch/sketch2.jpeg", top: "6%", left: "35%", rotate: "8deg", z: 20, aspectRatio: "1000/750" },
+  { src: "/sketch/sketch3.jpeg", top: "14%", left: "-2%", rotate: "-6deg", z: 15, aspectRatio: "800/1000" },
+  { src: "/sketch/sketch4.jpeg", top: "18%", left: "42%", rotate: "14deg", z: 25, aspectRatio: "1080/1351" },
+  { src: "/sketch/sketch5.jpeg", top: "32%", left: "8%", rotate: "-18deg", z: 5, aspectRatio: "1080/1350" },
+  { src: "/sketch/sketch6.jpeg", top: "34%", left: "48%", rotate: "5deg", z: 30, aspectRatio: "1080/1350" },
+  { src: "/sketch/sketch7.jpeg", top: "48%", left: "-5%", rotate: "-8deg", z: 20, aspectRatio: "1080/1920" },
+  { src: "/sketch/sketch8.jpeg", top: "51%", left: "40%", rotate: "12deg", z: 35, aspectRatio: "1080/1920" },
+  { src: "/sketch/23.jpg", top: "69%", left: "-12%", rotate: "-10deg", z: 10, aspectRatio: "736/981" },
+  { src: "/sketch/24.jpg", top: "75%", left: "48%", rotate: "6deg", z: 25, aspectRatio: "1/1" },
+  { src: "/sketch/25.jpg", top: "85%", left: "-8%", rotate: "15deg", z: 15, aspectRatio: "1/1" },
+  { src: "/sketch/26.jpg", top: "88%", left: "40%", rotate: "-5deg", z: 30, aspectRatio: "735/897" },
 ];
 
 export default function SketchingPage() {
@@ -49,14 +49,14 @@ export default function SketchingPage() {
             >
               <div style={{ transform: `rotate(${sketch.rotate})` }}>
                 <div className="w-full p-2 rounded-sm bg-[#e8e8e8] shadow-md sketch-photo group-hover:scale-[1.03]">
-                  <div className="w-full relative pointer-events-none">
+                  <div className="w-full relative pointer-events-none" style={{ aspectRatio: sketch.aspectRatio }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={sketch.src}
                       alt={`Sketch ${i + 1}`}
-                      className="w-full h-auto object-cover opacity-90 transition-opacity duration-300 group-hover:opacity-100"
+                      className="w-full h-full object-cover opacity-90 transition-opacity duration-300 group-hover:opacity-100"
                       decoding="async"
-                      loading={i > 2 ? "lazy" : "eager"}
+                      loading="eager"
                     />
                   </div>
                 </div>

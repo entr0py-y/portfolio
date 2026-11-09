@@ -29,6 +29,10 @@ const IMAGES_TO_PRELOAD = [
   "/sketch/sketch6.jpeg",
   "/sketch/sketch7.jpeg",
   "/sketch/sketch8.jpeg",
+  "/sketch/23.jpg",
+  "/sketch/24.jpg",
+  "/sketch/25.jpg",
+  "/sketch/26.jpg",
   // SVG
   "/spider-mask.svg",
 ];
