@@ -1537,7 +1537,7 @@
 :host(.dark-mode) .intro .preloader-bar-fill{background-color:#fdfdfb}
 .sig-item{background-color:transparent!important;overflow:visible!important;transform-origin:50% 50%!important}
 .sig-item>.ph{display:none!important}
-.sig-item>.md{rotate:none!important;transform:none!important}
+.sig-item>.md{rotate:none!important;transform:none!important;transition:opacity .35s ease,clip-path .6s cubic-bezier(.2,.75,.2,1)!important}
 .sig-item.st>.md{opacity:0.85!important;clip-path:inset(0 0 0 0)!important}
 .signature-img{opacity:0.85;pointer-events:none}
 :host(.dark-mode) .signature-img,.dark-mode .signature-img,:host-context(html.dark-mode) .signature-img{filter:invert(1)!important}
@@ -2760,9 +2760,8 @@
 
       const isRotated = !!it.rotate;
       const isLarge = !!it.big;
-      const isSignature = !!it.isSig;
 
-      if (isLarge || isSignature) {
+      if (isLarge) {
         it.styled = true;
       } else if (isRotated) {
         it.styled = false;
@@ -2777,7 +2776,7 @@
       bump(it);
       c.ov = () => [this.selection(it)];
 
-      if (isRotated && !isLarge && !isSignature) {
+      if (isRotated && !isLarge) {
         if (it.scale < 1) {
           let k = 0;
           while (k < 1) {
@@ -2790,7 +2789,7 @@
         } else {
           yield* this.wait(rand(0.14, 0.22));
         }
-      } else if (!isLarge && !isSignature) {
+      } else if (!isLarge) {
         const end = this.dragEnd(c, it);
         yield* this.moveTo(c, end, {
           speed: 0.75,
