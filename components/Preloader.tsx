@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 
 /* ─── Every image used across ALL pages ─── */
 const IMAGES_TO_PRELOAD = [
@@ -75,6 +76,7 @@ function prefetchRoute(path: string): Promise<void> {
 }
 
 export default function Preloader() {
+  const pathname = usePathname();
   const [progress, setProgress] = useState(0);
   const [hasEntered, setHasEntered] = useState(false); // SSR default to false to prevent initial flash
   const [isFadingOut, setIsFadingOut] = useState(false);
@@ -154,7 +156,7 @@ export default function Preloader() {
     run();
   }, []);
 
-  if (hasEntered) return null;
+  if (hasEntered || pathname === "/") return null;
 
   return (
     <div

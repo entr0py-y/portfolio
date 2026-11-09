@@ -8,18 +8,18 @@ export default function BackgroundCharacter() {
   const isWorkPage = pathname === "/work";
   const isProjectsPage = pathname === "/projects";
 
-  let containerClassName = "fixed bottom-[-20px] right-[-20px] w-[575px] pointer-events-none z-0 scale-x-[-1] max-[768px]:w-[130vw] max-[768px]:max-w-[550px] max-[768px]:opacity-80 max-[768px]:bottom-[-10px]";
+  let containerClassName = "fixed bottom-[-20px] right-[-20px] w-[575px] pointer-events-none z-0 scale-x-[-1] max-[768px]:w-[130vw] max-[768px]:max-w-[550px] max-[768px]:opacity-80 max-[768px]:bottom-[-10px] bg-character";
   let imgSrc = "/character.png";
   let imgClassName = "w-full h-auto block";
   let imgOpacity = 0.12;
 
   if (isListenPage) {
-    containerClassName = "fixed bottom-[-90px] right-[-80px] w-[575px] pointer-events-none z-0 scale-x-[-1] max-[768px]:w-[130vw] max-[768px]:max-w-[550px] max-[768px]:opacity-80 max-[768px]:bottom-[-50px] max-[768px]:right-[-50px]";
+    containerClassName = "fixed bottom-[-90px] right-[-80px] w-[575px] pointer-events-none z-0 scale-x-[-1] max-[768px]:w-[130vw] max-[768px]:max-w-[550px] max-[768px]:opacity-80 max-[768px]:bottom-[-50px] max-[768px]:right-[-50px] bg-character";
     imgSrc = "/listen.png";
     imgClassName = "w-full h-auto block bg-character-img";
     imgOpacity = 0.14;
   } else if (isWorkPage || isProjectsPage) {
-    containerClassName = "fixed bottom-[-15px] right-[-20px] w-[400px] pointer-events-none z-0 scale-x-[-1] max-[768px]:w-[280px] max-[768px]:opacity-80 max-[768px]:bottom-[-10px] max-[768px]:right-[-10px]";
+    containerClassName = "fixed bottom-[-15px] right-[-20px] w-[400px] pointer-events-none z-0 scale-x-[-1] max-[768px]:w-[280px] max-[768px]:opacity-80 max-[768px]:bottom-[-10px] max-[768px]:right-[-10px] bg-character";
     imgSrc = "/work.png";
     imgClassName = "w-full h-auto block bg-character-img";
     imgOpacity = 0.14;
