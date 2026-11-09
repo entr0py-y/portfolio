@@ -709,8 +709,11 @@
     }
 
     function detectRotation(el) {
+      if (!el || typeof el.getAttribute !== "function" || (typeof Element !== "undefined" && !(el instanceof Element))) {
+        return { rotate: "", transform: "" };
+      }
       let curr = el;
-      while (curr && curr !== html && curr !== body) {
+      while (curr && curr.nodeType === 1 && curr !== html && curr !== body) {
         const c = css(curr);
         const cssRotate = (c.getPropertyValue && c.getPropertyValue("rotate")) || c.rotate;
         if (cssRotate && cssRotate !== "none" && cssRotate !== "0deg" && cssRotate !== "0") {
