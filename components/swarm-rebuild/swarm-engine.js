@@ -3236,56 +3236,28 @@
   const PENTA = [0, 2, 4, 7, 9]; // E F# G# B C#
   const E2 = 40;
   const mtof = (m) => 440 * Math.pow(2, (m - 69) / 12);
-  let soundPref = true;
-  const SPK_ICON = '<svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6v4h2.5l3.5 3V3L5 6z" fill="currentColor"/>';
+  let soundPref = false;
+  const SPK_ICON = '';
 
   class Sound {
     constructor() {
-      this.on = soundPref;
+      this.on = false;
       this.ctx = null;
       this.bpm = 104;
       this.slots = new Map();
       this.lastKey = new Map();
       this.keyTimes = [];
       this.pressTimes = [];
-      this.ends = []; // when each sounding piano voice dies out
-      this.fakeNow = null; // offline renders drive the clock explicitly
+      this.ends = [];
+      this.fakeNow = null;
     }
 
-    init(offline) {
-      if (this.ctx) return true;
-      try {
-        const Ctx = window.AudioContext || window.webkitAudioContext;
-        this.ctx = offline || new Ctx({ latencyHint: "interactive" });
-      } catch (_) {
-        return false;
-      }
-      const ctx = this.ctx;
-      const out = ctx.createGain();
-      out.gain.value = this.on ? 1 : 0;
-      const comp = ctx.createDynamicsCompressor();
-      comp.threshold.value = -18;
-      comp.knee.value = 14;
-      comp.ratio.value = 5;
-      comp.attack.value = 0.003;
-      comp.release.value = 0.3;
-      const master = ctx.createGain();
-      master.gain.value = 0.9;
-      master.connect(comp);
-      comp.connect(out);
-      out.connect(ctx.destination);
-      const verb = ctx.createConvolver();
-      verb.buffer = this.impulse(3.2, 2.4);
-      const wet = ctx.createGain();
-      wet.gain.value = 0.5;
-      verb.connect(wet);
-      wet.connect(master);
-      this.out = out;
-      this.master = master;
-      this.verb = verb;
-      this.noiseBuf = this.noise(1.5);
-      this.t0 = this.now();
-      return true;
+    init() {
+      return false;
+    }
+
+    ready() {
+      return false;
     }
 
     now() {
@@ -3673,9 +3645,8 @@
       const shotP = this.loadShot();
       this.view = new View(this.env);
       this.engine = new Engine(this.view);
-      this.sfx = new Sound();
-      this.sfx.init();
-      this.engine.sfx = this.sfx;
+      this.sfx = null;
+      this.engine.sfx = null;
       this.engine.onStart = () => this.view.intro.classList.add("gone");
       this.engine.onComplete = () => this.onComplete();
       this.bind();
@@ -3687,7 +3658,7 @@
       if (this.view.grainOverlay) this.view.grainOverlay.classList.add("on");
 
       if (showIntro) {
-        this.sfx.intro();
+        if (this.sfx) this.sfx.intro();
         this.view.intro.classList.add("on");
         if (this.view.introFill) this.view.introFill.style.width = "25%";
         const mark = (k) => (this.timing[k] = Math.round(performance.now() - this.t0));
