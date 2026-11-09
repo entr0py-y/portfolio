@@ -3,11 +3,20 @@ import Link from "next/link";
 interface PageShellProps {
   title?: string;
   children: React.ReactNode;
+  maxWidth?: string;
+  className?: string;
 }
 
-export default function PageShell({ title, children }: PageShellProps) {
+export default function PageShell({
+  title,
+  children,
+  maxWidth = "max-w-[650px]",
+  className = "",
+}: PageShellProps) {
   return (
-    <div className="w-full max-w-[650px] px-10 pt-20 pb-6 relative flex flex-col min-h-screen box-border z-[1] max-[768px]:px-5 max-[768px]:pt-16 max-[768px]:pb-4">
+    <div
+      className={`w-full ${maxWidth} px-10 pt-20 pb-6 relative flex flex-col min-h-screen box-border z-[1] max-[768px]:px-5 max-[768px]:pt-16 max-[768px]:pb-4 ${className}`}
+    >
       {/* Title */}
       {title && (
         <h1
