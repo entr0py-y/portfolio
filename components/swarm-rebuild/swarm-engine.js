@@ -1584,6 +1584,17 @@
 .intro .preloader-bar-container{width:200px;max-width:80vw;display:flex;flex-direction:column;align-items:center;gap:12px}
 .intro .preloader-bar-track{width:100%;height:1px;background-color:var(--color-outline-variant,#c4c7c7);position:relative;overflow:hidden}
 .intro .preloader-bar-fill{position:absolute;top:0;left:0;height:100%;width:0%;background-color:var(--color-on-background,#1a1a1a);transition:width .35s cubic-bezier(0.4,0,0.2,1);will-change:width}
+.theme-choice-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;animation:tcFadeIn .45s cubic-bezier(0.16,1,0.3,1) forwards;pointer-events:auto!important;user-select:none;-webkit-user-select:none}
+@keyframes tcFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.theme-choice-row{display:flex;align-items:center;gap:10px}
+.theme-opt{all:unset;cursor:pointer;font-family:var(--font-body,Epilogue,system-ui,-apple-system,sans-serif);font-size:12px;font-weight:500;letter-spacing:0.04em;line-height:1;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px;color:#737373;transition:color .2s ease,opacity .2s ease}
+:host(.dark-mode) .theme-opt{color:#8c8c8c}
+.theme-opt:hover{color:#1a1a1a;opacity:0.7}
+:host(.dark-mode) .theme-opt:hover{color:#fdfdfb;opacity:0.7}
+.theme-sep{font-family:var(--font-body,Epilogue,system-ui,-apple-system,sans-serif);font-size:11px;color:#a3a3a3;user-select:none;pointer-events:none}
+:host(.dark-mode) .theme-sep{color:#525252}
+.theme-hint{margin:0;padding:0;font-family:var(--font-body,Epilogue,system-ui,-apple-system,sans-serif);font-size:11px;font-style:italic;font-weight:400;color:#8f8f8f;letter-spacing:0.02em;user-select:none;pointer-events:none;text-align:center}
+:host(.dark-mode) .theme-hint{color:#6b6b6b}
 .hud{display:none!important}
 .hud.on{opacity:1;transform:translate(-50%,0)}
 .hud .dots{display:flex;padding-left:5px}
@@ -1788,6 +1799,8 @@
       };
       this.makeIntroLogo();
       document.documentElement.appendChild(host);
+      document.documentElement.classList.add("swarm-ready");
+      document.documentElement.classList.remove("swarm-navigating");
       this.measure();
     }
 
@@ -1800,6 +1813,58 @@
         </div>
       `;
       this.introFill = this.intro.querySelector(".preloader-bar-fill");
+    }
+
+    promptTheme() {
+      return new Promise((resolve) => {
+        const barContainer = this.intro.querySelector(".preloader-bar-container");
+        if (barContainer) {
+          barContainer.style.transition = "opacity .3s ease, transform .3s ease";
+          barContainer.style.opacity = "0";
+          barContainer.style.transform = "scale(0.96)";
+          setTimeout(() => barContainer.remove(), 320);
+        }
+
+        const wrap = document.createElement("div");
+        wrap.className = "theme-choice-wrap";
+        wrap.innerHTML = `
+          <div class="theme-choice-row">
+            <button type="button" class="theme-opt opt-moonshine" aria-label="Moonshine mode">moonshine</button>
+            <span class="theme-sep">/</span>
+            <button type="button" class="theme-opt opt-sunlight" aria-label="Sunlight mode">sunlight</button>
+          </div>
+          <p class="theme-hint">don&apos;t worry, you can change it later</p>
+        `;
+
+        this.intro.style.pointerEvents = "auto";
+        this.intro.appendChild(wrap);
+
+        let resolved = false;
+        const onPick = (mode) => {
+          if (resolved) return;
+          resolved = true;
+          wrap.style.transition = "opacity .3s ease, transform .3s ease";
+          wrap.style.opacity = "0";
+          wrap.style.transform = "translateY(-4px)";
+          setTimeout(() => {
+            wrap.remove();
+            this.intro.style.pointerEvents = "";
+            resolve(mode);
+          }, 320);
+        };
+
+        const btnMoon = wrap.querySelector(".opt-moonshine");
+        const btnSun = wrap.querySelector(".opt-sunlight");
+
+        btnMoon.addEventListener("click", (e) => {
+          e.stopPropagation();
+          onPick("moonshine");
+        });
+        btnSun.addEventListener("click", (e) => {
+          e.stopPropagation();
+          onPick("sunlight");
+        });
+      });
     }
 
     measure() {
@@ -3650,6 +3715,30 @@
         const g = this.env.geom();
         shot.valid = Math.abs(g.sx - shot.sx) < 1 && Math.abs(g.sy - shot.sy) < 1;
       }
+
+      if (showIntro) {
+        if (this.view.introFill) this.view.introFill.style.width = "100%";
+        await sleep(350);
+        if (this.dead) return;
+
+        const chosenMode = await this.view.promptTheme();
+        if (this.dead) return;
+
+        if (this.sfx) {
+          const w = window.innerWidth;
+          this.sfx.press(w / 2, w);
+        }
+
+        const isDark = chosenMode === "moonshine";
+        document.documentElement.classList.toggle("dark-mode", isDark);
+        try {
+          localStorage.setItem("theme", isDark ? "dark" : "light");
+        } catch (_) {}
+
+        await nextFrame();
+        await sleep(50);
+      }
+
       let model;
       try {
         model = captureModel(this.env, shot);
@@ -3657,17 +3746,18 @@
         console.error("[swarm-rebuild] capture failed", err);
         model = { items: [], tasks: [], groups: [], guides: [], docW: 0, docH: 0 };
       }
-      if (showIntro && this.view.introFill) this.view.introFill.style.width = "100%";
+
       if (this.dead) return;
       this.view.mount(model);
       this.engine.setModel(model);
       this.model = model;
+
       if (showIntro) {
-        const wait = 900 - (performance.now() - this.t0);
-        if (wait > 0) await sleep(wait);
+        await sleep(200);
       } else {
         await nextFrame();
       }
+
       if (this.dead) return;
       this.engine.start();
     }
@@ -3855,6 +3945,8 @@
         for (const u of this.unbinds || []) u();
         if (this.view && this.view.cleanup) this.view.cleanup();
         this.view.host.remove();
+        document.documentElement.classList.add("swarm-ready");
+        document.documentElement.classList.remove("swarm-navigating");
       };
       if (reveal) {
         this.engine.releasing = true;
@@ -3875,7 +3967,11 @@
         cancelAnimationFrame(this.raf);
         for (const u of this.unbinds || []) u();
         if (this.view && this.view.cleanup) this.view.cleanup();
-        setTimeout(() => this.view.host.remove(), 260);
+        setTimeout(() => {
+          this.view.host.remove();
+          document.documentElement.classList.add("swarm-ready");
+          document.documentElement.classList.remove("swarm-navigating");
+        }, 260);
       }
     }
   }

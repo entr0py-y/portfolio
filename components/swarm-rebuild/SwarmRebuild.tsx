@@ -34,20 +34,28 @@ export default function SwarmRebuild() {
     if (!mounted) return;
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      document.documentElement.classList.add("swarm-ready");
       return;
     }
 
     // Do not repeat when returning to the home page; only initiate on initial visit or refresh
     if (pathname === "/") {
-      if (homePlayed) return;
+      if (homePlayed) {
+        document.documentElement.classList.add("swarm-ready");
+        document.documentElement.classList.remove("swarm-navigating");
+        return;
+      }
       homePlayed = true;
+    } else {
+      // Navigating to subpage: veil page until swarm rebuild overlay mounts
+      document.documentElement.classList.add("swarm-navigating");
     }
 
     const isHome = pathname === "/";
     // Allow Next.js route transition to settle and render new DOM elements before rebuilding
     const timer = setTimeout(() => {
       restartSwarm({ showIntro: isHome });
-    }, 120);
+    }, 60);
 
     return () => {
       clearTimeout(timer);

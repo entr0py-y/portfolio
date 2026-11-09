@@ -46,6 +46,18 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
     >
       <head>
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              html:not(.swarm-ready) body {
+                opacity: 0 !important;
+              }
+              html.swarm-navigating body {
+                opacity: 0 !important;
+              }
+            `,
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -59,9 +71,13 @@ export default function RootLayout({
                     document.documentElement.classList.remove('dark-mode');
                   }
 
-                  if (sessionStorage.getItem('portfolio_entered') === 'true') {
-                    document.documentElement.classList.add('has-entered');
+                  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                    document.documentElement.classList.add('swarm-ready');
                   }
+
+                  setTimeout(function() {
+                    document.documentElement.classList.add('swarm-ready');
+                  }, 2500);
                 } catch (e) {}
               })();
             `,
