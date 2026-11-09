@@ -111,7 +111,7 @@ export default function TopNav() {
                 />
                 {/* Line from Briefcase leading horizontally left to the side of 'work' */}
                 <path
-                  d="M 74.5 0 V 36 Q 74.5 41 69.5 41 H 65"
+                  d="M 74.5 3.8 V 36 Q 74.5 41 69.5 41 H 65"
                   stroke="currentColor"
                   strokeWidth="1.2"
                   strokeLinecap="round"
