@@ -845,6 +845,24 @@
         return null;
       }
       const sameAsPage = alphaOf(bgc) > 0.01 && sameColor(bgc, pageBg.color) && bgi === "none";
+
+      // Skip emitting a redundant background rect if this container simply wraps an image
+      // that fills its bounding box (e.g. image cards in masonry or photo grids).
+      // Otherwise, the engine generates two sequential drawing tasks (one for the card box,
+      // and a second for the image itself), making sketches/photos animate and load twice.
+      if (!forceRect && isEl) {
+        const innerImg = el.querySelector && el.querySelector("img, picture");
+        if (innerImg) {
+          const imgRect = innerImg.getBoundingClientRect();
+          const coversX = Math.abs(imgRect.left - r.left) <= 4 && Math.abs(imgRect.width - r.width) <= 8;
+          const coversY = Math.abs(imgRect.top - r.top) <= 4 && Math.abs(imgRect.height - r.height) <= 8;
+          const textContent = (el.textContent || "").trim();
+          if (!textContent && coversX && coversY) {
+            return null;
+          }
+        }
+      }
+
       if (!forceRect && !bgVisible && !shadow && !backdrop) {
         if (nb === 0) return null;
         if (nb < 4) {
@@ -1127,15 +1145,33 @@
       }
 
       const b = conv(unrotatedR, ctx.layer);
+      const pe = el.parentElement;
+      const pcs = pe ? css(pe) : null;
+      const radiusVal = isSig
+        ? "0px"
+        : (cs.borderRadius && cs.borderRadius !== "0px")
+          ? cs.borderRadius
+          : (pcs && pcs.borderRadius && pcs.borderRadius !== "0px" ? pcs.borderRadius : "0px");
+      const shadowVal = isSig
+        ? ""
+        : (cs.boxShadow && cs.boxShadow !== "none")
+          ? cs.boxShadow
+          : (pcs && pcs.boxShadow && pcs.boxShadow !== "none" ? pcs.boxShadow : "");
+      const bgVal = isSig
+        ? ""
+        : (alphaOf(cs.backgroundColor) > 0.01)
+          ? cs.backgroundColor
+          : (pcs && alphaOf(pcs.backgroundColor) > 0.01 ? pcs.backgroundColor : "");
+
       add({
         kind: "image",
         ...b,
         blend: cs.mixBlendMode !== "normal" ? cs.mixBlendMode : ctx.blend || "",
         media: m.el,
         frame: isSig ? "" : styleString(cs, ["border-top-width", "border-right-width", "border-bottom-width", "border-left-width", "border-top-style", "border-right-style", "border-bottom-style", "border-left-style", "border-top-color", "border-right-color", "border-bottom-color", "border-left-color"]),
-        radius: isSig ? "0px" : cs.borderRadius,
-        shadow: isSig ? "" : (cs.boxShadow !== "none" ? cs.boxShadow : ""),
-        bg: isSig ? "" : (alphaOf(cs.backgroundColor) > 0.01 ? cs.backgroundColor : ""),
+        radius: radiusVal,
+        shadow: shadowVal,
+        bg: bgVal,
         draw: null,
         styled: false,
         layer: ctx.layer,

@@ -73,9 +73,9 @@ export default function SketchingPage() {
                   width={sketch.width}
                   height={sketch.height}
                   style={{ aspectRatio: sketch.aspect }}
-                  className="w-full h-auto block object-cover rounded-2xl opacity-90 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-[1.025]"
+                  className="w-full h-auto block object-cover rounded-2xl transition-transform duration-300 ease-out group-hover:scale-[1.025]"
                   decoding="async"
-                  loading={i < 4 ? "eager" : "lazy"}
+                  loading="eager"
                 />
                 {/* Subtle Pinterest hover overlay */}
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 dark:group-hover:bg-white/5 transition-colors duration-200 pointer-events-none rounded-2xl" />
