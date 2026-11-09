@@ -8,21 +8,18 @@ import "./globals.css";
 
 const epilogue = Epilogue({
   subsets: ["latin"],
-  weight: ["300", "400"],
   variable: "--font-epilogue",
   display: "swap",
 });
 
 const manrope = Manrope({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
   variable: "--font-manrope",
   display: "swap",
 });
 
 const caveat = Caveat({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   variable: "--font-caveat",
   display: "swap",
 });
@@ -51,9 +48,24 @@ export default function RootLayout({
             __html: `
               html:not(.swarm-ready) body {
                 opacity: 0 !important;
+                visibility: hidden !important;
               }
               html.swarm-navigating body {
                 opacity: 0 !important;
+                visibility: hidden !important;
+              }
+              #pre-veil {
+                position: fixed;
+                inset: 0;
+                background-color: #fdfdfb;
+                z-index: 2147483640;
+                pointer-events: none;
+              }
+              html.dark-mode #pre-veil {
+                background-color: #121212;
+              }
+              html.swarm-ready #pre-veil {
+                display: none !important;
               }
             `,
           }}
@@ -85,6 +97,7 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <div id="pre-veil" aria-hidden="true" />
         <Preloader />
         <SwarmRebuild />
         <BackgroundCharacter />

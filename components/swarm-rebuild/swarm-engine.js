@@ -292,6 +292,13 @@
         dst.setAttribute("height", src.clientHeight || src.getBoundingClientRect().height);
         st += styleString(cs, SVG_OUTER_PROPS);
       }
+    } else {
+      const isDark = document.documentElement.classList.contains("dark-mode");
+      if (isDark) {
+        st = st.replace(/(^|;)color:\s*rgb\(\s*26\s*,\s*26\s*,\s*26\s*\)/gi, "$1color: rgb(253, 253, 251)");
+      } else {
+        st = st.replace(/(^|;)color:\s*rgb\(\s*253\s*,\s*253\s*,\s*251\s*\)/gi, "$1color: rgb(26, 26, 26)");
+      }
     }
     dst.setAttribute("style", st);
     for (const a of [...dst.attributes]) {
@@ -958,13 +965,27 @@
         return { el: m, sig: src };
       }
       if (tag === "svg") {
-        const m = cloneStyled(el);
+        const m = el.cloneNode(true);
         m.setAttribute("width", "100%");
         m.setAttribute("height", "100%");
         m.style.display = "block";
         m.style.overflow = "visible";
         m.style.margin = "0";
         m.style.position = "static";
+        m.style.color = "inherit";
+        // Clean out any hardcoded inline stroke, fill, or color from light/dark DOM computed values
+        const allSvgEls = [m, ...m.querySelectorAll("*")];
+        for (const sEl of allSvgEls) {
+          if (sEl.style) {
+            sEl.style.removeProperty("stroke");
+            sEl.style.removeProperty("fill");
+            sEl.style.removeProperty("color");
+          }
+          const strk = sEl.getAttribute("stroke");
+          if (strk && strk !== "none") sEl.setAttribute("stroke", "currentColor");
+          const fll = sEl.getAttribute("fill");
+          if (fll && fll !== "none") sEl.setAttribute("fill", "currentColor");
+        }
         // the box we draw is the transformed bounding box; keep only a pure rotation/flip
         const mt = cs.transform.match(/^matrix\(([^)]+)\)$/);
         const k = mt ? mt[1].split(",").map(Number) : null;
@@ -1056,6 +1077,7 @@
       if (!m) return;
 
       const isSig = (el.classList && el.classList.contains("signature-img")) || (src.classList && src.classList.contains("signature-img"));
+      const isSvg = el.localName === "svg" || (src && src.localName === "svg");
 
       // Determine rotation from CSS 'rotate', 'transform' matrix, ancestor style, or class fallback
       let rot = detectRotation(el);
@@ -1126,6 +1148,7 @@
         transform: pureTf,
         transformOrigin: "50% 50%",
         isSig,
+        isSvg,
         filter: cs.filter && cs.filter !== "none" ? cs.filter : "",
       });
     }
@@ -1555,11 +1578,20 @@
   // ------------------------------------------------------------------ styles
 
   const STYLE = `
-:host{all:initial;display:block;color:#1a1a1a}
-:host(.dark-mode){color:#fdfdfb!important}
+:host{all:initial;display:block;color:#1a1a1a;--color-on-background:#1a1a1a;--color-background:#fdfdfb;--color-highlight:#aa8970;--color-section-header:#1a1a1a;--color-outline:#747878}
+:host(.dark-mode){color:#fdfdfb!important;--color-on-background:#fdfdfb!important;--color-background:#121212!important;--color-highlight:#eeddd0!important;--color-section-header:#aa8970!important;--color-outline:#a0a0a0!important}
 *{box-sizing:border-box}
 .bg{position:absolute;inset:0;opacity:1;overflow:hidden}
 .bg.on{opacity:1}
+.it.t{color:inherit}
+.it.m svg{color:inherit}
+.svg-item{background-color:transparent!important;overflow:visible!important}
+.svg-item>.ph{display:none!important}
+.svg-item>.md{opacity:0;transition:opacity .25s ease;clip-path:none!important}
+.svg-item.st>.md{opacity:1!important}
+.it.m svg, .it.m svg *{stroke:currentColor!important}
+.it.m svg [fill="currentColor"], .it.m svg path[fill="currentColor"], .it.m svg g[fill="currentColor"]{fill:currentColor!important}
+.it.m svg [fill="none"], .it.m svg path[fill="none"]{fill:none!important}
 .grain-overlay{position:fixed;inset:0;pointer-events:none;background-image:url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)"/></svg>');opacity:0;transition:opacity .5s ease;z-index:2}
 .grain-overlay.on{opacity:0.05}
 :host(.dark-mode) .grain-overlay.on,.grain-overlay.dark-mode.on{opacity:0.03}
@@ -1851,6 +1883,8 @@
       document.documentElement.appendChild(host);
       document.documentElement.classList.add("swarm-ready");
       document.documentElement.classList.remove("swarm-navigating");
+      const preVeil = document.getElementById("pre-veil");
+      if (preVeil) preVeil.remove();
       this.measure();
     }
 
@@ -1992,8 +2026,8 @@
         f.className = "f";
         n.appendChild(f);
       } else if (it.kind === "image") {
-        n.className = "it m" + (it.isSig ? " sig-item" : "");
-        n.innerHTML = it.isSig ? "" : IMG_ICON;
+        n.className = "it m" + (it.isSig ? " sig-item" : "") + (it.isSvg ? " svg-item" : "");
+        n.innerHTML = (it.isSig || it.isSvg) ? "" : IMG_ICON;
       } else if (it.kind === "text") {
         n.className = "it t";
         prepText(it);
@@ -2067,7 +2101,7 @@
         n.classList.toggle("st", !!it.styled);
         n.style.borderRadius = it.styled ? (it.mode === "master" ? it.copyOf.radius : it.radius) : "0px";
       } else if (it.kind === "image") {
-        const src = it.mode === "master" ? it.copyOf : it;
+        const src = it;
         if (n._src !== src) {
           const old = n.querySelector(".md");
           const m = src.media.cloneNode(true);
@@ -2870,9 +2904,27 @@
     }
 
     *drawBox(c, it, isImg) {
-      c.shape = "cross";
       const cx = it.x + it.w / 2;
       const cy = it.y + it.h / 2;
+
+      // SVGs (like the 5 social symbols, moon/sun, back arrows) are vector icons,
+      // not photos. Click to place them with their native vector shape and current theme.
+      if (it.isSvg) {
+        c.shape = "arrow";
+        yield* this.moveTo(c, { x: cx, y: cy });
+        yield* this.click(c);
+        it.vis = true;
+        it.styled = true;
+        bump(it);
+        this.sfxPlace("image", it);
+        yield* this.wait(0.08);
+        c.ov = null;
+        it.done = true;
+        bump(it);
+        return;
+      }
+
+      c.shape = "cross";
       yield* this.moveTo(c, { x: it.rotate ? cx : it.x, y: it.rotate ? cy : it.y });
       c.press = 1;
       it.vis = true;
@@ -3782,7 +3834,7 @@
 
         await nextFrame();
         disableTransitions.remove();
-        await sleep(40);
+        await sleep(100);
       }
 
       // Ensure all images currently in DOM have had a chance to decode dimensions before capture
