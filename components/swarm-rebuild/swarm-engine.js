@@ -1037,15 +1037,15 @@
       let pureTf = rot.transform;
 
       if (isSig && !rotAngle) {
-        rotAngle = window.innerWidth < 768 ? "25deg" : "30deg";
+        rotAngle = window.innerWidth < 768 ? "18deg" : "20deg";
       }
 
       const hasTransform = !!rotAngle || (!!pureTf && pureTf !== "none");
       let unrotatedR = r;
 
       if (hasTransform) {
-        const parsedW = el.offsetWidth || el.naturalWidth || parseFloat(cs.width) || (isSig ? (window.innerWidth < 768 ? 220 : 380) : r.width);
-        const parsedH = el.offsetHeight || el.naturalHeight || parseFloat(cs.height) || (isSig ? (window.innerWidth < 768 ? 220 : 380) : r.height);
+        const parsedW = el.offsetWidth || el.naturalWidth || parseFloat(cs.width) || (isSig ? (window.innerWidth < 768 ? 110 : 190) : r.width);
+        const parsedH = el.offsetHeight || el.naturalHeight || parseFloat(cs.height) || (isSig ? (window.innerWidth < 768 ? 110 : 190) : r.height);
         if (parsedW > 0 && parsedH > 0) {
           const cx = r.left + r.width / 2;
           const cy = r.top + r.height / 2;
@@ -1584,9 +1584,9 @@
 .intro .preloader-bar-container{width:200px;max-width:80vw;display:flex;flex-direction:column;align-items:center;gap:12px}
 .intro .preloader-bar-track{width:100%;height:1px;background-color:var(--color-outline-variant,#c4c7c7);position:relative;overflow:hidden}
 .intro .preloader-bar-fill{position:absolute;top:0;left:0;height:100%;width:0%;background-color:var(--color-on-background,#1a1a1a);transition:width .35s cubic-bezier(0.4,0,0.2,1);will-change:width}
-.theme-choice-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;animation:tcFadeIn .45s cubic-bezier(0.16,1,0.3,1) forwards;pointer-events:auto!important;user-select:none;-webkit-user-select:none}
+.theme-choice-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;animation:tcFadeIn .45s cubic-bezier(0.16,1,0.3,1) forwards;pointer-events:auto!important;user-select:none;-webkit-user-select:none}
 @keyframes tcFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.theme-choice-row{display:flex;align-items:center;gap:10px}
+.theme-choice-row{display:flex;align-items:center;gap:10px;margin-bottom:2px}
 .theme-opt{all:unset;cursor:pointer;font-family:var(--font-body,Epilogue,system-ui,-apple-system,sans-serif);font-size:12px;font-weight:500;letter-spacing:0.04em;line-height:1;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px;color:#737373;transition:color .2s ease,opacity .2s ease}
 :host(.dark-mode) .theme-opt{color:#8c8c8c}
 .theme-opt:hover{color:#1a1a1a;opacity:0.7}
@@ -1595,6 +1595,8 @@
 :host(.dark-mode) .theme-sep{color:#525252}
 .theme-hint{margin:0;padding:0;font-family:var(--font-body,Epilogue,system-ui,-apple-system,sans-serif);font-size:11px;font-style:italic;font-weight:400;color:#8f8f8f;letter-spacing:0.02em;user-select:none;pointer-events:none;text-align:center}
 :host(.dark-mode) .theme-hint{color:#6b6b6b}
+.theme-note{margin:0;padding:0;font-family:var(--font-body,Epilogue,system-ui,-apple-system,sans-serif);font-size:10.5px;font-style:italic;font-weight:400;color:#a3a3a3;letter-spacing:0.02em;user-select:none;pointer-events:none;text-align:center}
+:host(.dark-mode) .theme-note{color:#585858}
 .hud{display:none!important}
 .hud.on{opacity:1;transform:translate(-50%,0)}
 .hud .dots{display:flex;padding-left:5px}
@@ -1834,6 +1836,7 @@
             <button type="button" class="theme-opt opt-sunlight" aria-label="Sunlight mode">sunlight</button>
           </div>
           <p class="theme-hint">don&apos;t worry, you can change it later</p>
+          <p class="theme-note">underlined texts are interactive</p>
         `;
 
         this.intro.style.pointerEvents = "auto";
