@@ -3516,7 +3516,8 @@
   // -------------------------------------------------------------------- app
 
   class App {
-    constructor() {
+    constructor(opts = {}) {
+      this.opts = opts;
       this.dead = false;
       this.t0 = performance.now();
       this.tour = false;
@@ -3546,6 +3547,9 @@
     }
 
     async run() {
+      const isHomepage = typeof window !== "undefined" ? window.location.pathname === "/" : false;
+      const showIntro = this.opts && this.opts.showIntro !== undefined ? this.opts.showIntro : isHomepage;
+
       this.env = detectEnv();
       const shotP = this.loadShot();
       this.view = new View(this.env);
@@ -3560,27 +3564,32 @@
       this.raf = requestAnimationFrame((t) => this.frame(t));
       await nextFrame();
       this.renderSoundBtn();
-      this.sfx.intro();
       this.view.bg.classList.add("on");
       if (this.view.grainOverlay) this.view.grainOverlay.classList.add("on");
-      this.view.intro.classList.add("on");
-      this.view.hud.classList.add("on");
-      if (this.view.introFill) this.view.introFill.style.width = "25%";
-      const mark = (k) => (this.timing[k] = Math.round(performance.now() - this.t0));
-      await sleep(250);
-      await unhidePage();
-      mark("blank");
-      if (this.view.introFill) this.view.introFill.style.width = "45%";
-      if (this.dead) return;
-      await this.scan();
-      mark("scan");
-      if (this.view.introFill) this.view.introFill.style.width = "65%";
-      if (this.dead) return;
-      try {
-        await Promise.race([document.fonts.ready, sleep(1200)]);
-      } catch (_) {}
-      mark("fonts");
-      if (this.view.introFill) this.view.introFill.style.width = "85%";
+
+      if (showIntro) {
+        this.sfx.intro();
+        this.view.intro.classList.add("on");
+        if (this.view.introFill) this.view.introFill.style.width = "25%";
+        const mark = (k) => (this.timing[k] = Math.round(performance.now() - this.t0));
+        await sleep(250);
+        await unhidePage();
+        mark("blank");
+        if (this.view.introFill) this.view.introFill.style.width = "45%";
+        if (this.dead) return;
+        await this.scan();
+        mark("scan");
+        if (this.view.introFill) this.view.introFill.style.width = "65%";
+        if (this.dead) return;
+        try {
+          await Promise.race([document.fonts.ready, sleep(1200)]);
+        } catch (_) {}
+        mark("fonts");
+        if (this.view.introFill) this.view.introFill.style.width = "85%";
+      } else {
+        await unhidePage();
+      }
+
       this.view.measure();
       const shot = await shotP;
       if (shot) {
@@ -3594,15 +3603,17 @@
         console.error("[swarm-rebuild] capture failed", err);
         model = { items: [], tasks: [], groups: [], guides: [], docW: 0, docH: 0 };
       }
-      mark("capture");
-      if (this.view.introFill) this.view.introFill.style.width = "100%";
+      if (showIntro && this.view.introFill) this.view.introFill.style.width = "100%";
       if (this.dead) return;
       this.view.mount(model);
       this.engine.setModel(model);
       this.model = model;
-      mark("mount");
-      const wait = 900 - (performance.now() - this.t0);
-      if (wait > 0) await sleep(wait);
+      if (showIntro) {
+        const wait = 900 - (performance.now() - this.t0);
+        if (wait > 0) await sleep(wait);
+      } else {
+        await nextFrame();
+      }
       if (this.dead) return;
       this.engine.start();
     }
@@ -3834,9 +3845,9 @@
   let app = null;
   let lastShot = null;
 
-  function start() {
+  function start(opts = {}) {
     if (app) return;
-    app = new App();
+    app = new App(opts);
     app.run().catch((err) => console.error("[swarm-rebuild]", err));
   }
 
@@ -3847,7 +3858,7 @@
     a.destroy(reveal);
   }
 
-  function restart() {
+  function restart(opts = {}) {
     if (app) {
       const a = app;
       app = null;
@@ -3860,7 +3871,7 @@
       // rebuild from where the first run started so screenshot crops line up again
       if (lastShot) a.env.scrollTo(lastShot.at.sy, lastShot.at.sx);
     }
-    start();
+    start(opts);
   }
 
   window[KEY] = {
@@ -3878,9 +3889,9 @@
   };
 })();
 
-export function startSwarm() {
+export function startSwarm(opts = {}) {
   if (typeof window !== "undefined" && window.__swarmRebuild) {
-    window.__swarmRebuild.start();
+    window.__swarmRebuild.start(opts);
   }
 }
 
@@ -3890,9 +3901,9 @@ export function stopSwarm(reveal = true) {
   }
 }
 
-export function restartSwarm() {
+export function restartSwarm(opts = {}) {
   if (typeof window !== "undefined" && window.__swarmRebuild) {
-    window.__swarmRebuild.restart();
+    window.__swarmRebuild.restart(opts);
   }
 }
 
