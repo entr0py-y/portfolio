@@ -4,6 +4,11 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { restartSwarm, stopSwarm } from "./swarm-engine";
 
+// Track visited routes so each page only animates ONCE per session.
+// When returning to an already visited page (e.g. Back to Home),
+// the animation does not repeat — it only initiates again on browser refresh.
+const playedRoutes = new Set<string>();
+
 export default function SwarmRebuild() {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
@@ -12,7 +17,7 @@ export default function SwarmRebuild() {
     setMounted(true);
   }, []);
 
-  // Keyboard shortcut listener ('R' to replay on any page)
+  // Keyboard shortcut listener ('R' to manually replay on any page)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
@@ -31,6 +36,12 @@ export default function SwarmRebuild() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       return;
     }
+
+    // Only initiate once per route in this session; do not repeat on return navigation
+    if (playedRoutes.has(pathname)) {
+      return;
+    }
+    playedRoutes.add(pathname);
 
     const isHome = pathname === "/";
     // Allow Next.js route transition to settle and render new DOM elements before rebuilding

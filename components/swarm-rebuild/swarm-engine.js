@@ -708,6 +708,52 @@
       });
     }
 
+    function detectRotation(el) {
+      let curr = el;
+      while (curr && curr !== html && curr !== body) {
+        const c = css(curr);
+        const cssRotate = (c.getPropertyValue && c.getPropertyValue("rotate")) || c.rotate;
+        if (cssRotate && cssRotate !== "none" && cssRotate !== "0deg" && cssRotate !== "0") {
+          return { rotate: cssRotate, transform: "" };
+        }
+        const csTransform = c.transform || (c.getPropertyValue && c.getPropertyValue("transform"));
+        if (csTransform && csTransform !== "none") {
+          const mt = csTransform.match(/^matrix\(([^)]+)\)$/);
+          if (mt) {
+            const k = mt[1].split(",").map(Number);
+            const rad = Math.atan2(k[1], k[0]);
+            const deg = Math.round(rad * (180 / Math.PI));
+            if (Math.abs(deg) > 0) {
+              return { rotate: `${deg}deg`, transform: `matrix(${k[0]},${k[1]},${k[2]},${k[3]},0,0)` };
+            }
+          }
+          const rotMatch = csTransform.match(/rotate\(([^)]+)\)/);
+          if (rotMatch) {
+            return { rotate: rotMatch[1], transform: "" };
+          }
+          return { rotate: "", transform: csTransform };
+        }
+        const styleAttr = curr.getAttribute && curr.getAttribute("style");
+        if (styleAttr) {
+          const rotMatch = styleAttr.match(/rotate\(([^)]+)\)/);
+          if (rotMatch) {
+            return { rotate: rotMatch[1], transform: "" };
+          }
+        }
+        const cls = (curr.getAttribute && curr.getAttribute("class")) || "";
+        if (cls) {
+          if (window.innerWidth < 768) {
+            const mMobile = cls.match(/max-\[768px\]:rotate-\[([^\]]+)\]/);
+            if (mMobile) return { rotate: mMobile[1], transform: "" };
+          }
+          const mDesk = cls.match(/rotate-\[([^\]]+)\]/);
+          if (mDesk) return { rotate: mDesk[1], transform: "" };
+        }
+        curr = curr.parentElement;
+      }
+      return { rotate: "", transform: "" };
+    }
+
     function emitBox(el, cs, r, ctx, key, forceRect) {
       if (el === html) return null;
       const tag = el.localName;
@@ -724,7 +770,25 @@
       const nb = sides.filter(Boolean).length;
       const shadow = cs.boxShadow && cs.boxShadow !== "none";
       const backdrop = cs.backdropFilter && cs.backdropFilter !== "none";
-      const b = conv(r, ctx.layer);
+      const rot = detectRotation(el);
+      const rotAngle = rot.rotate;
+      const pureTf = rot.transform;
+      const hasTransform = !!rotAngle || (!!pureTf && pureTf !== "none");
+      let unrotatedR = r;
+      if (hasTransform) {
+        const parsedW = el.offsetWidth || parseFloat(cs.width) || r.width;
+        const parsedH = el.offsetHeight || parseFloat(cs.height) || r.height;
+        if (parsedW > 0 && parsedH > 0) {
+          const cx = r.left + r.width / 2;
+          const cy = r.top + r.height / 2;
+          const left = cx - parsedW / 2;
+          const top = cy - parsedH / 2;
+          unrotatedR = {
+            left, top, width: parsedW, height: parsedH, right: left + parsedW, bottom: top + parsedH,
+          };
+        }
+      }
+      const b = conv(unrotatedR, ctx.layer);
       if (tag === "hr") {
         const c = sides[0] ? sides[0].c : alphaOf(bgc) > 0.01 ? bgc : "rgb(200,200,200)";
         const y = b.y + b.h / 2;
@@ -766,6 +830,9 @@
         clip: clipFor(r, ctx.clip, ctx.layer),
         parentBox: ctx.boxItem,
         sig: cssText,
+        rotate: rotAngle,
+        transform: pureTf,
+        transformOrigin: "50% 50%",
       });
     }
 
@@ -948,41 +1015,10 @@
 
       const isSig = (el.classList && el.classList.contains("signature-img")) || (src.classList && src.classList.contains("signature-img"));
 
-      // Determine rotation from CSS 'rotate', 'transform' matrix, or class fallback
-      let rotAngle = "";
-      const cssRotate = (cs.getPropertyValue && cs.getPropertyValue("rotate")) || cs.rotate;
-      if (cssRotate && cssRotate !== "none" && cssRotate !== "0deg" && cssRotate !== "0") {
-        rotAngle = cssRotate;
-      }
-      const csTransform = cs.transform || (cs.getPropertyValue && cs.getPropertyValue("transform"));
-      let pureTf = "";
-      if (csTransform && csTransform !== "none") {
-        const mt = csTransform.match(/^matrix\(([^)]+)\)$/);
-        if (mt) {
-          const k = mt[1].split(",").map(Number);
-          const rad = Math.atan2(k[1], k[0]);
-          const deg = Math.round(rad * (180 / Math.PI));
-          if (Math.abs(deg) > 0 && !rotAngle) {
-            rotAngle = `${deg}deg`;
-          }
-          pureTf = `matrix(${k[0]},${k[1]},${k[2]},${k[3]},0,0)`;
-        } else {
-          pureTf = csTransform;
-        }
-      }
-
-      // Fallback for Tailwind rotate classes if getComputedStyle didn't report it
-      if (!rotAngle) {
-        const cls = ((el.getAttribute && el.getAttribute("class")) || "") + " " + ((src.getAttribute && src.getAttribute("class")) || "");
-        if (window.innerWidth < 768) {
-          const mMobile = cls.match(/max-\[768px\]:rotate-\[([^\]]+)\]/);
-          if (mMobile) rotAngle = mMobile[1];
-        }
-        if (!rotAngle) {
-          const mDesk = cls.match(/rotate-\[([^\]]+)\]/);
-          if (mDesk) rotAngle = mDesk[1];
-        }
-      }
+      // Determine rotation from CSS 'rotate', 'transform' matrix, ancestor style, or class fallback
+      const rot = detectRotation(el) || detectRotation(src);
+      let rotAngle = rot.rotate;
+      let pureTf = rot.transform;
 
       if (isSig && !rotAngle) {
         rotAngle = window.innerWidth < 768 ? "25deg" : "30deg";
@@ -992,8 +1028,8 @@
       let unrotatedR = r;
 
       if (hasTransform) {
-        const parsedW = parseFloat(cs.width) || el.offsetWidth || el.naturalWidth || (isSig ? (window.innerWidth < 768 ? 220 : 380) : r.width);
-        const parsedH = parseFloat(cs.height) || el.offsetHeight || el.naturalHeight || (isSig ? (window.innerWidth < 768 ? 220 : 380) : r.height);
+        const parsedW = el.offsetWidth || el.naturalWidth || parseFloat(cs.width) || (isSig ? (window.innerWidth < 768 ? 220 : 380) : r.width);
+        const parsedH = el.offsetHeight || el.naturalHeight || parseFloat(cs.height) || (isSig ? (window.innerWidth < 768 ? 220 : 380) : r.height);
         if (parsedW > 0 && parsedH > 0) {
           const cx = r.left + r.width / 2;
           const cy = r.top + r.height / 2;
@@ -1287,52 +1323,8 @@
     const rootClip = env.isRoot ? fullClip : viewClip;
     walk(html, { op: 1, layer: rootLayer, clip: rootClip, zTop: null, posd: false, boxItem: null }, null);
 
-    // --------------------------------------------- repeated components (dup)
+    // --------------------------------------------- repeated components (disabled: each item builds with its own real content)
     const groups = [];
-    const kindsSig = (n) => {
-      let s = "";
-      for (let i = n.start; i < n.end; i++) s += items[i].kind[0];
-      return s;
-    };
-    const similar = (a, b, loose) =>
-      a.w > 0 && b.w > 0 && a.h > 0 && b.h > 0 && a.h / b.h < 1.8 && b.h / a.h < 1.8 && (loose || (a.w / b.w < 1.6 && b.w / a.w < 1.6));
-    function findGroups(node, inCopy) {
-      if (inCopy) return;
-      const buckets = new Map();
-      for (const k of node.kids) {
-        const n = k.end - k.start;
-        if (n < 1 || n > 48) continue;
-        // long single paragraphs read better typed than duplicated
-        if (n === 1 && items[k.start].kind === "text" && items[k.start].text.length > 40) continue;
-        const sig = `${k.tag}|${k.cls}|${k.layer}|${kindsSig(k)}`;
-        if (!buckets.has(sig)) buckets.set(sig, []);
-        buckets.get(sig).push(k);
-      }
-      const copies = new Set();
-      for (const list of buckets.values()) {
-        if (list.length < 2) continue;
-        const m = list[0];
-        const loose = m.end - m.start === 1 && items[m.start].kind === "text";
-        const members = list.filter((k) => similar(k.box, m.box, loose));
-        if (members.length < 2) continue;
-        const g = { id: groups.length, master: members[0], copies: members.slice(1) };
-        groups.push(g);
-        for (const c of g.copies) copies.add(c);
-      }
-      for (const k of node.kids) findGroups(k, copies.has(k));
-    }
-    for (const r of roots) findGroups(r, false);
-
-    for (const g of groups) {
-      for (const c of g.copies) {
-        for (let i = c.start; i < c.end; i++) {
-          const it = items[i];
-          if (it.copyOf) continue;
-          it.copyOf = items[g.master.start + (i - c.start)];
-          it.group = g;
-        }
-      }
-    }
 
     const twinKey = new Map();
     for (const it of items) {
@@ -2301,7 +2293,7 @@
           badge: `${Math.round(b.w)} × ${Math.round(b.h)}`,
           rulerLines: true,
           underline: it.kind === "text" ? this.underline(it, b) : undefined,
-          transform: it.transform || "",
+          transform: it.transform || (it.rotate ? `rotate(${it.rotate})` : ""),
         },
         extra,
       );
@@ -2732,8 +2724,8 @@
       yield* this.moveTo(c, { x: it.x, y: it.y });
       c.press = 1;
       it.vis = true;
-      if (it.big || it.transform) it.styled = true;
-      if (!it.transform) it.draw = { w: 0, h: 0 };
+      if (it.big || it.transform || it.rotate) it.styled = true;
+      if (!it.transform && !it.rotate) it.draw = { w: 0, h: 0 };
       bump(it);
       c.ov = () => [this.selection(it)];
       const end = this.dragEnd(c, it);
@@ -2742,13 +2734,13 @@
         drag: true,
         bend: 0,
         onStep: () => {
-          if (!it.transform) {
+          if (!it.transform && !it.rotate) {
             it.draw = { w: Math.max(0, c.x - it.x), h: Math.max(0, c.y - it.y) };
             bump(it);
           }
         },
       });
-      if (!it.transform && (end.x < it.x + it.w - 0.5 || end.y < it.y + it.h - 0.5)) {
+      if (!it.transform && !it.rotate && (end.x < it.x + it.w - 0.5 || end.y < it.y + it.h - 0.5)) {
         const w0 = it.draw.w;
         const h0 = it.draw.h;
         let k = 0;
