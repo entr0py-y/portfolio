@@ -1597,8 +1597,8 @@
 :host(.dark-mode) .grain-overlay.on,.grain-overlay.dark-mode.on{opacity:0.03}
 .bg-character-clone{position:fixed;bottom:-20px;right:-20px;width:575px;pointer-events:none;z-index:0;transform:scaleX(-1)}
 .bg-character-clone img{width:100%;height:auto;display:block;opacity:0.12;image-rendering:pixelated}
-.bg-character-clone img.bg-character-img{filter:saturate(0.3) brightness(1.1) sepia(0.15)}
-:host(.dark-mode) .bg-character-clone img.bg-character-img,.bg.dark-mode .bg-character-clone img.bg-character-img{filter:saturate(0.25) brightness(0.7) hue-rotate(10deg)}
+.bg-character-clone img.bg-character-img{filter:grayscale(1)}
+:host(.dark-mode) .bg-character-clone img.bg-character-img,.bg.dark-mode .bg-character-clone img.bg-character-img{filter:grayscale(1) brightness(0.9)}
 .bg-character-clone.listen-mode{bottom:-90px;right:-80px;width:575px}
 .bg-character-clone.listen-mode img{opacity:0.14}
 .bg-character-clone.work-mode{bottom:-15px;right:-20px;width:400px}
