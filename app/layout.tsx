@@ -26,8 +26,6 @@ const caveat = Caveat({
 
 export const metadata: Metadata = {
   title: "Quiet Space",
-  description:
-    "Personal portfolio of Pushkar Jha — a second-year CS student and software developer building clean, scalable applications.",
 };
 
 export default function RootLayout({
