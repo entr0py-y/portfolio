@@ -2050,26 +2050,31 @@
             const col = BLUE;
             const cx = f1(x + w / 2);
             const cy = f1(y + h / 2);
-            let tfAttr = "";
+            let groupOpen = "";
+            let groupClose = "";
             if (v.transform) {
               const rotM = v.transform.match(/^rotate\(([-\d.]+)(?:deg)?\)$/);
               if (rotM) {
-                tfAttr = ` transform="rotate(${rotM[1]} ${cx} ${cy})"`;
+                groupOpen = `<g transform="rotate(${rotM[1]} ${cx} ${cy})">`;
+                groupClose = `</g>`;
               } else {
-                tfAttr = ` style="transform-box:fill-box;transform-origin:center;transform:${v.transform};"`;
+                groupOpen = `<g style="transform-box:fill-box;transform-origin:center;transform:${v.transform};">`;
+                groupClose = `</g>`;
               }
             }
-            s += `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="none" stroke="${col}" stroke-width="1"${tfAttr}/>`;
+            s += groupOpen;
+            s += `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="none" stroke="${col}" stroke-width="1"/>`;
             if (v.underline && v.underline.w > 0) {
               const u = v.underline;
               s += `<line x1="${X(u.x, st)}" x2="${X(u.x + u.w, st)}" y1="${Y(u.y, st)}" y2="${Y(u.y, st)}" stroke="${BLUE}" stroke-width="1.5"/>`;
             }
-            if (v.rulerLines && rt > 0.05)
-              s += `<g stroke="${BLUE}" stroke-width="1" stroke-dasharray="2 2" opacity="${f1(rt)}"><line x1="${RULER}" x2="${x}" y1="${f1(y + h / 2)}" y2="${f1(y + h / 2)}"/><line x1="${f1(x + w / 2)}" x2="${f1(x + w / 2)}" y1="${RULER}" y2="${y}"/></g>`;
             if (v.handles)
               for (const [hx, hy] of [[x, y], [x + w, y], [x, y + h], [x + w, y + h]])
                 s += `<rect x="${f1(hx - 3.5)}" y="${f1(hy - 3.5)}" width="7" height="7" fill="#fff" stroke="${col}" stroke-width="1"/>`;
-            if (v.badge && w > 0) b += `<div class="badge" style="left:${f1(x + w / 2)}px;top:${f1(y + h + 8)}px;background:${col}">${v.badge}</div>`;
+            s += groupClose;
+            if (v.rulerLines && rt > 0.05)
+              s += `<g stroke="${BLUE}" stroke-width="1" stroke-dasharray="2 2" opacity="${f1(rt)}"><line x1="${RULER}" x2="${x}" y1="${f1(y + h / 2)}" y2="${f1(y + h / 2)}"/><line x1="${f1(x + w / 2)}" x2="${f1(x + w / 2)}" y1="${RULER}" y2="${y}"/></g>`;
+            if (v.badge && w > 0) b += `<div class="badge" style="left:${cx}px;top:${f1(cy + h / 2 + 10)}px;background:${col}">${v.badge}</div>`;
           } else if (v.t === "measure") {
             const a = { x: X(v.a.x, st), y: Y(v.a.y, st) };
             const z = { x: X(v.b.x, st), y: Y(v.b.y, st) };
@@ -2747,44 +2752,76 @@
 
     *drawBox(c, it, isImg) {
       c.shape = "cross";
-      yield* this.moveTo(c, { x: it.x, y: it.y });
+      const cx = it.x + it.w / 2;
+      const cy = it.y + it.h / 2;
+      yield* this.moveTo(c, { x: it.rotate ? cx : it.x, y: it.rotate ? cy : it.y });
       c.press = 1;
       it.vis = true;
-      if (it.big || it.transform || it.rotate) it.styled = true;
-      if (!it.transform && !it.rotate) it.draw = { w: 0, h: 0 };
+
+      const isRotated = !!it.rotate;
+      const isLarge = !!it.big;
+      const isSignature = !!it.isSig;
+
+      if (isLarge || isSignature) {
+        it.styled = true;
+      } else if (isRotated) {
+        it.styled = false;
+        if (isImg && it.parentBox) {
+          it.scale = 1;
+        } else {
+          it.scale = 0.05;
+        }
+      } else {
+        it.draw = { w: 0, h: 0 };
+      }
       bump(it);
       c.ov = () => [this.selection(it)];
-      const end = this.dragEnd(c, it);
-      yield* this.moveTo(c, end, {
-        speed: 0.75,
-        drag: true,
-        bend: 0,
-        onStep: () => {
-          if (!it.transform && !it.rotate) {
-            it.draw = { w: Math.max(0, c.x - it.x), h: Math.max(0, c.y - it.y) };
+
+      if (isRotated && !isLarge && !isSignature) {
+        if (it.scale < 1) {
+          let k = 0;
+          while (k < 1) {
+            k = Math.min(1, k + ((yield) * this.tempo) / 0.38);
+            it.scale = easeOut(k);
             bump(it);
           }
-        },
-      });
-      if (!it.transform && !it.rotate && (end.x < it.x + it.w - 0.5 || end.y < it.y + it.h - 0.5)) {
-        const w0 = it.draw.w;
-        const h0 = it.draw.h;
-        let k = 0;
-        while (k < 1) {
-          k = Math.min(1, k + ((yield) * this.tempo) / 0.5);
-          const e = easeOut(k);
-          it.draw = { w: w0 + (it.w - w0) * e, h: h0 + (it.h - h0) * e };
+          it.scale = 1;
           bump(it);
+        } else {
+          yield* this.wait(rand(0.14, 0.22));
         }
+      } else if (!isLarge && !isSignature) {
+        const end = this.dragEnd(c, it);
+        yield* this.moveTo(c, end, {
+          speed: 0.75,
+          drag: true,
+          bend: 0,
+          onStep: () => {
+            it.draw = { w: Math.max(0, c.x - it.x), h: Math.max(0, c.y - it.y) };
+            bump(it);
+          },
+        });
+        if (end.x < it.x + it.w - 0.5 || end.y < it.y + it.h - 0.5) {
+          const w0 = it.draw.w;
+          const h0 = it.draw.h;
+          let k = 0;
+          while (k < 1) {
+            k = Math.min(1, k + ((yield) * this.tempo) / 0.5);
+            const e = easeOut(k);
+            it.draw = { w: w0 + (it.w - w0) * e, h: h0 + (it.h - h0) * e };
+            bump(it);
+          }
+        }
+        it.draw = null;
+        bump(it);
       }
-      it.draw = null;
-      bump(it);
+
       c.shape = "arrow";
       yield* this.wait(rand(0.18, 0.3));
       it.styled = true;
       bump(it);
       this.sfxPlace(isImg ? "image" : "rect", it);
-      yield* this.wait(isImg ? 0.5 : 0.35);
+      yield* this.wait(isImg ? 0.5 : 0.18);
       c.ov = null;
       it.done = true;
       bump(it);
