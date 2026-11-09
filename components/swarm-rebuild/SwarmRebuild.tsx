@@ -2,60 +2,46 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { startSwarm, stopSwarm, restartSwarm } from "./swarm-engine";
-
-// Track auto-play so SPA navigation doesn't re-trigger unexpectedly,
-// while browser reload/refresh re-plays automatically.
-let hasAutoPlayed = false;
+import { restartSwarm, stopSwarm } from "./swarm-engine";
 
 export default function SwarmRebuild() {
   const pathname = usePathname();
-  const isHomepage = pathname === "/";
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Keyboard shortcut listener ('R' to replay)
+  // Keyboard shortcut listener ('R' to replay on any page)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
-      if ((e.key === "r" || e.key === "R") && isHomepage && !e.metaKey && !e.ctrlKey) {
+      if ((e.key === "r" || e.key === "R") && !e.metaKey && !e.ctrlKey) {
         e.preventDefault();
         restartSwarm();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isHomepage]);
+  }, []);
 
   useEffect(() => {
-    if (!mounted || !isHomepage) {
-      stopSwarm(false);
-      return;
-    }
+    if (!mounted) return;
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       return;
     }
 
-    if (hasAutoPlayed) {
-      return;
-    }
-
-    hasAutoPlayed = true;
-
-    // Launch authentic Swarm Rebuild
+    // Allow Next.js route transition to settle and render new DOM elements before rebuilding
     const timer = setTimeout(() => {
-      startSwarm();
-    }, 100);
+      restartSwarm();
+    }, 120);
 
     return () => {
       clearTimeout(timer);
       stopSwarm(false);
     };
-  }, [mounted, isHomepage]);
+  }, [mounted, pathname]);
 
   return null;
 }

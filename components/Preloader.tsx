@@ -156,7 +156,8 @@ export default function Preloader() {
     run();
   }, []);
 
-  if (hasEntered || pathname === "/") return null;
+  // Disabled overlay so SwarmRebuild handles intro and reconstruction on all pages
+  return null;
 
   return (
     <div
