@@ -46,16 +46,24 @@ export default function SwarmRebuild() {
         return;
       }
       homePlayed = true;
+      document.documentElement.classList.add("swarm-navigating");
     } else {
       // Navigating to subpage: veil page until swarm rebuild overlay mounts
       document.documentElement.classList.add("swarm-navigating");
     }
 
     const isHome = pathname === "/";
+    if (isHome) {
+      restartSwarm({ showIntro: true });
+      return () => {
+        stopSwarm(false);
+      };
+    }
+
     // Allow Next.js route transition to settle and render new DOM elements before rebuilding
     const timer = setTimeout(() => {
-      restartSwarm({ showIntro: isHome });
-    }, 60);
+      restartSwarm({ showIntro: false });
+    }, 40);
 
     return () => {
       clearTimeout(timer);

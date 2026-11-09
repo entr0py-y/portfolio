@@ -277,24 +277,21 @@
     const isSvg = src instanceof SVGElement;
     let st = styleString(cs, isSvg ? SVG_PROPS : ELEM_PROPS);
     if (isSvg) {
-      const isDark = document.documentElement.classList.contains("dark-mode");
-      const strokeVal = cs.stroke || cs.getPropertyValue("stroke");
-      const colorVal = cs.color || cs.getPropertyValue("color");
-      const isDarkStroke = (strokeVal && (/rgb\((\s*([0-4]?\d|5[0-9])\s*,){2}\s*([0-4]?\d|5[0-9])\s*\)/.test(strokeVal) || strokeVal === "black" || strokeVal === "#000" || strokeVal === "#1a1a1a"))
-        || (colorVal && (/rgb\((\s*([0-4]?\d|5[0-9])\s*,){2}\s*([0-4]?\d|5[0-9])\s*\)/.test(colorVal) || colorVal === "black" || colorVal === "#000" || colorVal === "#1a1a1a"));
-      const isLightStroke = (strokeVal && (/rgb\((\s*(2[0-5][0-9])\s*,){2}\s*(2[0-5][0-9])\s*\)/.test(strokeVal) || strokeVal === "white" || strokeVal === "#fff" || strokeVal === "#fdfdfb"))
-        || (colorVal && (/rgb\((\s*(2[0-5][0-9])\s*,){2}\s*(2[0-5][0-9])\s*\)/.test(colorVal) || colorVal === "white" || colorVal === "#fff" || colorVal === "#fdfdfb"));
-
-      if (isDark && isDarkStroke) {
-        st += "stroke:#fdfdfb !important;color:#fdfdfb !important;";
-      } else if (!isDark && isLightStroke) {
-        st += "stroke:#1a1a1a !important;color:#1a1a1a !important;";
+      const origStroke = src.getAttribute && src.getAttribute("stroke");
+      const origFill = src.getAttribute && src.getAttribute("fill");
+      if (origStroke === "currentColor") {
+        dst.setAttribute("stroke", "currentColor");
+        st = st.replace(/(^|;)stroke:[^;]+;/g, "$1stroke:currentColor;");
       }
-    }
-    if (isSvg && tag === "svg" && !src.ownerSVGElement) {
-      dst.setAttribute("width", src.clientWidth || src.getBoundingClientRect().width);
-      dst.setAttribute("height", src.clientHeight || src.getBoundingClientRect().height);
-      st += styleString(cs, SVG_OUTER_PROPS);
+      if (origFill === "currentColor") {
+        dst.setAttribute("fill", "currentColor");
+        st = st.replace(/(^|;)fill:[^;]+;/g, "$1fill:currentColor;");
+      }
+      if (tag === "svg" && !src.ownerSVGElement) {
+        dst.setAttribute("width", src.clientWidth || src.getBoundingClientRect().width);
+        dst.setAttribute("height", src.clientHeight || src.getBoundingClientRect().height);
+        st += styleString(cs, SVG_OUTER_PROPS);
+      }
     }
     dst.setAttribute("style", st);
     for (const a of [...dst.attributes]) {
@@ -804,8 +801,25 @@
       const hasTransform = !!rotAngle || (!!pureTf && pureTf !== "none");
       let unrotatedR = r;
       if (hasTransform && isEl) {
-        const parsedW = el.offsetWidth || parseFloat(cs.width) || r.width;
-        const parsedH = el.offsetHeight || parseFloat(cs.height) || r.height;
+        let parsedW = el.offsetWidth || parseFloat(cs.width) || r.width;
+        let parsedH = el.offsetHeight || parseFloat(cs.height) || r.height;
+
+        // If this is a sketch-photo card containing an image, ensure height matches aspect ratio + padding
+        const innerImg = el.querySelector && el.querySelector("img");
+        if (innerImg) {
+          let imgAspect = null;
+          const imgCs = getComputedStyle(innerImg);
+          if (imgCs.aspectRatio && imgCs.aspectRatio !== "auto") {
+            const parts = imgCs.aspectRatio.split("/").map(Number);
+            if (parts.length === 2 && parts[1] > 0) imgAspect = parts[0] / parts[1];
+          } else if (innerImg.naturalWidth && innerImg.naturalHeight) {
+            imgAspect = innerImg.naturalWidth / innerImg.naturalHeight;
+          }
+          if (imgAspect && imgAspect > 0 && parsedW > 0 && (parsedH < 70 || parsedH < parsedW * 0.4)) {
+            parsedH = Math.round(parsedW / imgAspect) + 16;
+          }
+        }
+
         if (parsedW > 0 && parsedH > 0) {
           const cx = r.left + r.width / 2;
           const cy = r.top + r.height / 2;
@@ -951,8 +965,6 @@
         m.style.overflow = "visible";
         m.style.margin = "0";
         m.style.position = "static";
-        const isDark = document.documentElement.classList.contains("dark-mode");
-        m.style.color = isDark ? "#fdfdfb" : "#1a1a1a";
         // the box we draw is the transformed bounding box; keep only a pure rotation/flip
         const mt = cs.transform.match(/^matrix\(([^)]+)\)$/);
         const k = mt ? mt[1].split(",").map(Number) : null;
@@ -1054,27 +1066,26 @@
       let pureTf = rot.transform;
 
       if (isSig && !rotAngle) {
-        rotAngle = window.innerWidth < 768 ? "18deg" : "20deg";
+        rotAngle = window.innerWidth < 768 ? "25deg" : "30deg";
       }
 
       const hasTransform = !!rotAngle || (!!pureTf && pureTf !== "none");
       let unrotatedR = r;
 
       if (hasTransform) {
-        let parsedW = el.offsetWidth || el.naturalWidth || parseFloat(cs.width) || (isSig ? (window.innerWidth < 768 ? 110 : 190) : r.width);
-        let parsedH = el.offsetHeight || el.naturalHeight || parseFloat(cs.height) || (isSig ? (window.innerWidth < 768 ? 110 : 190) : r.height);
+        let parsedW = el.offsetWidth || el.naturalWidth || parseFloat(cs.width) || (isSig ? (window.innerWidth < 768 ? 220 : 380) : r.width);
+        let parsedH = el.offsetHeight || el.naturalHeight || parseFloat(cs.height) || (isSig ? (window.innerWidth < 768 ? 220 : 380) : r.height);
 
-        // Failsafe for unrendered/lazy images: if height is collapsed (< 45px) but natural aspect ratio or container aspect ratio exists
-        if (el.naturalWidth > 0 && el.naturalHeight > 0 && parsedH < 45 && parsedW > 60) {
-          parsedH = Math.round(parsedW * (el.naturalHeight / el.naturalWidth));
-        } else if (parsedH < 45 && parsedW > 60 && el.parentElement) {
-          const parentAspect = el.parentElement.style.aspectRatio || getComputedStyle(el.parentElement).aspectRatio;
-          if (parentAspect && parentAspect !== "auto") {
-            const parts = parentAspect.split("/").map(Number);
-            if (parts.length === 2 && parts[0] > 0 && parts[1] > 0) {
-              parsedH = Math.round(parsedW * (parts[1] / parts[0]));
-            }
-          }
+        let aspect = null;
+        if (cs.aspectRatio && cs.aspectRatio !== "auto") {
+          const parts = cs.aspectRatio.split("/").map(Number);
+          if (parts.length === 2 && parts[1] > 0) aspect = parts[0] / parts[1];
+        } else if (el.naturalWidth && el.naturalHeight) {
+          aspect = el.naturalWidth / el.naturalHeight;
+        }
+
+        if (aspect && aspect > 0 && parsedW > 0 && (parsedH < 70 || parsedH < parsedW * 0.4)) {
+          parsedH = Math.round(parsedW / aspect);
         }
 
         if (parsedW > 0 && parsedH > 0) {
@@ -1091,13 +1102,6 @@
             bottom: top + parsedH,
           };
         }
-      } else if (el.naturalWidth > 0 && el.naturalHeight > 0 && unrotatedR.height < 45 && unrotatedR.width > 60) {
-        const correctH = Math.round(unrotatedR.width * (el.naturalHeight / el.naturalWidth));
-        unrotatedR = {
-          ...unrotatedR,
-          height: correctH,
-          bottom: unrotatedR.top + correctH,
-        };
       }
 
       const b = conv(unrotatedR, ctx.layer);
@@ -1551,11 +1555,10 @@
   // ------------------------------------------------------------------ styles
 
   const STYLE = `
-:host{all:initial;color:#1a1a1a;--color-on-background:#1a1a1a;--color-outline:#747878;--color-outline-variant:#c4c7c7;--color-highlight:#aa8970;--color-section-header:#1a1a1a}
-:host(.dark-mode){color:#fdfdfb;--color-on-background:#fdfdfb;--color-outline:#a0a0a0;--color-outline-variant:#404040;--color-highlight:#eeddd0;--color-section-header:#aa8970}
-:host(.dark-mode) svg{color:#fdfdfb}
+:host{all:initial;display:block;color:#1a1a1a}
+:host(.dark-mode){color:#fdfdfb!important}
 *{box-sizing:border-box}
-.bg{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;overflow:hidden}
+.bg{position:absolute;inset:0;opacity:1;overflow:hidden}
 .bg.on{opacity:1}
 .grain-overlay{position:fixed;inset:0;pointer-events:none;background-image:url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)"/></svg>');opacity:0;transition:opacity .5s ease;z-index:2}
 .grain-overlay.on{opacity:0.05}
@@ -1618,15 +1621,15 @@
 .ruler-corner{position:absolute;top:0;left:0;width:20px;height:20px;background:#2c2c2c}
 .rtext{font:500 9px Inter,system-ui,-apple-system,sans-serif;fill:#8c8c8c}
 .rsel{fill:#0d99ff}
-.intro{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);opacity:0;transition:opacity .4s ease,transform .45s cubic-bezier(.2,.8,.2,1);pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.intro{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);opacity:1;transition:opacity .4s ease,transform .45s cubic-bezier(.2,.8,.2,1);pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .intro.on{opacity:1;transform:translate(-50%,-50%)}
 .intro.gone{opacity:0;transform:translate(-50%,-50%) scale(.95)}
 .intro .preloader-bar-container{width:200px;max-width:80vw;display:flex;flex-direction:column;align-items:center;gap:12px}
 .intro .preloader-bar-track{width:100%;height:1px;background-color:var(--color-outline-variant,#c4c7c7);position:relative;overflow:hidden}
 .intro .preloader-bar-fill{position:absolute;top:0;left:0;height:100%;width:0%;background-color:var(--color-on-background,#1a1a1a);transition:width .35s cubic-bezier(0.4,0,0.2,1);will-change:width}
-.theme-choice-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;animation:tcFadeIn .45s cubic-bezier(0.16,1,0.3,1) forwards;pointer-events:auto!important;user-select:none;-webkit-user-select:none}
+.theme-choice-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;animation:tcFadeIn .45s cubic-bezier(0.16,1,0.3,1) forwards;pointer-events:auto!important;user-select:none;-webkit-user-select:none}
 @keyframes tcFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.theme-choice-row{display:flex;align-items:center;gap:10px;margin-bottom:2px}
+.theme-choice-row{display:flex;align-items:center;gap:10px}
 .theme-opt{all:unset;cursor:pointer;font-family:var(--font-body,Epilogue,system-ui,-apple-system,sans-serif);font-size:12px;font-weight:500;letter-spacing:0.04em;line-height:1;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px;color:#737373;transition:color .2s ease,opacity .2s ease}
 :host(.dark-mode) .theme-opt{color:#8c8c8c}
 .theme-opt:hover{color:#1a1a1a;opacity:0.7}
@@ -1635,8 +1638,8 @@
 :host(.dark-mode) .theme-sep{color:#525252}
 .theme-hint{margin:0;padding:0;font-family:var(--font-body,Epilogue,system-ui,-apple-system,sans-serif);font-size:11px;font-style:italic;font-weight:400;color:#8f8f8f;letter-spacing:0.02em;user-select:none;pointer-events:none;text-align:center}
 :host(.dark-mode) .theme-hint{color:#6b6b6b}
-.theme-note{margin:0;padding:0;font-family:var(--font-body,Epilogue,system-ui,-apple-system,sans-serif);font-size:10.5px;font-style:italic;font-weight:400;color:#a3a3a3;letter-spacing:0.02em;user-select:none;pointer-events:none;text-align:center}
-:host(.dark-mode) .theme-note{color:#585858}
+.theme-subhint{margin:0;padding:0;font-family:var(--font-body,Epilogue,system-ui,-apple-system,sans-serif);font-size:10.5px;color:#9e9e9e;letter-spacing:0.02em;user-select:none;pointer-events:none;text-align:center;opacity:0.85}
+:host(.dark-mode) .theme-subhint{color:#787878}
 .hud{display:none!important}
 .hud.on{opacity:1;transform:translate(-50%,0)}
 .hud .dots{display:flex;padding-left:5px}
@@ -1785,12 +1788,16 @@
       this._ovB = "";
       this._rulersOn = false;
 
+      const isDark = document.documentElement.classList.contains("dark-mode");
+      const initialBg = isDark ? "#121212" : (env.pageBg && env.pageBg.color ? env.pageBg.color : "#fdfdfb");
+      this.host.style.backgroundColor = initialBg;
+      this.bg.style.backgroundColor = initialBg;
+
       const pb = env.pageBg;
-      this.bg.style.backgroundColor = pb.color;
-      const rgb = (pb.color.match(/[\d.]+/g) || [255, 255, 255]).map(Number);
+      const rgb = (initialBg.match(/[\d.]+/g) || [255, 255, 255]).map(Number);
       const lum = (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]) / 255;
       if (lum < 0.4) this.host.style.setProperty("--ph", "#3B3D42");
-      if (pb.image && pb.image !== "none") {
+      if (pb && pb.image && pb.image !== "none") {
         this.bg.style.backgroundImage = pb.image;
         this.bg.style.backgroundSize = pb.size;
         this.bg.style.backgroundPosition = pb.position;
@@ -1798,7 +1805,6 @@
       }
 
       // Sync dark mode
-      const isDark = document.documentElement.classList.contains("dark-mode");
       if (isDark) {
         this.host.classList.add("dark-mode");
         this.bg.classList.add("dark-mode");
@@ -1809,7 +1815,9 @@
         this.host.classList.toggle("dark-mode", dark);
         this.bg.classList.toggle("dark-mode", dark);
         if (this.grainOverlay) this.grainOverlay.classList.toggle("dark-mode", dark);
-        this.bg.style.backgroundColor = dark ? "#121212" : (env.pageBg ? env.pageBg.color : "#fdfdfb");
+        const bgCol = dark ? "#121212" : (env.pageBg ? env.pageBg.color : "#fdfdfb");
+        this.bg.style.backgroundColor = bgCol;
+        this.host.style.backgroundColor = bgCol;
         for (const sig of this.root.querySelectorAll(".signature-img")) {
           sig.style.filter = dark ? "invert(1)" : "none";
         }
@@ -1876,7 +1884,7 @@
             <button type="button" class="theme-opt opt-sunlight" aria-label="Sunlight mode">sunlight</button>
           </div>
           <p class="theme-hint">don&apos;t worry, you can change it later</p>
-          <p class="theme-note">underlined texts are interactive</p>
+          <p class="theme-subhint">(underlined texts are interactive)</p>
         `;
 
         this.intro.style.pointerEvents = "auto";
@@ -2066,6 +2074,9 @@
           m.classList.add("md");
           if (src.filter) m.style.filter = src.filter;
           if (src.isSig) m.classList.add("signature-img");
+          if (m instanceof SVGElement || m.localName === "svg") {
+            m.style.color = "inherit";
+          }
           if (old) {
             m.classList.add("swap");
             old.replaceWith(m);
@@ -3744,42 +3755,44 @@
         }
 
         const isDark = chosenMode === "moonshine";
+
+        // Disable transitions temporarily so all computed colors update instantly without 300ms transition lag
+        const disableTransitions = document.createElement("style");
+        disableTransitions.textContent = "*, *::before, *::after { transition: none !important; }";
+        document.head.appendChild(disableTransitions);
+
         document.documentElement.classList.toggle("dark-mode", isDark);
         try {
           localStorage.setItem("theme", isDark ? "dark" : "light");
         } catch (_) {}
-        window.dispatchEvent(new Event("storage"));
 
+        // Force reflow so browser computes all styles immediately
+        void document.documentElement.offsetHeight;
+
+        // Notify ThemeToggle and any other listeners of theme change
+        window.dispatchEvent(new CustomEvent("themechange", { detail: { isDark } }));
+
+        // Sync view and environment immediately
         this.view.host.classList.toggle("dark-mode", isDark);
         this.view.bg.classList.toggle("dark-mode", isDark);
-        if (this.view.grainOverlay) this.view.grainOverlay.classList.toggle("dark-mode", isDark);
-        this.view.bg.style.backgroundColor = isDark ? "#121212" : "#fdfdfb";
-        this.env = detectEnv();
+        const newBgColor = isDark ? "#121212" : "#fdfdfb";
+        this.view.bg.style.backgroundColor = newBgColor;
+        this.view.host.style.backgroundColor = newBgColor;
+        this.env.pageBg = pageBackground();
 
         await nextFrame();
-        await sleep(80);
+        disableTransitions.remove();
+        await sleep(40);
       }
 
-      // Wait for visible images to ensure natural dimensions and layout are fully ready
-      try {
-        const pendingImages = Array.from(document.querySelectorAll("img")).filter(
-          (img) => !img.complete || img.naturalHeight === 0
-        );
-        if (pendingImages.length > 0) {
-          await Promise.race([
-            Promise.all(
-              pendingImages.map(
-                (img) =>
-                  new Promise((resolve) => {
-                    img.addEventListener("load", resolve, { once: true });
-                    img.addEventListener("error", resolve, { once: true });
-                  })
-              ),
-            ),
-            sleep(400),
-          ]);
-        }
-      } catch (_) {}
+      // Ensure all images currently in DOM have had a chance to decode dimensions before capture
+      const currentImgs = Array.from(document.querySelectorAll("img"));
+      if (currentImgs.length > 0) {
+        await Promise.race([
+          Promise.all(currentImgs.map((im) => (im.complete ? Promise.resolve() : im.decode().catch(() => {})))),
+          sleep(300),
+        ]);
+      }
 
       let model;
       try {

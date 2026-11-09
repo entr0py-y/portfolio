@@ -8,27 +8,26 @@ export default function ThemeToggle() {
 
   useEffect(() => {
     const syncTheme = () => {
-      const isCurrentlyDark = document.documentElement.classList.contains("dark-mode");
-      setIsDark(isCurrentlyDark);
+      const dark =
+        document.documentElement.classList.contains("dark-mode") ||
+        localStorage.getItem("theme") === "dark";
+      setIsDark(dark);
     };
 
-    const saved = localStorage.getItem("theme");
-    if (saved === "dark") {
-      document.documentElement.classList.add("dark-mode");
-      setIsDark(true);
-    } else if (saved === "light") {
-      document.documentElement.classList.remove("dark-mode");
-      setIsDark(false);
-    } else {
-      syncTheme();
-    }
+    syncTheme();
 
-    const observer = new MutationObserver(() => syncTheme());
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    const observer = new MutationObserver(syncTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    window.addEventListener("themechange", syncTheme);
     window.addEventListener("storage", syncTheme);
 
     return () => {
       observer.disconnect();
+      window.removeEventListener("themechange", syncTheme);
       window.removeEventListener("storage", syncTheme);
     };
   }, []);
