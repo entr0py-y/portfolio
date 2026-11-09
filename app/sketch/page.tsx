@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import PageShell from "@/components/PageShell";
+import { stopSwarm } from "@/components/swarm-rebuild";
 
 // 12 sketches arranged so column heights balance evenly in 4-column (desktop) and 2-column (mobile) masonry
 const sketches = [
@@ -35,6 +36,11 @@ export default function SketchingPage() {
     setMounted(true);
   }, []);
 
+  const openSketch = (i: number) => {
+    setSelectedSketch(i);
+    stopSwarm(true);
+  };
+
   // Close lightbox on Escape key
   useEffect(() => {
     if (selectedSketch === null) return;
@@ -58,7 +64,7 @@ export default function SketchingPage() {
             <div
               key={i}
               className="break-inside-avoid mb-3.5 sm:mb-4 cursor-pointer group"
-              onClick={() => setSelectedSketch(i)}
+              onClick={() => openSketch(i)}
             >
               <div className="relative rounded-2xl overflow-hidden bg-[var(--color-surface)] shadow-sm hover:shadow-md transition-all duration-300 ease-out">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -95,14 +101,14 @@ export default function SketchingPage() {
       {/* Maximized View Overlay */}
       {mounted && selectedSketch !== null && createPortal(
         <div
-          className="fixed inset-0 z-[1000] bg-[var(--color-background)]/90 backdrop-blur-md flex flex-col items-center justify-center p-6 sm:p-10 sketch-lightbox cursor-zoom-out"
+          className="fixed inset-0 z-[2147483648] bg-[var(--color-background)]/90 backdrop-blur-md flex flex-col items-center justify-center p-6 sm:p-10 sketch-lightbox cursor-zoom-out"
           style={{ fontFamily: "var(--font-body)" }}
           onClick={() => setSelectedSketch(null)}
         >
           {/* Back Button */}
           <button
             onClick={() => setSelectedSketch(null)}
-            className="absolute top-6 right-6 sm:top-10 sm:right-10 flex items-center justify-center bg-transparent cursor-pointer text-[var(--color-on-background)] transition-opacity duration-200 hover:opacity-60 z-[1010]"
+            className="absolute top-6 right-6 sm:top-10 sm:right-10 flex items-center justify-center bg-transparent cursor-pointer text-[var(--color-on-background)] transition-opacity duration-200 hover:opacity-60 z-[2147483649]"
             aria-label="Back to sketches"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-[18px] h-[18px]">

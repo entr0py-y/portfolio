@@ -1578,10 +1578,10 @@
   // ------------------------------------------------------------------ styles
 
   const STYLE = `
-:host{all:initial;display:block;color:#1a1a1a;--color-on-background:#1a1a1a;--color-background:#fdfdfb;--color-highlight:#aa8970;--color-section-header:#1a1a1a;--color-outline:#747878}
+:host{all:initial;display:block;pointer-events:none!important;color:#1a1a1a;--color-on-background:#1a1a1a;--color-background:#fdfdfb;--color-highlight:#aa8970;--color-section-header:#1a1a1a;--color-outline:#747878}
 :host(.dark-mode){color:#fdfdfb!important;--color-on-background:#fdfdfb!important;--color-background:#121212!important;--color-highlight:#eeddd0!important;--color-section-header:#aa8970!important;--color-outline:#a0a0a0!important}
 *{box-sizing:border-box}
-.bg{position:absolute;inset:0;opacity:1;overflow:hidden}
+.bg{position:absolute;inset:0;opacity:1;overflow:hidden;pointer-events:none!important}
 .bg.on{opacity:1}
 .it.t{color:inherit}
 .it.m svg{color:inherit}
@@ -1616,10 +1616,11 @@
 .sig-item.st>.md{opacity:0.85!important;clip-path:inset(0 0 0 0)!important}
 .signature-img{opacity:0.85;pointer-events:none}
 :host(.dark-mode) .signature-img,.dark-mode .signature-img,:host-context(html.dark-mode) .signature-img{filter:invert(1)!important}
-.layer,.port{position:absolute;overflow:hidden;pointer-events:none}
+.layer,.port{position:absolute;overflow:hidden;pointer-events:none!important}
 .layer{inset:0}
-.world{position:absolute;left:0;top:0;will-change:transform}
-.it{position:absolute;left:0;top:0;transform-origin:0 0}
+.world{position:absolute;left:0;top:0;will-change:transform;pointer-events:none!important}
+.it{position:absolute;left:0;top:0;transform-origin:0 0;pointer-events:none!important}
+.it *{pointer-events:none!important}
 .it.settle{transition:transform .3s cubic-bezier(.2,.8,.2,1)}
 .r{background-color:var(--ph,#D9D9D9);transition:background-color .22s ease,border-radius .22s ease}
 .r.st{background-color:transparent}
@@ -1770,7 +1771,7 @@
       for (const old of document.querySelectorAll("swarm-rebuild")) old.remove();
       const host = document.createElement("swarm-rebuild");
       host.style.cssText =
-        "all:initial !important;position:fixed !important;inset:0 !important;z-index:2147483647 !important;display:block !important;pointer-events:auto !important;contain:strict !important;opacity:1;transition:opacity .6s ease;";
+        "all:initial !important;position:fixed !important;inset:0 !important;z-index:2147483647 !important;display:block !important;pointer-events:none !important;contain:strict !important;opacity:1;transition:opacity .6s ease;";
       env.host = host;
       this.host = host;
       const root = host.attachShadow({ mode: "open" });
@@ -1918,6 +1919,7 @@
           <p class="theme-hint">don&apos;t worry, you can change it later</p>
         `;
 
+        this.host.style.setProperty("pointer-events", "auto", "important");
         this.intro.style.pointerEvents = "auto";
         this.intro.appendChild(wrap);
 
@@ -1925,6 +1927,7 @@
         const onPick = (mode) => {
           if (resolved) return;
           resolved = true;
+          this.host.style.setProperty("pointer-events", "none", "important");
           wrap.style.transition = "opacity .3s ease, transform .3s ease";
           wrap.style.opacity = "0";
           wrap.style.transform = "translateY(-4px)";
@@ -3863,6 +3866,9 @@
       }
 
       if (this.dead) return;
+      if (this.view && this.view.host) {
+        this.view.host.style.setProperty("pointer-events", "none", "important");
+      }
       this.engine.start();
     }
 
