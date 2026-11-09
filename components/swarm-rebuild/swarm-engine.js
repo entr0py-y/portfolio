@@ -500,12 +500,17 @@
     let order = 0;
     const csCache = new Map();
     const css = (el) => {
+      if (!el || typeof el !== "object" || el.nodeType !== 1) return {};
       let c = csCache.get(el);
       if (!c) {
-        c = getComputedStyle(el);
-        csCache.set(el, c);
+        try {
+          c = getComputedStyle(el);
+          csCache.set(el, c);
+        } catch (_) {
+          return {};
+        }
       }
-      return c;
+      return c || {};
     };
     const inlineCache = new Map();
     const fullClip = { l: -1e9, t: -1e9, r: 1e9, b: 1e9 };
@@ -709,51 +714,55 @@
     }
 
     function detectRotation(el) {
-      if (!el || typeof el.getAttribute !== "function" || (typeof Element !== "undefined" && !(el instanceof Element))) {
+      if (!el || typeof el !== "object" || el.nodeType !== 1) {
         return { rotate: "", transform: "" };
       }
       let curr = el;
-      while (curr && curr.nodeType === 1 && curr !== html && curr !== body) {
-        const c = css(curr);
-        const cssRotate = (c.getPropertyValue && c.getPropertyValue("rotate")) || c.rotate;
-        if (cssRotate && cssRotate !== "none" && cssRotate !== "0deg" && cssRotate !== "0") {
-          return { rotate: cssRotate, transform: "" };
-        }
-        const csTransform = c.transform || (c.getPropertyValue && c.getPropertyValue("transform"));
-        if (csTransform && csTransform !== "none") {
-          const mt = csTransform.match(/^matrix\(([^)]+)\)$/);
-          if (mt) {
-            const k = mt[1].split(",").map(Number);
-            const rad = Math.atan2(k[1], k[0]);
-            const deg = Math.round(rad * (180 / Math.PI));
-            if (Math.abs(deg) > 0) {
-              return { rotate: `${deg}deg`, transform: `matrix(${k[0]},${k[1]},${k[2]},${k[3]},0,0)` };
+      try {
+        while (curr && curr.nodeType === 1 && curr !== html && curr !== body) {
+          const c = css(curr);
+          if (c && c.getPropertyValue) {
+            const cssRotate = c.getPropertyValue("rotate") || c.rotate;
+            if (cssRotate && cssRotate !== "none" && cssRotate !== "0deg" && cssRotate !== "0") {
+              return { rotate: cssRotate, transform: "" };
+            }
+            const csTransform = c.transform || c.getPropertyValue("transform");
+            if (csTransform && csTransform !== "none") {
+              const mt = csTransform.match(/^matrix\(([^)]+)\)$/);
+              if (mt) {
+                const k = mt[1].split(",").map(Number);
+                const rad = Math.atan2(k[1], k[0]);
+                const deg = Math.round(rad * (180 / Math.PI));
+                if (Math.abs(deg) > 0) {
+                  return { rotate: `${deg}deg`, transform: "" };
+                }
+              }
+              const rotMatch = csTransform.match(/rotate\(([^)]+)\)/);
+              if (rotMatch) {
+                return { rotate: rotMatch[1], transform: "" };
+              }
+              return { rotate: "", transform: csTransform };
             }
           }
-          const rotMatch = csTransform.match(/rotate\(([^)]+)\)/);
-          if (rotMatch) {
-            return { rotate: rotMatch[1], transform: "" };
+          const styleAttr = curr.getAttribute && curr.getAttribute("style");
+          if (styleAttr) {
+            const rotMatch = styleAttr.match(/rotate\(([^)]+)\)/);
+            if (rotMatch) {
+              return { rotate: rotMatch[1], transform: "" };
+            }
           }
-          return { rotate: "", transform: csTransform };
-        }
-        const styleAttr = curr.getAttribute && curr.getAttribute("style");
-        if (styleAttr) {
-          const rotMatch = styleAttr.match(/rotate\(([^)]+)\)/);
-          if (rotMatch) {
-            return { rotate: rotMatch[1], transform: "" };
+          const cls = (curr.getAttribute && curr.getAttribute("class")) || "";
+          if (cls) {
+            if (window.innerWidth < 768) {
+              const mMobile = cls.match(/max-\[768px\]:rotate-\[([^\]]+)\]/);
+              if (mMobile) return { rotate: mMobile[1], transform: "" };
+            }
+            const mDesk = cls.match(/rotate-\[([^\]]+)\]/);
+            if (mDesk) return { rotate: mDesk[1], transform: "" };
           }
+          curr = curr.parentElement;
         }
-        const cls = (curr.getAttribute && curr.getAttribute("class")) || "";
-        if (cls) {
-          if (window.innerWidth < 768) {
-            const mMobile = cls.match(/max-\[768px\]:rotate-\[([^\]]+)\]/);
-            if (mMobile) return { rotate: mMobile[1], transform: "" };
-          }
-          const mDesk = cls.match(/rotate-\[([^\]]+)\]/);
-          if (mDesk) return { rotate: mDesk[1], transform: "" };
-        }
-        curr = curr.parentElement;
-      }
+      } catch (_) {}
       return { rotate: "", transform: "" };
     }
 
@@ -773,12 +782,13 @@
       const nb = sides.filter(Boolean).length;
       const shadow = cs.boxShadow && cs.boxShadow !== "none";
       const backdrop = cs.backdropFilter && cs.backdropFilter !== "none";
-      const rot = detectRotation(el);
+      const isEl = el && el.nodeType === 1;
+      const rot = isEl ? detectRotation(el) : { rotate: "", transform: "" };
       const rotAngle = rot.rotate;
       const pureTf = rot.transform;
       const hasTransform = !!rotAngle || (!!pureTf && pureTf !== "none");
       let unrotatedR = r;
-      if (hasTransform) {
+      if (hasTransform && isEl) {
         const parsedW = el.offsetWidth || parseFloat(cs.width) || r.width;
         const parsedH = el.offsetHeight || parseFloat(cs.height) || r.height;
         if (parsedW > 0 && parsedH > 0) {
@@ -1019,7 +1029,10 @@
       const isSig = (el.classList && el.classList.contains("signature-img")) || (src.classList && src.classList.contains("signature-img"));
 
       // Determine rotation from CSS 'rotate', 'transform' matrix, ancestor style, or class fallback
-      const rot = detectRotation(el) || detectRotation(src);
+      let rot = detectRotation(el);
+      if ((!rot || (!rot.rotate && !rot.transform)) && src && src !== el) {
+        rot = detectRotation(src);
+      }
       let rotAngle = rot.rotate;
       let pureTf = rot.transform;
 
@@ -2035,7 +2048,17 @@
             const w = f1(v.b.w);
             const h = f1(v.b.h);
             const col = BLUE;
-            const tfAttr = v.transform ? ` transform="${v.transform}" transform-origin="${X(v.b.x + v.b.w / 2, st)}px ${Y(v.b.y + v.b.h / 2, st)}px"` : "";
+            const cx = f1(x + w / 2);
+            const cy = f1(y + h / 2);
+            let tfAttr = "";
+            if (v.transform) {
+              const rotM = v.transform.match(/^rotate\(([-\d.]+)(?:deg)?\)$/);
+              if (rotM) {
+                tfAttr = ` transform="rotate(${rotM[1]} ${cx} ${cy})"`;
+              } else {
+                tfAttr = ` style="transform-box:fill-box;transform-origin:center;transform:${v.transform};"`;
+              }
+            }
             s += `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="none" stroke="${col}" stroke-width="1"${tfAttr}/>`;
             if (v.underline && v.underline.w > 0) {
               const u = v.underline;
@@ -2296,7 +2319,7 @@
           badge: `${Math.round(b.w)} × ${Math.round(b.h)}`,
           rulerLines: true,
           underline: it.kind === "text" ? this.underline(it, b) : undefined,
-          transform: it.transform || (it.rotate ? `rotate(${it.rotate})` : ""),
+          transform: it.rotate ? `rotate(${it.rotate})` : (it.transform || ""),
         },
         extra,
       );

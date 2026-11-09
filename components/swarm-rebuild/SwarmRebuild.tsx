@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { restartSwarm, stopSwarm } from "./swarm-engine";
 
-// Track visited routes so each page only animates ONCE per session.
-// When returning to an already visited page (e.g. Back to Home),
-// the animation does not repeat — it only initiates again on browser refresh.
-const playedRoutes = new Set<string>();
+// Track whether the home page animation has already played in this browser session.
+// When returning to the home page via SPA navigation, it will not initiate again.
+// It will only initiate on initial visit or when the user refreshes.
+let homePlayed = false;
 
 export default function SwarmRebuild() {
   const pathname = usePathname();
@@ -37,11 +37,11 @@ export default function SwarmRebuild() {
       return;
     }
 
-    // Only initiate once per route in this session; do not repeat on return navigation
-    if (playedRoutes.has(pathname)) {
-      return;
+    // Do not repeat when returning to the home page; only initiate on initial visit or refresh
+    if (pathname === "/") {
+      if (homePlayed) return;
+      homePlayed = true;
     }
-    playedRoutes.add(pathname);
 
     const isHome = pathname === "/";
     // Allow Next.js route transition to settle and render new DOM elements before rebuilding
