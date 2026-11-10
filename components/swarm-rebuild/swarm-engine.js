@@ -1643,7 +1643,8 @@
 .grain-overlay{position:fixed;inset:0;pointer-events:none;background-image:url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)"/></svg>');opacity:0;transition:opacity .5s ease;z-index:2}
 .grain-overlay.on{opacity:0.05}
 :host(.dark-mode) .grain-overlay.on,.grain-overlay.dark-mode.on{opacity:0.03}
-.bg-character-clone{position:fixed;bottom:-20px;right:-20px;width:575px;pointer-events:none;z-index:0;transform:scaleX(-1)}
+.bg-character-clone{position:fixed;bottom:-20px;right:-20px;width:575px;pointer-events:none;z-index:0;transform:scaleX(-1);opacity:0;transition:opacity .5s ease}
+.bg-character-clone.visible{opacity:1}
 .bg-character-clone img{width:100%;height:auto;display:block;opacity:0.12;image-rendering:pixelated}
 .bg-character-clone img.bg-character-img{filter:grayscale(1)}
 :host(.dark-mode) .bg-character-clone img.bg-character-img,.bg.dark-mode .bg-character-clone img.bg-character-img{filter:grayscale(1) brightness(0.9)}
@@ -1652,7 +1653,8 @@
 .bg-character-clone.work-mode{bottom:-15px;right:-20px;width:400px}
 .bg-character-clone.work-mode img{opacity:0.14}
 @media (max-width:768px){
-  .bg-character-clone{width:130vw;max-width:550px;bottom:-10px;opacity:0.8}
+  .bg-character-clone{width:130vw;max-width:550px;bottom:-10px}
+  .bg-character-clone.visible{opacity:0.8}
   .bg-character-clone.listen-mode{bottom:-50px;right:-50px}
   .bg-character-clone.work-mode{width:280px;right:-10px}
 }
@@ -1921,6 +1923,7 @@
         }
         charContainer.appendChild(charImg);
         this.bg.appendChild(charContainer);
+        this.charContainer = charContainer;
       }
 
       this.cleanup = () => {
@@ -1931,6 +1934,12 @@
       document.documentElement.classList.add("swarm-ready");
       document.documentElement.classList.remove("swarm-navigating");
       this.measure();
+    }
+
+    showCharacter() {
+      if (this.charContainer) {
+        this.charContainer.classList.add("visible");
+      }
     }
 
     makeIntroLogo() {
@@ -3799,7 +3808,10 @@
       this.engine = new Engine(this.view);
       this.sfx = null;
       this.engine.sfx = null;
-      this.engine.onStart = () => this.view.intro.classList.add("gone");
+      this.engine.onStart = () => {
+        this.view.intro.classList.add("gone");
+        this.view.showCharacter();
+      };
       this.engine.onComplete = () => this.onComplete();
       this.bind();
       this.last = performance.now();
@@ -3829,6 +3841,7 @@
         mark("fonts");
         if (this.view.introFill) this.view.introFill.style.width = "85%";
       } else {
+        this.view.showCharacter();
         await unhidePage();
       }
 
