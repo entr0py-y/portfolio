@@ -847,17 +847,14 @@
       const sameAsPage = alphaOf(bgc) > 0.01 && sameColor(bgc, pageBg.color) && bgi === "none";
 
       // Skip emitting a redundant background rect if this container simply wraps an image
-      // that fills its bounding box (e.g. image cards in masonry or photo grids).
+      // (e.g. image cards in sketch masonry, gear product thumbnail squares, etc.).
       // Otherwise, the engine generates two sequential drawing tasks (one for the card box,
-      // and a second for the image itself), making sketches/photos animate and load twice.
+      // and a second for the image itself), making sketches/gear items animate and load twice.
       if (!forceRect && isEl) {
-        const innerImg = el.querySelector && el.querySelector("img, picture");
-        if (innerImg) {
-          const imgRect = innerImg.getBoundingClientRect();
-          const coversX = Math.abs(imgRect.left - r.left) <= 4 && Math.abs(imgRect.width - r.width) <= 8;
-          const coversY = Math.abs(imgRect.top - r.top) <= 4 && Math.abs(imgRect.height - r.height) <= 8;
+        const innerImgs = el.querySelectorAll && el.querySelectorAll("img, picture");
+        if (innerImgs && innerImgs.length === 1) {
           const textContent = (el.textContent || "").trim();
-          if (!textContent && coversX && coversY) {
+          if (!textContent) {
             return null;
           }
         }
@@ -1144,9 +1141,24 @@
         }
       }
 
-      const b = conv(unrotatedR, ctx.layer);
+      let targetR = unrotatedR;
       const pe = el.parentElement;
       const pcs = pe ? css(pe) : null;
+
+      // If the parent is a dedicated image container that was skipped by emitBox,
+      // size the image task to the container box so the full thumbnail is drawn in one pass
+      if (pe && pe.nodeType === 1 && !hasTransform) {
+        const pText = (pe.textContent || "").trim();
+        const pImgs = pe.querySelectorAll && pe.querySelectorAll("img, picture");
+        if (!pText && pImgs && pImgs.length === 1) {
+          const peRect = pe.getBoundingClientRect();
+          if (peRect.width > 0 && peRect.height > 0) {
+            targetR = peRect;
+          }
+        }
+      }
+
+      const b = conv(targetR, ctx.layer);
       const radiusVal = isSig
         ? "0px"
         : (cs.borderRadius && cs.borderRadius !== "0px")

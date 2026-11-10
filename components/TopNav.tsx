@@ -31,7 +31,7 @@ export default function TopNav() {
       {/* Icons & Stacked Labels — right */}
       <nav className="flex flex-col items-end">
         {isSubPage ? (
-          <div className="flex gap-4 items-center">
+          <div key="subpage-nav" className="flex gap-4 items-center">
             <TransitionLink
               href="/"
               className="flex items-center justify-center bg-transparent cursor-pointer text-[var(--color-on-background)] no-underline transition-opacity duration-200 hover:opacity-60"
@@ -45,7 +45,7 @@ export default function TopNav() {
             <ThemeToggle />
           </div>
         ) : (
-          <div className="relative w-[83px] flex flex-col items-end">
+          <div key="home-nav" className="relative w-[83px] flex flex-col items-end">
             {/* Row 1: The 3 compact symbols pinned to the right edge */}
             <div className="flex gap-4 items-center w-[83px] justify-between">
               <div className="flex items-center justify-center w-[17px] h-[17px]">

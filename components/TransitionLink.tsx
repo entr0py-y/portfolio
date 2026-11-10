@@ -1,8 +1,7 @@
 "use client";
 
 import Link, { LinkProps } from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useTransition } from "react";
+import React, { useCallback, useEffect } from "react";
 
 interface TransitionLinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps>, LinkProps {
   children: React.ReactNode;
@@ -26,14 +25,11 @@ function ensureListeners() {
 }
 
 export default function TransitionLink({ children, href, className, onClick, ...props }: TransitionLinkProps) {
-  const router = useRouter();
-  const [, startTransition] = useTransition();
-
   useEffect(() => {
     ensureListeners();
   }, []);
 
-  const handleTransition = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
     if (onClick) {
       onClick(e);
     }
@@ -42,38 +38,17 @@ export default function TransitionLink({ children, href, className, onClick, ...
       return;
     }
 
-    e.preventDefault();
-
-    // Use the globally captured pointer coordinates (reliable on both desktop and mobile).
-    // Fall back to click event coords if pointerdown hasn't fired yet (shouldn't happen).
+    // Use the globally captured pointer coordinates.
     const x = lastX || e.clientX;
     const y = lastY || e.clientY;
 
     // Set the click coordinates as CSS custom properties on the root element.
-    // The view transition CSS will use these to position the clip-path circle.
     document.documentElement.style.setProperty("--vt-x", `${x}px`);
     document.documentElement.style.setProperty("--vt-y", `${y}px`);
-
-    try {
-      startTransition(() => {
-        router.push(href.toString());
-      });
-    } catch (_) {
-      window.location.href = href.toString();
-      return;
-    }
-
-    // Safety fallback: if client-side router transition hangs in an in-app browser webview,
-    // ensure hard navigation occurs rather than remaining stuck on a dead document state.
-    setTimeout(() => {
-      if (typeof window !== "undefined" && window.location.pathname !== href.toString()) {
-        window.location.href = href.toString();
-      }
-    }, 2000);
-  }, [href, router, onClick, startTransition]);
+  }, [onClick]);
 
   return (
-    <Link {...props} href={href} onClick={handleTransition} className={className}>
+    <Link {...props} href={href} onClick={handleClick} className={className}>
       {children}
     </Link>
   );

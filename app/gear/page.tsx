@@ -94,8 +94,8 @@ export default function GearPage() {
                   <img
                     src={item.image}
                     alt={item.name}
+                    loading="eager"
                     className="w-full h-full object-contain"
-
                   />
                 </div>
                 {/* Info */}
