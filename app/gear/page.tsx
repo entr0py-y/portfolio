@@ -23,6 +23,24 @@ const gearItems = [
     url: "https://www.oneplus.in/nord-5",
   },
   {
+    name: "Redragon K617 Fizz",
+    detail: "60% mechanical keyboard",
+    image: "/gear/redragon-k617-fizz.png",
+    url: "https://www.amazon.in/s?k=Redragon+K617+Fizz",
+  },
+  {
+    name: "Redragon Predator Pro",
+    detail: "Wireless gaming mouse",
+    image: "/gear/redragon-predator-pro.png",
+    url: "https://www.amazon.in/s?k=Redragon+Predator+Pro",
+  },
+  {
+    name: "8BitDo Ultimate 2",
+    detail: "Wireless controller",
+    image: "/gear/8bitdo-ultimate-2.jpg",
+    url: "https://www.amazon.in/s?k=8BitDo+Ultimate+controller",
+  },
+  {
     name: "HyperX Cloud Stinger 2",
     detail: "Headphones",
     image: "/gear/hyperx-stinger2.jpg",
@@ -45,6 +63,12 @@ const gearItems = [
     detail: "Portable DAC",
     image: "/gear/audiocular-d07.png",
     url: "https://www.amazon.in/s?k=Audiocular+D07+DAC",
+  },
+  {
+    name: "Pentel GraphGear 1000",
+    detail: "Drafting mechanical pencil",
+    image: "/gear/pentel-graphgear-1000.jpg",
+    url: "https://www.amazon.in/s?k=Pentel+GraphGear+1000",
   },
 ];
 
