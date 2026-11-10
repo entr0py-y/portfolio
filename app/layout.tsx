@@ -26,6 +26,16 @@ const caveat = Caveat({
 
 export const metadata: Metadata = {
   title: "Quiet Space",
+  description: "Quiet Space",
+  openGraph: {
+    title: "Quiet Space",
+    description: "Quiet Space",
+    siteName: "Quiet Space",
+  },
+  twitter: {
+    title: "Quiet Space",
+    description: "Quiet Space",
+  },
 };
 
 export default function RootLayout({

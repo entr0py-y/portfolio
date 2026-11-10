@@ -36,7 +36,7 @@ const gearItems = [
   },
   {
     name: "8BitDo Ultimate 2",
-    detail: "Wireless controller",
+    detail: "Wireless controller · White with dock",
     image: "/gear/8bitdo-ultimate-2.jpg",
     url: "https://www.amazon.in/s?k=8BitDo+Ultimate+controller",
   },
