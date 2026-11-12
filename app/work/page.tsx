@@ -1,6 +1,10 @@
 "use client";
 
 import PageShell from "@/components/PageShell";
+import TransitionLink from "@/components/TransitionLink";
+
+const pillButtonClass =
+  "inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full border-[1.5px] border-[var(--color-on-background)] text-[13px] font-semibold text-[var(--color-on-background)] transition-all duration-300 hover:shadow-[0_0_12px_rgba(34,197,94,0.3)] hover:border-[#22c55e] no-underline";
 
 export default function WorkPage() {
   return (
@@ -14,18 +18,30 @@ export default function WorkPage() {
           <p className="text-[14px] leading-relaxed text-[var(--color-outline)] font-medium mb-8">
             What I’ve built, explored, and learned along the way.
           </p>
-          <a
-            href="/PushkarJhaResume.pdf"
-            download
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full border-[1.5px] border-[var(--color-on-background)] text-[13px] font-semibold text-[var(--color-on-background)] transition-all duration-300 hover:shadow-[0_0_12px_rgba(34,197,94,0.3)] hover:border-[#22c55e] no-underline"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            Download Resume
-          </a>
+          <div className="flex flex-wrap items-center gap-3">
+            <a
+              href="/PushkarJhaResume.pdf"
+              download
+              className={pillButtonClass}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Download Resume
+            </a>
+            <TransitionLink
+              href="/projects"
+              className={pillButtonClass}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="8 7 3 12 8 17" />
+                <polyline points="16 7 21 12 16 17" />
+              </svg>
+              Projects
+            </TransitionLink>
+          </div>
         </div>
 
         {/* EXPERIENCE */}
@@ -73,7 +89,7 @@ export default function WorkPage() {
             <div>
               <div className="flex justify-between items-baseline flex-wrap gap-1">
                 <div className="text-[14px] font-semibold text-[var(--color-on-background)]">
-                  Winner — GenCodeX Hackathon
+                  Winner: GenCodeX Hackathon
                 </div>
                 <div className="text-[12px] text-[var(--color-outline)] font-medium">
                   Mar 2026
@@ -86,7 +102,7 @@ export default function WorkPage() {
             <div>
               <div className="flex justify-between items-baseline flex-wrap gap-1">
                 <div className="text-[14px] font-semibold text-[var(--color-on-background)]">
-                  Finalist — Brainwave 2.0 Hackathon
+                  Finalist: Brainwave 2.0 Hackathon
                 </div>
                 <div className="text-[12px] text-[var(--color-outline)] font-medium">
                   Jan 2026
@@ -99,7 +115,7 @@ export default function WorkPage() {
             <div>
               <div className="flex justify-between items-baseline flex-wrap gap-1">
                 <div className="text-[14px] font-semibold text-[var(--color-on-background)]">
-                  Finalist — Zinnovatio Ideathon
+                  Finalist: Zinnovatio Ideathon
                 </div>
                 <div className="text-[12px] text-[var(--color-outline)] font-medium">
                   Oct 2026
