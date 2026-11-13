@@ -50,7 +50,7 @@ export async function GET() {
 
     const data = await Promise.all(responses.map(res => res.json()));
     
-    const filterGames = (games: any[]) => games.filter((g: SteamGame) => g.appid !== 431960 && g.name !== "Wallpaper Engine");
+    const filterGames = (games: SteamGame[]) => games.filter((g: SteamGame) => g.appid !== 431960 && g.name !== "Wallpaper Engine");
 
     let allGamesList: SteamGame[] = [];
     let recentGamesList: SteamGame[] = [];

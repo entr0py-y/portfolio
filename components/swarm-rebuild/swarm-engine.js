@@ -2542,7 +2542,6 @@
       const out = [];
       for (const t of this.tasks) {
         if (t.state !== "wait") continue;
-        if (t.layer === "world" && t.gate > this.frontier) continue;
         let ok = true;
         for (const d of t.deps)
           if (d.state !== "done") {
@@ -2607,7 +2606,13 @@
         }
       }
 
-      if (!this.flocking && this.started && this.waitCount === 0) {
+      const visibleDone =
+        this.time - this.startTime > 0.8 &&
+        this.tasks.some((t) => t.state === "done") &&
+        this.tasks.filter((t) => t.gate <= this.viewBot + 50).every((t) => t.state === "done") &&
+        !this.cursors.some((c) => c.task);
+      const canComplete = this.started && (this.waitCount === 0 || visibleDone);
+      if (!this.flocking && canComplete) {
         for (const c of this.cursors)
           if (!c.task && !c.follow) {
             c.follow = true;
