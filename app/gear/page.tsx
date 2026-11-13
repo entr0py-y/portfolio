@@ -173,17 +173,17 @@ export default function GearPage() {
                 </span>
               </div>
 
-              <div className="grid grid-cols-3 gap-2.5 max-[560px]:grid-cols-2 max-[380px]:grid-cols-1">
+              <div className="grid grid-cols-3 gap-2.5 max-[500px]:gap-1.5">
                 {category.items.map((item) => (
                   <a
                     key={item.name}
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex flex-col rounded-xl bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] overflow-hidden smooth-card no-underline group"
+                    className="flex flex-col rounded-xl max-[500px]:rounded-lg bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] overflow-hidden smooth-card no-underline group"
                   >
                     {/* Product Image */}
-                    <div className="w-full aspect-[4/3] bg-[#1a1a1a] flex items-center justify-center p-2.5">
+                    <div className="w-full aspect-[4/3] bg-[#1a1a1a] flex items-center justify-center p-2.5 max-[500px]:p-1.5">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={item.image}
@@ -193,16 +193,16 @@ export default function GearPage() {
                       />
                     </div>
                     {/* Info */}
-                    <div className="p-2.5 flex flex-col gap-0.5">
-                      <div className="flex items-center justify-between gap-1">
-                        <span className="text-[11.5px] font-semibold text-[var(--color-on-background)] truncate">
+                    <div className="p-2.5 max-[500px]:p-1.5 flex flex-col gap-0.5">
+                      <div className="flex items-center justify-between gap-0.5">
+                        <span className="text-[11.5px] max-[500px]:text-[10px] font-semibold text-[var(--color-on-background)] truncate">
                           {item.name}
                         </span>
-                        <span className="text-[10px] text-[var(--color-outline)] opacity-70 group-hover:opacity-100 group-hover:text-[var(--color-highlight)] transition-colors">
+                        <span className="text-[10px] max-[500px]:text-[8px] text-[var(--color-outline)] opacity-70 group-hover:opacity-100 group-hover:text-[var(--color-highlight)] transition-colors shrink-0">
                           ↗
                         </span>
                       </div>
-                      <span className="text-[10px] text-[var(--color-outline)] truncate">
+                      <span className="text-[10px] max-[500px]:text-[8.5px] text-[var(--color-outline)] truncate">
                         {item.detail}
                       </span>
                     </div>
