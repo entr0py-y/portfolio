@@ -13,7 +13,7 @@ export default function Home() {
             i build <TransitionLink href="/projects" className="interactive-word">stuff</TransitionLink>.
           </p>
           <div className="flex gap-4 mt-0">
-            <a href="https://instagram.com/endeavv0r" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-[var(--color-on-background)] no-underline flex items-center justify-center transition-opacity duration-200 hover:opacity-60">
+            <a href="https://www.instagram.com/sinofsloth10" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-[var(--color-on-background)] no-underline flex items-center justify-center transition-opacity duration-200 hover:opacity-60">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                 <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
