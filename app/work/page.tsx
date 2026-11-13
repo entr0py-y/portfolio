@@ -60,7 +60,7 @@ export default function WorkPage() {
                 </div>
               </div>
               <div className="text-[13px] text-[var(--color-highlight)] font-medium mt-0.5 mb-2">
-                Exponent Solutions
+                Exponent Solutions / Skyjumper
               </div>
               <ul className="flex flex-col gap-1.5 list-none p-0 m-0">
                 <li className="text-[13px] text-[var(--color-outline)] flex gap-2.5 items-start leading-relaxed">
