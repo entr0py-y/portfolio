@@ -173,7 +173,7 @@ export default function GearPage() {
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 max-[500px]:grid-cols-1">
+              <div className="grid grid-cols-3 gap-2.5 max-[560px]:grid-cols-2 max-[380px]:grid-cols-1">
                 {category.items.map((item) => (
                   <a
                     key={item.name}
@@ -183,7 +183,7 @@ export default function GearPage() {
                     className="flex flex-col rounded-xl bg-[var(--color-surface)] border-[1.5px] border-[var(--color-on-background)] overflow-hidden smooth-card no-underline group"
                   >
                     {/* Product Image */}
-                    <div className="w-full aspect-[4/3] bg-[#1a1a1a] flex items-center justify-center p-3">
+                    <div className="w-full aspect-[4/3] bg-[#1a1a1a] flex items-center justify-center p-2.5">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={item.image}
@@ -193,16 +193,16 @@ export default function GearPage() {
                       />
                     </div>
                     {/* Info */}
-                    <div className="p-3 flex flex-col gap-0.5">
+                    <div className="p-2.5 flex flex-col gap-0.5">
                       <div className="flex items-center justify-between gap-1">
-                        <span className="text-[12px] font-semibold text-[var(--color-on-background)] truncate">
+                        <span className="text-[11.5px] font-semibold text-[var(--color-on-background)] truncate">
                           {item.name}
                         </span>
-                        <span className="text-[11px] text-[var(--color-outline)] opacity-70 group-hover:opacity-100 group-hover:text-[var(--color-highlight)] transition-colors">
+                        <span className="text-[10px] text-[var(--color-outline)] opacity-70 group-hover:opacity-100 group-hover:text-[var(--color-highlight)] transition-colors">
                           ↗
                         </span>
                       </div>
-                      <span className="text-[10.5px] text-[var(--color-outline)] truncate">
+                      <span className="text-[10px] text-[var(--color-outline)] truncate">
                         {item.detail}
                       </span>
                     </div>
